@@ -1,11 +1,15 @@
 import { CaretDown, DownloadSimple } from 'phosphor-react'
 import { STUDENT } from './data'
 import { UseGetCurrentAcademicYear } from '../../hooks/useGetCurrentAcademicYear'
-// import { DownloadGradeReportModal } from '../modals/download-grade-report'
+import { UseDownloadFile } from '../../hooks/useDonwloadFile'
 
 const Header = () => {
   const currentAcademicYear = UseGetCurrentAcademicYear()
   const { details, name } = STUDENT
+
+  const donwloadFile = (elementId: string) => {
+    UseDownloadFile({ elementId })
+  }
 
   return (
     <header className="flex items-end justify-between flex-wrap gap-7">
@@ -30,11 +34,11 @@ const Header = () => {
         <button
           type="button"
           className="text-[#1E1E1E] w-full justify-center sm:w-fit py-3 px-6 bg-[#F8C40D] flex gap-2 rounded-[50px] font-medium items-center cursor-pointer text-[14px] sm:text-[16px]"
+          onClick={() => donwloadFile('grade_report')}
         >
           Baixar relatório de notas
           <DownloadSimple size={16} color="#1E1E1E" />
         </button>
-        {/* <DownloadGradeReportModal /> */}
       </div>
     </header>
   )

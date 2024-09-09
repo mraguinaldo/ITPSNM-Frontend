@@ -2,39 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 @layer utilities {
-  .form::-webkit-scrollbar {
-    width: 8px; 
+  .form::-webkit-scrollbar,
+  .modal::-webkit-scrollbar {
+    width: 8px;
   }
 
-  .form::-webkit-scrollbar-track, 
-  .form::-webkit-scrollbar-thumb, 
-  .form::-webkit-scrollbar-thumb:hover{
-    background: transparent; 
+  .form::-webkit-scrollbar-track,
+  .form::-webkit-scrollbar-thumb,
+  .form::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+  }
+
+  .modal::-webkit-scrollbar-track {
+    background-color: #F8C40D;
+    border: 6px solid #F8C40D;
+    border-radius: 8px;
+  }
+
+  .modal::-webkit-scrollbar-thumb {
+    background-color: #FFFFFF;
+    border-radius: 6px;
+  }
+
+  .modal::-webkit-scrollbar-thumb:hover {
+    background-color: #CCCCCC;
   }
 
   .mySwiper {
     width: 100%;
-    .swiper-pagination-bullet-active {
-      background-color: #F8C40D;
-      width: 60px;
-    }
-    .swiper-pagination-bullet {
-      transition: all 0.6s;
-      padding: 6px;
-      border-radius: 6px;
-    }
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #F8C40D;
+    width: 60px;
+  }
+
+  .swiper-pagination-bullet {
+    transition: all 0.6s;
+    padding: 6px;
+    border-radius: 6px;
   }
 }
 
+@media screen and (max-width: 1024px) {
+  .force_desktop_screen {
+    width: 1296px;
+  }
+}
 
-body{
+body {
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
