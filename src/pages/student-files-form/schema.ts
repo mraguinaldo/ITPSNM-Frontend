@@ -9,7 +9,7 @@ export const schemaForm = yup.object().shape({
   image: yup
     .mixed()
     .required('Carregue a sua foto')
-    .test('image-validation', 'Imagem deve ser JPG/PNG, até 1MB.', (value) => {
+    .test('image-validation', 'A Imagem deve ser JPG/PNG, até 1MB.', (value) => {
       if (typeof value === 'object') {
         const { size, type } = value as FileValue
         if (size <= 1000000 && (type === 'image/png' || type === 'image/jpeg')) {

@@ -56,7 +56,7 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex gap-6 flex-col">
-      <div className="flex gap-3 flex-col w-fit">
+      <div className="flex gap-3 flex-col w-full max-w-[280px]:">
         <label htmlFor="Foto" className="cursor-pointer ">
           Foto
         </label>

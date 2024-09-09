@@ -53,7 +53,7 @@ export const schemaForm = yup.object().shape({
   natural: yup
     .string()
     .required('A naturalidade é obrigratório')
-    .min(4, 'A naturalidade deve ter no mínimo 4 letras')
+    .min(4, 'Deve ter no mínimo 4 letras')
     .test('natural-validation', 'Naturalidade inválida', (natural) => {
       const regEx = /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
       if (natural.match(regEx)) return true
