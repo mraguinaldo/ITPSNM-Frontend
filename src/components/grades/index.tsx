@@ -15,7 +15,7 @@ const Grades = () => {
                   <th
                     key={id}
                     colSpan={colSpan}
-                    className={`border-[2px] border-[#D9D9D9] text-[14px] sm:text-[16px] text-center p-2 ${visible ? 'opacity-1' : 'opacity-0'}`}
+                    className={`border-[1px] border-b-[#D9D9D9] text-[14px] sm:text-[16px] text-center p-2 ${visible ? 'opacity-1' : 'opacity-0'}`}
                   >
                     {content}
                   </th>
@@ -25,7 +25,7 @@ const Grades = () => {
                 {STUDENT.grades.TEST_TYPES.map(({ id, testType, visible }) => (
                   <th
                     key={id}
-                    className={`border-[2px] border-[#D9D9D9] text-[14px] sm:text-[16px] text-center p-2 ${visible ? 'opacity-1' : 'opacity-0'}`}
+                    className={`border-[1px] border-b-[#D9D9D9] text-[14px] sm:text-[16px] text-center p-2 ${visible ? 'opacity-1' : 'opacity-0'}`}
                   >
                     {testType}
                   </th>
@@ -38,7 +38,7 @@ const Grades = () => {
                   {values.map(({ id, value, visible }) => (
                     <td
                       key={id}
-                      className={`border-[2px] text-[14px] sm:text-[16px] border-[#D9D9D9] w-[60px] text-center p-2
+                      className={`border-[1px] text-[14px] sm:text-[16px] border-[#D9D9D9] w-[60px] text-center p-2
                       ${visible ? 'opacity-1' : 'opacity-0'}
                       ${
                         typeof value === 'number'

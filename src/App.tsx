@@ -4,6 +4,7 @@ import { BiDataForm } from './pages/bi-data-form'
 import { StudentFilesForm } from './pages/student-files-form'
 import { StudentDataForm } from './pages/student-data-form'
 import { GradeViewArea } from './pages/see-student-grade'
+import { StudentViewingArea } from './pages/see-student-table'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/register/student-data-form" element={<StudentDataForm />} />
         <Route path="/register/student-files-form" element={<StudentFilesForm />} />
         <Route path="/student/grade-view-area" element={<GradeViewArea />} />
+        <Route path="/student/student-viewing-area" element={<StudentViewingArea />} />
       </Routes>
     </Router>
   )
