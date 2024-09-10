@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 interface IButton {
-  content: string
+  content?: string
   className?: string
   Icon?: ReactNode
   type: 'button' | 'submit' | 'reset'
