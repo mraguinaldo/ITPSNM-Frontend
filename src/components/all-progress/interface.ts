@@ -7,6 +7,7 @@ interface IAllProgress {
 interface IProgress {
   typeProgress: string
   value: number
+  content: string
 }
 
 export type { IAllProgress, IProgress }

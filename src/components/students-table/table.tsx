@@ -1,12 +1,12 @@
 'use client'
-import { STUDENT_DATA, STUDENTS, tableHeader } from './data'
+import { STUDENTS, tableHeader } from './data'
 import { Student } from '../student'
 import { DotsThree } from 'phosphor-react'
-import { StudentInformationModal } from '../modals/student-information-modal'
-import { useState } from 'react'
+// import { StudentInformationModal } from '../modals/student-information-modal'
+// import { useState } from 'react'
 
 const Students = () => {
-  const [stateStudentInformationModal, setStateStudentInformationModal] = useState<boolean>(true)
+  // const [stateStudentInformationModal, setStateStudentInformationModal] = useState<boolean>(true)
   return (
     <div id="students" className="py-12 w-full overflow-x-auto">
       <table className="w-full">
@@ -22,7 +22,7 @@ const Students = () => {
 
         <tbody className="w-full">
           {STUDENTS.map(({ id, course, img, level, name, period, state }) => (
-            <Student.Root className="mb-3" key={id} onClick={() => setStateStudentInformationModal(true)}>
+            <Student.Root className="mb-3" key={id} onClick={() => alert(name)}>
               <th className="flex items-center gap-3 py-3 w-[360px]">
                 <Student.Image img={img} alt={name} />
                 <Student.Name name={name} />
@@ -40,16 +40,13 @@ const Students = () => {
                 <Student.State locked={state} />
               </th>
               <th className="text-left p-3 w-[68px]">
-                <Student.BtnActions
-                  icon={<DotsThree color="#161616" size={32} />}
-                  onClick={() => setStateStudentInformationModal(true)}
-                />
+                <Student.BtnActions icon={<DotsThree color="#161616" size={32} />} onClick={() => alert(name)} />
               </th>
             </Student.Root>
           ))}
         </tbody>
       </table>
-      <StudentInformationModal
+      {/* <StudentInformationModal
         visible={stateStudentInformationModal}
         toggleStateModal={() => setStateStudentInformationModal(false)}
         // biome-ignore lint/correctness/noChildrenProp: <explanation>
@@ -74,7 +71,7 @@ const Students = () => {
             <p>{STUDENT_DATA.emissionDate}</p>
           </div>
         }
-      />
+      /> */}
     </div>
   )
 }

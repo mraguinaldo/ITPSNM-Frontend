@@ -33,7 +33,7 @@ const Form = () => {
       gender: '',
       alternativePhone: '',
       phone: '',
-      email: '',
+      // email: '',
       height: '',
       emissionDate: undefined,
       identityCardNumber: '',
@@ -54,9 +54,6 @@ const Form = () => {
   const changeGender = (value: number) => {
     dispatch({ type: actions.changeGender, payload: value })
   }
-  const toggleMaritalStatus = (value: number) => {
-    dispatch({ type: actions.toggleMaritalStatus, payload: value })
-  }
 
   const onSubmit = (data: any) => {
     try {
@@ -70,7 +67,7 @@ const Form = () => {
         formData.append(field, data[field])
       })
       UsestoreData('IdentityCard', formData)
-      navigate('/register/student-data-form')
+      navigate('/register/enrollment-form')
     } catch (error) {
       console.log(error)
     }
@@ -136,13 +133,13 @@ const Form = () => {
           />
         ))}
       </div>
-      <Input
+      {/* <Input
         label="E-mail atual"
         errorMessage={errors.email?.message}
         inputType="email"
         placeholder="E-mail"
         {...register('email')}
-      />
+      /> */}
       <div className="flex flex-col sm:flex-row w-full gap-3">
         <Input
           label="Telefone"
@@ -217,18 +214,33 @@ const Form = () => {
           </OptionsModal>
         </div>
       </div>
-      <div className="flex flex-col gap-3">
-        <p className="text-[16px] font-medium text-[#2F2F2F]">Estado civil</p>
-        {MARITAL_STATUS.map(({ id, maritalStatus }) => (
-          <RadioButton
-            key={id}
-            value={maritalStatus}
-            checked={state.maritalStatus === id}
-            onClick={() => toggleMaritalStatus(id)}
-            label={maritalStatus}
-            {...register('maritalStatus')}
-          />
-        ))}
+      <div className="relative w-full">
+        <Input
+          label="Estado Civil"
+          errorMessage={errors.maritalStatus?.message}
+          inputType="text"
+          onClick={() => {
+            toggleModalState(3)
+          }}
+          chevronState={state.chevronState === 3}
+          placeholder={'Selecionar estado civil'}
+          option
+          {...register('maritalStatus')}
+        />
+        <OptionsModal modalState={state.modalState === 3}>
+          {MARITAL_STATUS.map(({ id, maritalStatus }) => (
+            <SelectedArea
+              key={id}
+              id={id}
+              area={maritalStatus}
+              onClick={() => {
+                toggleModalState(3)
+                dispatch({ type: actions.toggleMaritalStatus, payload: maritalStatus })
+                setValue('maritalStatus', maritalStatus, { shouldValidate: true })
+              }}
+            />
+          ))}
+        </OptionsModal>
       </div>
       <div className="flex flex-col sm:flex-row w-full gap-3">
         <Input

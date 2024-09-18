@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Grades } from '../../components/grades'
-import { Header } from './header'
+import { HeaderForAuthenticatedUsers } from '../../components/header-for-authenticated-users'
 
 const GradeViewArea = () => {
   const ChangeBodyColor = () => {
@@ -14,7 +14,7 @@ const GradeViewArea = () => {
 
   return (
     <main>
-      <Header />
+      <HeaderForAuthenticatedUsers />
       <Grades />
     </main>
   )
