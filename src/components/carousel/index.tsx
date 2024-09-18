@@ -20,7 +20,7 @@ const Carousel = () => {
         <SwiperSlide key={id}>
           <div className="relative">
             <img src={src} alt={src} className="w-full object-contain rounded-[32px] brightness-50" />
-            <h2 className="font-semibold w-full text-center md:text-left absolute bottom-[124px] md:bottom-[184px] text-[22px]  md:text-[32px] text-[#fff] px-8">
+            <h2 className="font-semibold w-full text-center md:text-left absolute bottom-[124px] md:bottom-[184px] text-[22px]  md:text-[48px] xl:text-[32px] text-[#fff] px-8">
               {content}
             </h2>
           </div>

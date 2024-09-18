@@ -11,10 +11,12 @@ import type { FileField } from './interfaces'
 import { actions } from './actions'
 import { UseHandleFileChange } from '../../hooks/useHandleFileChange'
 import { ImagePreview } from '../../components/Image-preview'
+import { useNavigate } from 'react-router-dom'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const [studentImage, setStudantImage] = useState<string>()
+  const navigate = useNavigate()
 
   const {
     register,
@@ -49,6 +51,7 @@ const Form = () => {
       fields.map((field) => {
         formData.append(field, data[field])
       })
+      navigate('/register/congratulations-page')
     } catch (error) {
       console.log(error)
     }

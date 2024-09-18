@@ -40,7 +40,7 @@ const fields = [
   'maritalStatus',
   'natural',
   'residence',
-  'email',
+  // 'email',
   'phone',
   'alternativePhone',
 ]

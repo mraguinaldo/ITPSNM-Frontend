@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { Header } from './header'
 import { StudentsTable } from '../../components/students-table'
+import { HeaderForAuthenticatedUsers } from '../../components/header-for-authenticated-users'
 
 const StudentViewingArea = () => {
   const ChangeBodyColor = () => {
@@ -14,7 +14,7 @@ const StudentViewingArea = () => {
 
   return (
     <main>
-      <Header />
+      <HeaderForAuthenticatedUsers />
       <StudentsTable />
     </main>
   )

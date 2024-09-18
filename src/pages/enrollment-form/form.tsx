@@ -57,7 +57,7 @@ const Form = () => {
         formData.append(field, data[field])
       })
       UsestoreData('studentData', formData)
-      navigate('/register/student-files-form')
+      navigate('/register/document-form')
     } catch (error) {
       console.log(error)
     }

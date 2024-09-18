@@ -1,10 +1,10 @@
 import { toPng } from 'html-to-image'
 
-interface IUseDownloadImage {
+interface IUseDownloadFile {
   elementId: string
 }
 
-const UseDownloadFile = async ({ elementId }: IUseDownloadImage) => {
+const UseDownloadFile = async ({ elementId }: IUseDownloadFile) => {
   const gradeReport = document.getElementById(elementId)
   if (gradeReport) {
     try {
