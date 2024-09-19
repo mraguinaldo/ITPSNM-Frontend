@@ -11,8 +11,9 @@ const EnrollmentForm = () => {
       <MainForm
         allProgress={<AllProgress firstProcess="concluded" secondProcess="inProgress" thirdProcess="stopped" />}
         title="Matrícula"
-        formArea={<Form />}
-      />
+      >
+        <Form />
+      </MainForm>
       <Footer />
     </>
   )

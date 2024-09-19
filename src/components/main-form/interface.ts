@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 interface IMainForm {
-  form: ReactNode
+  children: ReactNode
   allProgress: ReactNode
   title: string
 }

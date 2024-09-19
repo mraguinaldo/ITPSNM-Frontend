@@ -1,7 +1,7 @@
 import { Carousel } from '../carousel'
 import type { IMainForm } from './interface'
 
-const MainForm = ({ formArea, title, allProgress }: IMainForm) => {
+const MainForm = ({ children, title, allProgress }: IMainForm) => {
   return (
     <section className="py-36">
       <div className="w-full max-w-[1296px] m-auto px-6 flex flex-col xl:flex-row items-start gap-6 justify-between">
@@ -13,7 +13,7 @@ const MainForm = ({ formArea, title, allProgress }: IMainForm) => {
           <div>
             <h2 className="text-[28px] xl:text-[32px] font-medium">{title}</h2>
           </div>
-          {formArea}
+          {children}
         </div>
       </div>
     </section>

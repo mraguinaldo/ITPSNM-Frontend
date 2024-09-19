@@ -1,15 +1,18 @@
 import { CaretDown, DownloadSimple } from 'phosphor-react'
-import { LEVELS, STUDENT } from './data'
+import { LEVELS } from './data'
 import { UseDownloadFile } from '../../hooks/useDonwloadFile'
 import { OptionsModal } from '../modals/options-modal'
 import { SelectedArea } from '../selected-area'
 import { useState } from 'react'
 
-const Header = () => {
-  const { details, name } = STUDENT
+interface IHeader {
+  user: any
+  details: any[]
+}
 
-  const [modalState, setModalState] = useState<boolean>(false)
-  const [selectedLevel, setSelectedLevel] = useState<string>(LEVELS[0].level)
+const Header = ({ details, user }: IHeader) => {
+  const [modalState, setModalState] = useState(false)
+  const [selectedLevel, setSelectedLevel] = useState(LEVELS[0].level)
 
   const toggleModalState = (selectedLevelId: number) => {
     setModalState((prev) => !prev)
@@ -22,10 +25,10 @@ const Header = () => {
 
   return (
     <header className="flex items-end justify-between flex-wrap gap-16">
-      <div id="student" className="flex flex-col gap-4">
-        <h2 className="text-[24px] sm:text-[32px] font-semibold">{name}</h2>
-        <ul id="details" className="flex gap-4 flex-wrap">
-          {details.map(({ content, detailType, id }) => (
+      <div id="student" className="flex flex-col gap-4 w-[600px]">
+        <h2 className="text-[24px] sm:text-[32px] font-semibold">{user?.userName}</h2>
+        <ul id="details" className="flex w-full gap-4 flex-wrap">
+          {details.map(({ id, detailType, content }) => (
             <li key={id} className="text-[14px] sm:text-[16px]">
               {detailType}
               <span className="text-[#737373] text-[14px] sm:text-[16px]">{content}</span>

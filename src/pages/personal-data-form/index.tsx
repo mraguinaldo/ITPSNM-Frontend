@@ -11,8 +11,9 @@ const PersonalDataForm = () => {
       <MainForm
         allProgress={<AllProgress firstProcess="inProgress" secondProcess="stopped" thirdProcess="stopped" />}
         title="Dados Pessoais"
-        formArea={<Form />}
-      />
+      >
+        <Form />
+      </MainForm>
       <Footer />
     </>
   )

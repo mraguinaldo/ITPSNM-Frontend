@@ -3,13 +3,13 @@ import { Grades } from '../../components/grades'
 import { HeaderForAuthenticatedUsers } from '../../components/header-for-authenticated-users'
 
 const GradeViewArea = () => {
-  const ChangeBodyColor = () => {
+  const changeBodyColor = () => {
     document.body.style.backgroundColor = '#F4F4F4'
   }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    ChangeBodyColor()
+    changeBodyColor()
   }, [])
 
   return (
