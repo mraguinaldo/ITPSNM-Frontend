@@ -13,7 +13,9 @@ const DataTableHeader = ({ totalStudents }: PropsTypes) => {
   return (
     <header className="flex flex-col items-start justify-between gap-8 sm:flex-row">
       <div id="about__contacts" className="flex flex-col gap-3">
-        <h1 className="text-[32px] font-semibold leading-9">Total alunos ({totalStudents})</h1>
+        <h1 className="text-[32px] font-semibold leading-9">
+          Total alunos ({totalStudents}){currentTarget}
+        </h1>
         <p className="text-base font-normal leading-5 text-[#737373]">Encontre os alunos!</p>
       </div>
 

@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify'
-
 import type { IToast } from './interface'
 
 const Toast = ({ message, theme, toastType }: IToast) => {

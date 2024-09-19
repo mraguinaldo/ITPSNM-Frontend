@@ -11,8 +11,9 @@ const DocumentForm = () => {
       <MainForm
         allProgress={<AllProgress firstProcess="concluded" secondProcess="concluded" thirdProcess="inProgress" />}
         title="Documentos"
-        formArea={<Form />}
-      />
+      >
+        <Form />
+      </MainForm>
       <Footer />
     </>
   )

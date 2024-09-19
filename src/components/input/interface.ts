@@ -1,5 +1,5 @@
 interface IInput {
-  inputType: 'text' | 'number' | 'email' | 'file' | 'date'
+  inputType: 'text' | 'number' | 'email' | 'file' | 'date' | 'password'
   className?: string
   onClick?: () => void
   Icon?: any

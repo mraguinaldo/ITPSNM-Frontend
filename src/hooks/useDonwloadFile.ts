@@ -6,9 +6,11 @@ interface IUseDownloadFile {
 
 const UseDownloadFile = async ({ elementId }: IUseDownloadFile) => {
   const gradeReport = document.getElementById(elementId)
+  const grades = document.getElementById('grades')
   if (gradeReport) {
     try {
       gradeReport.classList.add('force_desktop_screen')
+      grades?.classList.add('force')
       const dataUrl = await toPng(gradeReport, { skipFonts: true })
       const link = document.createElement('a')
       link.href = dataUrl
@@ -19,6 +21,7 @@ const UseDownloadFile = async ({ elementId }: IUseDownloadFile) => {
       document.body.removeChild(link)
 
       gradeReport.classList.remove('force_desktop_screen')
+      grades?.classList.remove('force')
     } catch (error) {
       console.error('Erro ao fazer download da imagem', error)
     }
