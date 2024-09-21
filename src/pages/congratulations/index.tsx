@@ -7,12 +7,14 @@ import { UseGetData } from '../../hooks/useGetData'
 
 const CongratulationsPage = () => {
   const [user, setUser] = useState<any>()
+
   useEffect(() => {
     const enrollmentData = UseGetData('studentData')
     const personalData = UseGetData('IdentityCard')
     const currentUser = { enrollmentData, personalData }
     if (enrollmentData && personalData) setUser(currentUser)
   }, [])
+
   return (
     <>
       <Header />

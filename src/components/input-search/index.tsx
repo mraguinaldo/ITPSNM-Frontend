@@ -12,7 +12,7 @@ const InputSearch = ({ placeholder, icon, onChange }: PropsTyoe) => {
         type="text"
         placeholder={placeholder}
         onChange={onChange}
-        className="w-full max-w-[164px] border-none bg-transparent outline-none placeholder:text-sm placeholder:font-normal placeholder:tracking-[1px] placeholder:text-[#363636]"
+        className="w-full border-none bg-transparent outline-none placeholder:text-sm placeholder:font-normal placeholder:tracking-[1px] placeholder:text-[#363636]"
       />
     </div>
   )

@@ -81,7 +81,7 @@ const Form = () => {
         placeholder="Nome completo"
         {...register('fullName')}
       />
-      <div className="flex flex-col sm:flex-row w-full gap-3">
+      <div className="flex flex-col sm:flex-row w-full gap-5 md:gap-3">
         <Input
           label="Pai"
           errorMessage={errors.father?.message}
@@ -104,7 +104,7 @@ const Form = () => {
         placeholder="Bilhete de identidade"
         {...register('identityCardNumber')}
       />
-      <div className="flex flex-col sm:flex-row w-full gap-3">
+      <div className="flex flex-col sm:flex-row w-full gap-5 md:gap-3">
         <Input
           label="Data de nascimento"
           errorMessage={errors.dateOfBirth?.message}
@@ -140,7 +140,7 @@ const Form = () => {
         placeholder="E-mail"
         {...register('email')}
       /> */}
-      <div className="flex flex-col sm:flex-row w-full gap-3">
+      <div className="flex flex-col sm:flex-row w-full gap-5 md:gap-3">
         <Input
           label="Telefone"
           errorMessage={errors.phone?.message}
@@ -156,7 +156,7 @@ const Form = () => {
           {...register('alternativePhone')}
         />
       </div>
-      <div className="flex flex-col sm:flex-row w-full gap-3">
+      <div className="flex flex-col sm:flex-row w-full gap-5 md:gap-3">
         <div className="relative w-full">
           <Input
             label="Província"
@@ -242,7 +242,7 @@ const Form = () => {
           ))}
         </OptionsModal>
       </div>
-      <div className="flex flex-col sm:flex-row w-full gap-3">
+      <div className="flex flex-col sm:flex-row w-full gap-5 md:gap-3">
         <Input
           label="Natural"
           errorMessage={errors.natural?.message}
@@ -258,7 +258,7 @@ const Form = () => {
           {...register('residence')}
         />
       </div>
-      <div className="flex  flex-col sm:flex-row w-full gap-3">
+      <div className="flex  flex-col sm:flex-row w-full gap-5 md:gap-3">
         <Input
           label="Data de emissão"
           errorMessage={errors.emissionDate?.message}
