@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 import { Button } from '../button'
 import { MENU } from './data'
 import { Logo } from '../logo'
+import { useNavigate } from 'react-router-dom'
 
 const Header = () => {
   const [menuMobileStatus, setMenuMobileStatus] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -36,7 +38,7 @@ const Header = () => {
             className="bg-[#F8C40D] text-black py-2 px-7 duration-100 hover:bg-[#f8c50dde]"
             content="Entrar"
             type="button"
-            onClick={() => alert('Clicou')}
+            onClick={() => navigate('/Login')}
           />
         </div>
         <div className="flex lg:hidden">
@@ -68,7 +70,7 @@ const Header = () => {
             ))}
           </nav>
           <div className="flex flex-col gap-9">
-            <Button className="bg-white py-6 px-7" content="Entrar" type="button" onClick={() => alert('Clicou')} />
+            <Button className="bg-white py-6 px-7" content="Entrar" type="button" onClick={() => navigate('/Login')} />
             <a href="/" className="flex gap-2 items-center font-medium text-white">
               Ajuda <Question size={24} color="#fff" />
             </a>

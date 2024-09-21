@@ -4,17 +4,18 @@ import { UseGetData } from '../hooks/useGetData'
 
 interface PropsType {
   children: ReactNode
+  path: string
 }
 
-const PrivateRoute = ({ children }: PropsType) => {
+const PrivateRoute = ({ children, path }: PropsType) => {
   const user = UseGetData('LoginData')
   const navigate = useNavigate()
 
   useEffect(() => {
     if (!user) {
-      navigate('/Login')
+      navigate(path)
     }
-  }, [user, navigate])
+  }, [user, navigate, path])
 
   return user ? <>{children}</> : null
 }

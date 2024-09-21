@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
 import { UseExtractFirstAndLastName } from '../../hooks/useExtractFirstAndLastName'
-import { AuthenticatedUser } from './authenticated-user'
 import { Logo } from '../logo'
 import { StudentOptionsModal } from '../modals/student/options'
 import { SelectedArea } from '../selected-area'
@@ -9,12 +8,16 @@ import { Toast } from '../toast'
 import { STTUDENT_OPTIONS } from './data'
 import { UseGetData } from '../../hooks/useGetData'
 import { FAKEUSERS } from '../../utils'
+import { AuthenticatedUser } from '../authenticated-user'
+import { QuestionModal } from '../modals/question'
+import { Check, X } from 'phosphor-react'
 
 const HeaderForAuthenticatedUsers = () => {
   const navigate = useNavigate()
   const [authenticatedUser, setAuthenticatedUser] = useState<any>()
   const [nameExtracted, setNameExtracted] = useState<string>('')
   const [modalState, setModalState] = useState<boolean>(false)
+  const [questionModalState, setQuestionModalState] = useState<boolean>(false)
 
   const handleScroll = useCallback(() => setModalState(false), [])
 
@@ -44,13 +47,20 @@ const HeaderForAuthenticatedUsers = () => {
   }, [fetchUserData, handleScroll])
 
   const handleStudentOptionClick = (content: string, href: string) => {
-    const isLogout = content === 'Terminar sessão'
+    setModalState(false)
 
+    const isLogout = content === 'Terminar sessão'
     if (isLogout) {
-      Toast({ message: 'Sessão Terminada', theme: 'light', toastType: 'success' })
-      localStorage.setItem('LoginData', '')
+      return setQuestionModalState(true)
     }
     navigate(href)
+  }
+
+  const signOut = () => {
+    setQuestionModalState(false)
+    Toast({ message: 'Sessão Terminada', theme: 'light', toastType: 'success' })
+    localStorage.setItem('LoginData', '')
+    navigate('/login')
   }
 
   const toggleModalState = () => setModalState((prevState) => !prevState)
@@ -62,8 +72,9 @@ const HeaderForAuthenticatedUsers = () => {
         <div className="w-full max-w-[240px] md:max-w-[400px] relative">
           <AuthenticatedUser
             fullName={nameExtracted}
-            studentType={authenticatedUser?.userType || ''}
+            userType={authenticatedUser?.userType || ''}
             avatar="/men-00.png"
+            className="items-center justify-end"
             onClick={toggleModalState}
             onMouseEnter={() => setModalState(true)}
           />
@@ -80,6 +91,14 @@ const HeaderForAuthenticatedUsers = () => {
           </StudentOptionsModal>
         </div>
       </div>
+      <QuestionModal
+        title="Desejas terminar a sessão?"
+        visible={questionModalState}
+        iconReject={<X color="#fff" size={24} />}
+        iconConfirm={<Check color="#fff" size={24} />}
+        reject={() => setQuestionModalState(false)}
+        confirm={signOut}
+      />
     </header>
   )
 }

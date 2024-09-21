@@ -1,4 +1,4 @@
-import { User, UserSwitch } from 'phosphor-react'
+import { SignOut, User } from 'phosphor-react'
 
 const STTUDENT_OPTIONS = [
   {
@@ -11,7 +11,7 @@ const STTUDENT_OPTIONS = [
     id: 1,
     content: 'Terminar sessão',
     href: '/login',
-    Icon: UserSwitch,
+    Icon: SignOut,
   },
 ]
 

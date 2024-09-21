@@ -3,7 +3,6 @@ interface PropsType {
   name: string
   img: string
   course: string
-  period: 'Manhã' | 'Tarde' | 'Noite'
   level: string
   state: boolean
 }
@@ -15,7 +14,6 @@ export const STUDENTS: PropsType[] = [
     img: '/men-00.png',
     course: 'Farmácia',
     level: '10ª',
-    period: 'Manhã',
     state: true,
   },
   {
@@ -24,7 +22,6 @@ export const STUDENTS: PropsType[] = [
     img: '/men-00.png',
     course: 'Enfermagem',
     level: '10ª',
-    period: 'Tarde',
     state: false,
   },
   {
@@ -33,7 +30,6 @@ export const STUDENTS: PropsType[] = [
     img: '/men-00.png',
     course: 'Análises Clínica',
     level: '10ª',
-    period: 'Manhã',
     state: true,
   },
   {
@@ -42,7 +38,6 @@ export const STUDENTS: PropsType[] = [
     img: '/men-00.png',
     course: 'Enfermagem',
     level: '10ª',
-    period: 'Tarde',
     state: false,
   },
   {
@@ -51,7 +46,6 @@ export const STUDENTS: PropsType[] = [
     img: '/men-00.png',
     course: 'Farmácia',
     level: '10ª',
-    period: 'Manhã',
     state: true,
   },
   {
@@ -60,7 +54,6 @@ export const STUDENTS: PropsType[] = [
     img: '/men-00.png',
     course: 'Fisioterapia',
     level: '10ª',
-    period: 'Manhã',
     state: true,
   },
 ]
@@ -85,14 +78,10 @@ export const tableHeader: PropsTypeTableHeader[] = [
   },
   {
     id: 3,
-    content: 'Turno',
-  },
-  {
-    id: 4,
     content: 'Estado',
   },
   {
-    id: 5,
+    id: 4,
     content: 'Ações',
   },
 ]

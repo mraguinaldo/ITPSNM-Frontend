@@ -5,7 +5,7 @@ interface PropsType {
 const State = ({ locked }: PropsType) => {
   return (
     <span
-      className={`flex h-8 w-full items-center rounded-[40px] px-4 py-2 font-normal ${
+      className={`flex text-[14px] lg:text-[16px] h-8 w-full items-center rounded-[40px] px-4 py-2 font-normal justify-center ${
         locked ? 'max-w-[114px] bg-[#ff373723] text-[#FF3737]' : 'max-w-[88px] bg-[#3758ff26] text-[#3757FF]'
       }`}
     >
