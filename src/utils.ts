@@ -1,8 +1,7 @@
 const generateNotes = () => {
-  return Array.from({ length: 16 }, (_, i) => ({
+  return Array.from({ length: 14 }, (_, i) => ({
     id: i + 1,
     note: Math.floor(Math.random() * 21),
-    visible: i + 1 !== 5 && i + 1 !== 10,
   }))
 }
 

@@ -4,11 +4,7 @@ import { UseDownloadFile } from '../../hooks/useDonwloadFile'
 import { OptionsModal } from '../modals/options-modal'
 import { SelectedArea } from '../selected-area'
 import { useState } from 'react'
-
-interface IHeader {
-  user: any
-  details: any[]
-}
+import type { IHeader } from './interfaces'
 
 const Header = ({ details, user }: IHeader) => {
   const [modalState, setModalState] = useState(false)
