@@ -1,13 +1,11 @@
 'use client'
-import { STUDENTS, tableHeader } from './data'
-import { Student } from '../student'
+
 import { DotsThree } from 'phosphor-react'
 import { UseExtractFirstAndLastName } from '../../hooks/useExtractFirstAndLastName'
-// import { StudentInformationModal } from '../modals/student-information-modal'
-// import { useState } from 'react'
+import { Student } from '../student'
+import { STUDENTS, tableHeader } from './data'
 
 const Students = () => {
-  // const [stateStudentInformationModal, setStateStudentInformationModal] = useState<boolean>(true)
   return (
     <div id="students" className="py-12 w-full overflow-x-auto">
       <table className="w-full">
@@ -44,32 +42,6 @@ const Students = () => {
           ))}
         </tbody>
       </table>
-      {/* <StudentInformationModal
-        visible={stateStudentInformationModal}
-        toggleStateModal={() => setStateStudentInformationModal(false)}
-        // biome-ignore lint/correctness/noChildrenProp: <explanation>
-        children={
-          <div>
-            <h1>Nome completo: {STUDENT_DATA.fullName}</h1>
-            <p>Telefone: {STUDENT_DATA.phone}</p>
-            <p>Telefone alternativo: {STUDENT_DATA.alternativePhone}</p>
-            <p>Email: {STUDENT_DATA.email}</p>
-            <p>Curso: {STUDENT_DATA.course}</p>
-            <p>{STUDENT_DATA.level}</p>
-            <p>{STUDENT_DATA.father}</p>
-            <p>{STUDENT_DATA.mother}</p>
-            <p>{STUDENT_DATA.gender}</p>
-            <p>{STUDENT_DATA.height}</p>
-            <p>{STUDENT_DATA.identityCardNumber}</p>
-            <p>{STUDENT_DATA.residence}</p>
-            <p>{STUDENT_DATA.province}</p>
-            <p>{STUDENT_DATA.natural}</p>
-            <p>{STUDENT_DATA.maritalStatus}</p>
-            <p>{STUDENT_DATA.expirationDate}</p>
-            <p>{STUDENT_DATA.emissionDate}</p>
-          </div>
-        }
-      /> */}
     </div>
   )
 }

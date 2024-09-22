@@ -174,7 +174,6 @@ const Form = () => {
             {PROVINCES.map(({ id, province }) => (
               <SelectedArea
                 key={id}
-                id={id}
                 area={province}
                 onClick={() => {
                   toggleModalState(0)
@@ -202,7 +201,6 @@ const Form = () => {
             {COUNTIES.map(({ id, county }) => (
               <SelectedArea
                 key={id}
-                id={id}
                 area={county}
                 onClick={() => {
                   toggleModalState(1)
@@ -231,7 +229,6 @@ const Form = () => {
           {MARITAL_STATUS.map(({ id, maritalStatus }) => (
             <SelectedArea
               key={id}
-              id={id}
               area={maritalStatus}
               onClick={() => {
                 toggleModalState(3)

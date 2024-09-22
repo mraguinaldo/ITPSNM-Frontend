@@ -82,7 +82,6 @@ const HeaderForAuthenticatedUsers = () => {
             {STTUDENT_OPTIONS.map(({ id, content, Icon, href }) => (
               <SelectedArea
                 key={id}
-                id={id}
                 Icon={<Icon size={24} color="#fff" />}
                 area={content}
                 onClick={() => handleStudentOptionClick(content, href)}
