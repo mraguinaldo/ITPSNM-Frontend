@@ -91,7 +91,6 @@ const Form = () => {
             {COURSES.map(({ id, course }) => (
               <SelectedArea
                 key={id}
-                id={id}
                 area={course}
                 onClick={() => {
                   toggleModalState(0)

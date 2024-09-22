@@ -27,6 +27,11 @@ const FAKEUSERS = [
         { id: 5, subject: 'Química', notes: generateNotes() },
         { id: 6, subject: 'Literatura', notes: generateNotes() },
         { id: 7, subject: 'Sociologia', notes: generateNotes() },
+        { id: 8, subject: 'Gestão de Redes', notes: generateNotes() },
+        { id: 9, subject: 'Comportamento Organizacional', notes: generateNotes() },
+        { id: 10, subject: 'Física', notes: generateNotes() },
+        { id: 11, subject: 'Sistemas Digitais', notes: generateNotes() },
+        { id: 12, subject: 'Engenharia de Redes', notes: generateNotes() },
       ],
       eleventh_class: [
         { id: 0, subject: 'Física', notes: generateNotes() },

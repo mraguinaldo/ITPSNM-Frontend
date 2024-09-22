@@ -3,16 +3,17 @@ import { LEVELS } from './data'
 import { UseDownloadFile } from '../../hooks/useDonwloadFile'
 import { OptionsModal } from '../modals/options-modal'
 import { SelectedArea } from '../selected-area'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import type { IHeader } from './interfaces'
+import { SelectedLevelContenxts } from '../contexts/selected-level-context'
 
 const Header = ({ details, user }: IHeader) => {
   const [modalState, setModalState] = useState(false)
-  const [selectedLevel, setSelectedLevel] = useState(LEVELS[0].level)
+  const { selectedLevel, setSelectedLevel }: any = useContext(SelectedLevelContenxts)
 
-  const toggleModalState = (selectedLevelId: number) => {
+  const changeGradeReport = (selectedLevelId: number) => {
     setModalState((prev) => !prev)
-    setSelectedLevel(LEVELS[selectedLevelId].level)
+    setSelectedLevel(LEVELS[selectedLevelId])
   }
 
   const donwloadFile = (elementId: string) => {
@@ -37,7 +38,7 @@ const Header = ({ details, user }: IHeader) => {
             className="text-[#1E1E1E] w-full py-3 px-6 bg-[#F4F4F4] flex gap-2 rounded-[50px] items-center cursor-pointer text-[14px] sm:text-[16px] absolute z-50"
             onClick={() => setModalState((prev) => !prev)}
           >
-            {selectedLevel}
+            {selectedLevel?.level}
             <CaretDown
               size={18}
               color="#2F2F2F"
@@ -46,14 +47,7 @@ const Header = ({ details, user }: IHeader) => {
           </button>
           <OptionsModal className="top-8" modalState={modalState}>
             {LEVELS.map(({ id, level }) => (
-              <SelectedArea
-                key={id}
-                id={id}
-                area={level}
-                onClick={() => {
-                  toggleModalState(id)
-                }}
-              />
+              <SelectedArea key={id} area={level} onClick={() => changeGradeReport(id)} />
             ))}
           </OptionsModal>
         </div>

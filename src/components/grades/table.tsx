@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { FinalAssessment } from './final-assessment'
 import { HeadLine } from './headLine'
 import { TypeAssessment } from './type-assessment'
@@ -7,10 +7,19 @@ import { Grade } from './grade'
 import { Subject } from './subject'
 import type { ITableContent } from './interfaces'
 import React from 'react'
+import { SelectedLevelContenxts } from '../contexts/selected-level-context'
 
 const TableContent = ({ user }: ITableContent) => {
   const average = 12
-  const [currentLevel, setCurrentLevel] = useState<string>('eleventh_class')
+  const { selectedLevel }: any = useContext(SelectedLevelContenxts)
+
+  if (!selectedLevel) {
+    return (
+      <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-dvh">
+        Buscando Notas...
+      </h1>
+    )
+  }
 
   return (
     <div className="flex flex-row pt-12 w-full overflow-x-scroll">
@@ -29,7 +38,7 @@ const TableContent = ({ user }: ITableContent) => {
             </tr>
           </thead>
           <tbody>
-            {user?.grades[currentLevel].map((item: any) => (
+            {user?.grades[selectedLevel?.ordinalFormClass].map((item: any) => (
               <tr key={item.id}>
                 <Subject key={item.id} subject={item.subject} />
                 {item.notes.map((currentSubject: any, index: number) => (

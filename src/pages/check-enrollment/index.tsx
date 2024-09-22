@@ -50,7 +50,6 @@ const CheckEnrollment = () => {
                   {Search_Types.map(({ id, searchType, value }) => (
                     <SelectedArea
                       key={id}
-                      id={id}
                       area={value}
                       onClick={() => {
                         toggleModalState(value, searchType)

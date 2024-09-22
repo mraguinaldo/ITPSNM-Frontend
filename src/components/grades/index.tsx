@@ -36,7 +36,6 @@ const Grades = () => {
         <Header user={user} details={user.details} />
         <TableContent user={user} />
       </div>
-      )
     </section>
   )
 }
