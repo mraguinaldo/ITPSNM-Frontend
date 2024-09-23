@@ -1,5 +1,5 @@
 import { useReducer } from 'react'
-import { Input } from '../../components/input'
+import { Input } from '../../components/inputs/normal'
 import { Button } from '../../components/button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -33,7 +33,6 @@ const Form = () => {
       gender: '',
       alternativePhone: '',
       phone: '',
-      // email: '',
       height: '',
       emissionDate: undefined,
       identityCardNumber: '',
@@ -133,13 +132,6 @@ const Form = () => {
           />
         ))}
       </div>
-      {/* <Input
-        label="E-mail atual"
-        errorMessage={errors.email?.message}
-        inputType="email"
-        placeholder="E-mail"
-        {...register('email')}
-      /> */}
       <div className="flex flex-col sm:flex-row w-full gap-5 md:gap-3">
         <Input
           label="Telefone"

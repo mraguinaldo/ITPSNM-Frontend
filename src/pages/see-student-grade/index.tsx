@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Grades } from '../../components/grades'
-import { HeaderForAuthenticatedUsers } from '../../components/header-for-authenticated-users'
+import { HeaderForAuthenticatedUsers } from '../../components/headers/for-authenticated-users'
 
 const GradeViewArea = () => {
   useEffect(() => {

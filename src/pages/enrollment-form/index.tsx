@@ -1,6 +1,6 @@
 import { AllProgress } from '../../components/all-progress'
 import { Footer } from '../../components/footer'
-import { Header } from '../../components/header'
+import { Header } from '../../components/headers/normal'
 import { MainForm } from '../../components/main-form'
 import { Form } from './form'
 

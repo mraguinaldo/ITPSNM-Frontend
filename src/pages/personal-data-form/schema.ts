@@ -58,14 +58,6 @@ export const schemaForm = yup.object().shape({
       const regEx = /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
       if (natural.match(regEx)) return true
     }),
-  // email: yup
-  //   .string()
-  //   .required('O email é obrigatório!!')
-  //   .test('email-validation', 'Email inválido.', (email) => {
-  //     const emailRegex =
-  //       /^([A-Z|a-z|0-9](\.|_){0,1})+[A-Z|a-z|0-9]@([A-Z|a-z|0-9])+((\.){0,1}[A-Z|a-z|0-9]){2}\.[a-z]{2,3}$/
-  //     if (email?.match(emailRegex)) return true
-  //   }),
   phone: yup
     .string()
     .required('O número de telefone é obrigatório!!')

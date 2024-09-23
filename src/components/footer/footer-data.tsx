@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { FOOTER_DATA } from './data'
 
 const FooterData = () => {
@@ -8,13 +9,13 @@ const FooterData = () => {
           <h4 className="font-semibold uppercase text-white">{title}</h4>
           <nav className="flex gap-3 flex-col">
             {children.map(({ id, content, Icon, target, element }) => (
-              <a
+              <Link
                 key={id}
-                href={target && target}
+                to={(target && target) || ''}
                 className={`flex gap-1 duration-150 items-center font-light ${element === 'email' ? 'bg-[#F8C40D] rounded-[6px] font-semibold p-3 text-[#000]' : 'bg-transparent text-[#989292] hover:text-[#9892929a]'}`}
               >
                 {Icon && <Icon weight="duotone" size={18} color={element === 'email' ? '#000' : '#F8C40D'} />} {content}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>

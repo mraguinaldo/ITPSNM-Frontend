@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Footer } from '../../components/footer'
-import { Header } from '../../components/header'
 import { Button } from '../../components/button'
 import { OptionsModal } from '../../components/modals/options-modal'
 import { SelectedArea } from '../../components/selected-area'
 import { Search_Types } from './data'
 import { CaretDown } from 'phosphor-react'
+import { Header } from '../../components/headers/normal'
 
 const CheckEnrollment = () => {
   const [enrollmenteData, setEnrollmenteData] = useState<string>('')
@@ -26,7 +26,7 @@ const CheckEnrollment = () => {
   return (
     <>
       <Header />
-      <section className="py-56">
+      <section className="py-36 sm:py-56">
         <div className="w-full max-w-[1296px] m-auto px-6 flex flex-col lg:flex-row items-center gap-16 justify-center">
           <div className="flex flex-col gap-8 w-full items-center justify-center">
             <div className="flex flex-col items-center justify-center gap-4">
@@ -72,7 +72,7 @@ const CheckEnrollment = () => {
                   type="button"
                   content="Consultar"
                   onClick={() => searchEnrollmentStatus(currentSearchMode, enrollmenteData)}
-                  className="bg-[#F8C40D] py-4 leading-[130%] sm:max-w-[150px] sm:px-2"
+                  className="bg-[#F8C40D] text-[12px] sm:text-[16px] py-4 leading-[130%] sm:max-w-[150px] sm:px-2"
                 />
               </div>
             </div>
