@@ -1,10 +1,6 @@
-interface PropsTyoe {
-  placeholder: string
-  icon: any
-  onChange: (e: any) => void
-}
+import type { IInputSearch } from './interface'
 
-const InputSearch = ({ placeholder, icon, onChange }: PropsTyoe) => {
+const InputSearch = ({ placeholder, icon, onChange }: IInputSearch) => {
   return (
     <div id="input" className="flex h-10 w-full items-center gap-2 rounded-[8px] bg-[#F4F4F4] p-2">
       {icon && icon}

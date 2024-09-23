@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { CongratulationsCard } from '../../components/cards/congratulations'
 import { Footer } from '../../components/footer'
-import { Header } from '../../components/header'
 import { RegistrationNumberCopier } from '../../components/registration-number-copier'
 import { UseGetData } from '../../hooks/useGetData'
+import { Header } from '../../components/headers/normal'
 
 const CongratulationsPage = () => {
   const [user, setUser] = useState<any>()

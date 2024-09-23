@@ -1,5 +1,4 @@
 import { useEffect, useReducer } from 'react'
-import { Input } from '../../components/input'
 import { Button } from '../../components/button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -13,6 +12,7 @@ import { actions } from './actions'
 import { useNavigate } from 'react-router-dom'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { UseGetData } from '../../hooks/useGetData'
+import { Input } from '../../components/inputs/normal'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)

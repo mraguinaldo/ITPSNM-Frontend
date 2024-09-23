@@ -1,9 +1,9 @@
 import { CaretRight, List, Question, X } from 'phosphor-react'
 import { useEffect, useState } from 'react'
-import { Button } from '../button'
+import { Button } from '../../button'
 import { MENU } from './data'
-import { Logo } from '../logo'
-import { useNavigate } from 'react-router-dom'
+import { Logo } from '../../logo'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Header = () => {
   const [menuMobileStatus, setMenuMobileStatus] = useState<boolean>(false)
@@ -20,20 +20,20 @@ const Header = () => {
           <Logo />
           <nav className="hidden gap-8 items-center md:flex">
             {MENU.map(({ id, content, target, Icon }) => (
-              <a
+              <Link
                 key={id}
-                href={target}
+                to={target}
                 className="flex text-white gap-2 duration-100 items-center font-normal hover:text-[#ffffffb1]"
               >
                 {content} {Icon && <Icon size={24} className="hover:text-[#ABA7A7] duration-75" />}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>
         <div className="hidden gap-7 items-center lg:flex">
-          <a href="/" className="flex gap-2 items-center font-medium text-[#fff]">
+          <Link to="/" className="flex gap-2 items-center font-medium text-[#fff]">
             Ajuda <Question size={24} color="#fff" />
-          </a>
+          </Link>
           <Button
             className="bg-[#F8C40D] text-black py-2 px-7 duration-100 hover:bg-[#f8c50dde]"
             content="Entrar"
@@ -60,20 +60,20 @@ const Header = () => {
         <div className="flex flex-col w-full gap-6 px-6 py-10">
           <nav className="flex flex-col w-full gap-4">
             {MENU.map(({ id, content, target }) => (
-              <a
+              <Link
                 key={id}
-                href={target}
+                to={target}
                 className="flex gap-2 items-center uppercase justify-between font-normal text-[#AFAFAF]"
               >
                 {content} <CaretRight size={24} color="#AFAFAF" />
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="flex flex-col gap-9">
             <Button className="bg-white py-6 px-7" content="Entrar" type="button" onClick={() => navigate('/Login')} />
-            <a href="/" className="flex gap-2 items-center font-medium text-white">
+            <Link to="/" className="flex gap-2 items-center font-medium text-white">
               Ajuda <Question size={24} color="#fff" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

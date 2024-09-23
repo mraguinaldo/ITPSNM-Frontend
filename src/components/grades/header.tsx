@@ -35,7 +35,7 @@ const Header = ({ details, user }: IHeader) => {
         <div className="relative w-full max-w-[160px]">
           <button
             type="button"
-            className="text-[#1E1E1E] w-full py-3 px-6 bg-[#F4F4F4] flex gap-2 rounded-[50px] items-center cursor-pointer text-[14px] sm:text-[16px] absolute z-50"
+            className="text-[#1E1E1E] w-full py-3 px-6 bg-[#F4F4F4] flex gap-2 rounded-[50px] items-center font-semibold justify-between cursor-pointer text-[14px] sm:text-[16px] absolute z-50"
             onClick={() => setModalState((prev) => !prev)}
           >
             {selectedLevel?.level}
@@ -45,7 +45,10 @@ const Header = ({ details, user }: IHeader) => {
               className={`duration-100 cursor-pointer ${modalState ? 'rotate-[-180deg]' : 'rotate-0'}`}
             />
           </button>
-          <OptionsModal className="top-8" modalState={modalState}>
+          <OptionsModal
+            className={`top-8 ${modalState ? 'pt-8 opacity-100' : 'pt-0 opacity-0'}`}
+            modalState={modalState}
+          >
             {LEVELS.map(({ id, level }) => (
               <SelectedArea key={id} area={level} onClick={() => changeGradeReport(id)} />
             ))}

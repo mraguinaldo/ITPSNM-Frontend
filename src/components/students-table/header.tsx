@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { InputSearch } from '../input-search'
+import { InputSearch } from '../inputs/search'
 import { MagnifyingGlass } from 'phosphor-react'
 
 interface PropsTypes {
