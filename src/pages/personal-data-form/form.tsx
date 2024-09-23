@@ -27,7 +27,7 @@ const Form = () => {
     resolver: yupResolver(schemaForm),
     defaultValues: {
       fullName: '',
-      county: '',
+      countyId: '',
       dateOfBirth: undefined,
       father: '',
       gender: '',
@@ -39,7 +39,7 @@ const Form = () => {
       maritalStatus: '',
       mother: '',
       natural: '',
-      province: '',
+      provinceId: '',
       residence: '',
       expirationDate: undefined,
     },
@@ -152,7 +152,7 @@ const Form = () => {
         <div className="relative w-full">
           <Input
             label="Província"
-            errorMessage={errors.province?.message}
+            errorMessage={errors.provinceId?.message}
             inputType="text"
             onClick={() => {
               toggleModalState(0)
@@ -160,7 +160,7 @@ const Form = () => {
             chevronState={state.chevronState === 0}
             placeholder={'Província'}
             option
-            {...register('province')}
+            {...register('provinceId')}
           />
           <OptionsModal modalState={state.modalState === 0}>
             {PROVINCES.map(({ id, province }) => (
@@ -170,7 +170,7 @@ const Form = () => {
                 onClick={() => {
                   toggleModalState(0)
                   dispatch({ type: actions.addProvince, payload: province })
-                  setValue('province', province, { shouldValidate: true })
+                  setValue('provinceId', province, { shouldValidate: true })
                 }}
               />
             ))}
@@ -179,7 +179,7 @@ const Form = () => {
         <div className="relative w-full">
           <Input
             label="Município"
-            errorMessage={errors.county?.message}
+            errorMessage={errors.countyId?.message}
             inputType="text"
             onClick={() => {
               toggleModalState(1)
@@ -187,7 +187,7 @@ const Form = () => {
             chevronState={state.chevronState === 1}
             placeholder={'Município'}
             option
-            {...register('county')}
+            {...register('countyId')}
           />
           <OptionsModal modalState={state.modalState === 1}>
             {COUNTIES.map(({ id, county }) => (
@@ -197,7 +197,7 @@ const Form = () => {
                 onClick={() => {
                   toggleModalState(1)
                   dispatch({ type: actions.addProvince, payload: county })
-                  setValue('county', county, { shouldValidate: true })
+                  setValue('countyId', county, { shouldValidate: true })
                 }}
               />
             ))}
