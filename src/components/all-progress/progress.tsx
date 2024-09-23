@@ -21,7 +21,7 @@ const Progress = ({ typeProgress, value, content }: IProgress) => {
         <span
           className={`font-semibold text-[14px] md:text-[16xp] ${typeProgress === 'concluded' ? 'text-[#00AA1F]' : 'text-[#9F9F9F]'}`}
         >
-          {typeProgress === 'concluded' ? 'Feito' : 'Pendente'}
+          {typeProgress === 'concluded' ? 'Feito' : typeProgress === 'inProgress' ? 'Em andamento' : 'Pendente'}
         </span>
       </div>
     </div>
