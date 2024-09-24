@@ -5,18 +5,18 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schemaForm } from './schema'
 import { SelectedArea } from '../../components/selected-area'
-import { COUNTIES, GENRES, MARITAL_STATUS, PROVINCES, dateFields, fields, initialValues } from './data'
+import { COUNTIES, GENRES, MARITAL_STATUS, PROVINCES, initialValues } from './data'
 import { RadioButton } from '../../components/radio-button'
 import { OptionsModal } from '../../components/modals/options-modal'
 import { reducer } from './reducer'
 import { actions } from './actions'
-import { UseformatDate } from '../../hooks/useFormatDate'
-import { useNavigate } from 'react-router-dom'
-import { UsestoreData } from '../../hooks/useStoreData'
+
+import { UseSendStudentPersonalData } from '../../hooks/useSendStudentPersonalData'
+import { ProgressBar } from '../../components/progress-bar'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
-  const navigate = useNavigate()
+  const { mutate: sendStudentPersonalData, isLoading } = UseSendStudentPersonalData()
 
   const {
     register,
@@ -27,19 +27,19 @@ const Form = () => {
     resolver: yupResolver(schemaForm),
     defaultValues: {
       fullName: '',
-      countyId: '',
+      countyId: undefined,
       dateOfBirth: undefined,
       father: '',
       gender: '',
-      alternativePhone: '',
+      alternativePhone: undefined,
       phone: '',
-      height: '',
+      height: undefined,
       emissionDate: undefined,
       identityCardNumber: '',
       maritalStatus: '',
       mother: '',
       natural: '',
-      provinceId: '',
+      provinceId: undefined,
       residence: '',
       expirationDate: undefined,
     },
@@ -56,23 +56,23 @@ const Form = () => {
 
   const onSubmit = (data: any) => {
     try {
-      const formData = new FormData()
-
-      dateFields.map((field) => {
-        formData.append(field, UseformatDate(data[field]))
-      })
-
-      fields.map((field) => {
-        formData.append(field, data[field])
-      })
-      UsestoreData('IdentityCard', formData)
-      navigate('/register/enrollment-form')
+      sendStudentPersonalData({ formData: data })
     } catch (error) {
       console.log(error)
     }
   }
+
+  if (isLoading) return <ProgressBar />
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full'}>
+      <Input
+        label="Nº do bilhete de identidade"
+        errorMessage={errors.identityCardNumber?.message}
+        inputType="text"
+        placeholder="Bilhete de identidade"
+        {...register('identityCardNumber')}
+      />
       <Input
         label="Nome completo"
         errorMessage={errors.fullName?.message}
@@ -96,13 +96,7 @@ const Form = () => {
           {...register('mother')}
         />
       </div>
-      <Input
-        label="Nº do bilhete de identidade"
-        errorMessage={errors.identityCardNumber?.message}
-        inputType="text"
-        placeholder="Bilhete de identidade"
-        {...register('identityCardNumber')}
-      />
+
       <div className="flex flex-col sm:flex-row w-full gap-5 md:gap-3">
         <Input
           label="Data de nascimento"
@@ -121,13 +115,13 @@ const Form = () => {
       </div>
       <div className="flex flex-col gap-3">
         <p className="text-[16px] font-medium text-[#2F2F2F]">Sexo</p>
-        {GENRES.map(({ id, gender }) => (
+        {GENRES.map(({ id, content, gender }) => (
           <RadioButton
             key={id}
             value={gender}
             checked={state.gender === id}
             onClick={() => changeGender(id)}
-            label={gender}
+            label={content}
             {...register('gender')}
           />
         ))}
@@ -154,6 +148,7 @@ const Form = () => {
             label="Província"
             errorMessage={errors.provinceId?.message}
             inputType="text"
+            value={state.province}
             onClick={() => {
               toggleModalState(0)
             }}
@@ -170,7 +165,7 @@ const Form = () => {
                 onClick={() => {
                   toggleModalState(0)
                   dispatch({ type: actions.addProvince, payload: province })
-                  setValue('provinceId', province, { shouldValidate: true })
+                  setValue('provinceId', id, { shouldValidate: true })
                 }}
               />
             ))}
@@ -187,6 +182,7 @@ const Form = () => {
             chevronState={state.chevronState === 1}
             placeholder={'Município'}
             option
+            value={state.county}
             {...register('countyId')}
           />
           <OptionsModal modalState={state.modalState === 1}>
@@ -196,8 +192,8 @@ const Form = () => {
                 area={county}
                 onClick={() => {
                   toggleModalState(1)
-                  dispatch({ type: actions.addProvince, payload: county })
-                  setValue('countyId', county, { shouldValidate: true })
+                  dispatch({ type: actions.addCounty, payload: county })
+                  setValue('countyId', id, { shouldValidate: true })
                 }}
               />
             ))}
@@ -214,17 +210,21 @@ const Form = () => {
           }}
           chevronState={state.chevronState === 3}
           placeholder={'Selecionar estado civil'}
+          value={state.maritalStatus}
           option
           {...register('maritalStatus')}
         />
         <OptionsModal modalState={state.modalState === 3}>
-          {MARITAL_STATUS.map(({ id, maritalStatus }) => (
+          {MARITAL_STATUS.map(({ id, content, maritalStatus }) => (
             <SelectedArea
               key={id}
-              area={maritalStatus}
+              area={content.concat(GENRES[state.gender].gender === 'MALE' ? 'o' : 'a')}
               onClick={() => {
                 toggleModalState(3)
-                dispatch({ type: actions.toggleMaritalStatus, payload: maritalStatus })
+                dispatch({
+                  type: actions.toggleMaritalStatus,
+                  payload: content.concat(GENRES[state.gender].gender === 'MALE' ? 'o' : 'a'),
+                })
                 setValue('maritalStatus', maritalStatus, { shouldValidate: true })
               }}
             />

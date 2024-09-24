@@ -23,7 +23,7 @@ const initialValues = {
   chevronState: 100,
   modalState: 100,
   gender: 0,
-  maritalStatus: 0,
+  maritalStatus: '',
   province: '',
   county: '',
 }
@@ -47,15 +47,15 @@ const fields = [
 const dateFields = ['dateOfBirth', 'emissionDate', 'expirationDate']
 
 const MARITAL_STATUS = [
-  { id: 0, maritalStatus: 'Solteiro(a)' },
-  { id: 1, maritalStatus: 'Casado(a)' },
-  { id: 2, maritalStatus: 'Divorcíado(a)' },
-  { id: 3, maritalStatus: 'Viúvo(a)' },
+  { id: 0, content: 'Solteir', maritalStatus: 'SINGLE' },
+  { id: 1, content: 'Casad', maritalStatus: 'MARRIED' },
+  { id: 2, content: 'Divorcíad', maritalStatus: 'DIVORCED' },
+  { id: 3, content: 'Viúv', maritalStatus: 'WIDOWED' },
 ]
 
 const GENRES = [
-  { id: 0, gender: 'Masculino' },
-  { id: 1, gender: 'Feminino' },
+  { id: 0, content: 'Masculino', gender: 'MALE' },
+  { id: 1, content: 'Feminino', gender: 'FEMALE' },
 ]
 
 export { PROVINCES, COUNTIES, initialValues, fields, dateFields, MARITAL_STATUS, GENRES }
