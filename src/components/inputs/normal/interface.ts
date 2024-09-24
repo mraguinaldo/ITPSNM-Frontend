@@ -13,6 +13,7 @@ interface IInput {
   label: string
   chevronState?: boolean
   hiddenLabel?: boolean
+  value?: string
 }
 
 export type { IInput }
