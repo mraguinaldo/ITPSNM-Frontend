@@ -1,9 +1,6 @@
 import { BrowserRouter, Route, Routes as Router } from 'react-router-dom'
 import { Home } from '../pages/home'
-import { PersonalDataForm } from '../pages/personal-data-form'
-import { EnrollmentForm } from '../pages/enrollment-form'
-import { DocumentForm } from '../pages/document-form'
-import { CongratulationsPage } from '../pages/congratulations'
+
 import { CheckEnrollment } from '../pages/check-enrollment'
 import { GradeViewArea } from '../pages/see-student-grade'
 import { Login } from '../pages/login'
@@ -15,16 +12,23 @@ import { EnrollmentsTable } from '../components/enrollment-table'
 import { UsersTable } from '../components/users-table'
 import { StudentGrades } from '../components/student-grades'
 import { CoursesTable } from '../components/courses-table'
+import { PersonalDataForm } from '../components/personal-data-form'
+import { EnrollmentForm } from '../components/enrollment-form'
+import { DocumentForm } from '../components/document-form'
+import { Register } from '../pages/register'
+import { CongratulationsPage } from '../components/congratulations-page'
 
 function Routes() {
   return (
     <BrowserRouter>
       <Router>
         <Route path="/" element={<Home />} />
-        <Route path="/register/personal-data-form" element={<PersonalDataForm />} />
-        <Route path="/register/enrollment-form" element={<EnrollmentForm />} />
-        <Route path="/register/document-form" element={<DocumentForm />} />
-        <Route path="/register/congratulations-page" element={<CongratulationsPage />} />
+        <Route path="/register" element={<Register />}>
+          <Route path="personal-data-form" element={<PersonalDataForm />} />
+          <Route path="enrollment-form" element={<EnrollmentForm />} />
+          <Route path="document-form" element={<DocumentForm />} />
+          <Route path="congratulations-page" element={<CongratulationsPage />} />
+        </Route>
         <Route path="/check-enrollment" element={<CheckEnrollment />} />
         <Route
           path="/student/grade-view-area"

@@ -7,37 +7,19 @@ const reducer = (state: any, action: any) => {
     case actions.handleChangeImage: {
       return {
         ...state,
-        image: payload,
+        PHOTO: payload,
       }
     }
     case actions.handleChangeCertificate: {
       return {
         ...state,
-        certificate: payload,
+        REPORT_CARD: payload,
       }
     }
     case actions.handleChangeIdentityCard: {
       return {
         ...state,
-        identityCard: payload,
-      }
-    }
-    case actions.handleChangeReceiptOfPayment: {
-      return {
-        ...state,
-        receiptOfPayment: payload,
-      }
-    }
-    case actions.handleChangeVaccineCard: {
-      return {
-        ...state,
-        vaccineCard: payload,
-      }
-    }
-    case actions.handleChangeMedicalCertificate: {
-      return {
-        ...state,
-        medicalCertificate: payload,
+        IDENTITY_CARD: payload,
       }
     }
     default:

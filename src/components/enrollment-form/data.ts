@@ -8,16 +8,14 @@ const COURSES = [
 const initialValues = {
   chevronState: 100,
   modalState: 100,
-  level: 0,
+  level: 1,
 }
 
 const LEVELS = [
-  { id: 0, level: '10ª Classe' },
-  { id: 1, level: '11ª Classe' },
-  { id: 2, level: '12ª Classe' },
-  { id: 3, level: '13ª Classe' },
+  { id: 1, level: '10ª Classe' },
+  { id: 2, level: '11ª Classe' },
+  { id: 3, level: '12ª Classe' },
+  { id: 4, level: '13ª Classe' },
 ]
 
-const fields = ['fullName', 'course', 'level']
-
-export { COURSES, initialValues, fields, LEVELS }
+export { COURSES, initialValues, LEVELS }
