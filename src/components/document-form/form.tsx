@@ -4,19 +4,19 @@ import { Button } from '../../components/button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schemaForm } from './schema'
-import { fields, initialValues } from './data'
+import { initialValues } from './data'
 import { reducer } from './reducer'
-import { Article, IdentificationBadge, IdentificationCard, User, UserRectangle, Vault } from 'phosphor-react'
+import { Article, IdentificationCard, User } from 'phosphor-react'
 import type { FileField } from './interfaces'
 import { actions } from './actions'
 import { UseHandleFileChange } from '../../hooks/useHandleFileChange'
 import { ImagePreview } from '../../components/Image-preview'
-import { useNavigate } from 'react-router-dom'
+import { useMutation } from 'react-query'
+import { API } from '../../services/api'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const [studentImage, setStudantImage] = useState<string>()
-  const navigate = useNavigate()
 
   const {
     register,
@@ -40,18 +40,40 @@ const Form = () => {
     if (file) {
       setValue(field, file, { shouldValidate: true })
       dispatch({ type: actionType, payload: file.name })
-      if (field === 'image') setStudantImage(URL.createObjectURL(file))
+      if (field === 'PHOTO') setStudantImage(URL.createObjectURL(file))
     }
   }
 
+  const mutation = useMutation({
+    mutationFn: async ({ formData }: { formData: any }) => {
+      console.log(formData)
+      const response = await API.post('/uploads/enrollments', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      return response.data
+    },
+    onSuccess: (data: any) => {
+      console.log('DATA', data)
+    },
+    onError: (error: any) => {
+      console.log('ERRO', error)
+    },
+  })
+
   const onSubmit = (data: any) => {
     try {
+      data.enrollmentId = 2
       const formData = new FormData()
-      console.log(data)
-      fields.map((field) => {
-        formData.append(field, data[field])
-      })
-      navigate('/register/congratulations-page')
+
+      formData.append('REPORT_CARD', data.REPORT_CARD)
+      formData.append('IDENTITY_CARD', data.IDENTITY_CARD)
+      formData.append('PHOTO', data.PHOTO)
+      formData.append('enrollmentId', data.enrollmentId)
+
+      mutation.mutate({ formData })
     } catch (error) {
       console.log(error)
     }
@@ -65,29 +87,29 @@ const Form = () => {
         </label>
         <ImagePreview Icon={User} onClick={changeStudentPhoto} studentImage={studentImage} />
         <Input
-          errorMessage={errors.image?.message}
+          errorMessage={errors.PHOTO?.message}
           inputType="file"
           Icon={User}
-          fileName={state.image}
-          placeholder={state.image}
+          fileName={state.PHOTO}
+          placeholder={state.PHOTO}
           className="hidden"
           hiddenLabel
           label="Foto"
-          {...register('image')}
-          onChange={(e) => handleFileChange('image', actions.handleChangeImage, e)}
+          {...register('PHOTO')}
+          onChange={(e) => handleFileChange('PHOTO', actions.handleChangeImage, e)}
         />
       </div>
       <Input
-        errorMessage={errors.certificate?.message}
+        errorMessage={errors.REPORT_CARD?.message}
         inputType="file"
         Icon={Article}
-        fileName={state.certificate}
-        placeholder={state.certificate}
+        fileName={state.REPORT_CARD}
+        placeholder={state.REPORT_CARD}
         label="Declaração ou certificado"
-        {...register('certificate')}
-        onChange={(e) => handleFileChange('certificate', actions.handleChangeCertificate, e)}
+        {...register('REPORT_CARD')}
+        onChange={(e) => handleFileChange('REPORT_CARD', actions.handleChangeCertificate, e)}
       />
-      <Input
+      {/* <Input
         errorMessage={errors.medicalCertificate?.message}
         inputType="file"
         Icon={IdentificationBadge}
@@ -96,8 +118,8 @@ const Form = () => {
         label="Atestado médico"
         {...register('medicalCertificate')}
         onChange={(e) => handleFileChange('medicalCertificate', actions.handleChangeMedicalCertificate, e)}
-      />
-      <Input
+      /> */}
+      {/* <Input
         errorMessage={errors.vaccineCard?.message}
         inputType="file"
         Icon={UserRectangle}
@@ -106,18 +128,18 @@ const Form = () => {
         label="Cartão de vacina"
         {...register('vaccineCard')}
         onChange={(e) => handleFileChange('vaccineCard', actions.handleChangeVaccineCard, e)}
-      />
+      /> */}
       <Input
-        errorMessage={errors.identityCard?.message}
+        errorMessage={errors.IDENTITY_CARD?.message}
         inputType="file"
         Icon={IdentificationCard}
-        fileName={state.identityCard}
-        placeholder={state.identityCard}
+        fileName={state.IDENTITY_CARD}
+        placeholder={state.IDENTITY_CARD}
         label="Bilhete de identidade"
-        {...register('identityCard')}
-        onChange={(e) => handleFileChange('identityCard', actions.handleChangeIdentityCard, e)}
+        {...register('IDENTITY_CARD')}
+        onChange={(e) => handleFileChange('IDENTITY_CARD', actions.handleChangeIdentityCard, e)}
       />
-      <Input
+      {/* <Input
         errorMessage={errors.receiptOfPayment?.message}
         inputType="file"
         Icon={Vault}
@@ -126,7 +148,7 @@ const Form = () => {
         label="Comprovativo do pagamento"
         {...register('receiptOfPayment')}
         onChange={(e) => handleFileChange('receiptOfPayment', actions.handleChangeReceiptOfPayment, e)}
-      />
+      /> */}
       <div className="pt-3 w-full">
         <Button type="submit" content="Próximo" />
       </div>
