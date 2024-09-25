@@ -1,12 +1,12 @@
 const Search_Types = [
   {
     id: 0,
-    searchType: 'idEnrollment',
+    searchType: 'enrollmentNumber',
     value: 'Nº de inscrição',
   },
   {
     id: 1,
-    searchType: 'IdentityCardNumber',
+    searchType: 'identityCardNumber',
     value: 'Número do BI',
   },
 ]

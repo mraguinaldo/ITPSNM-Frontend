@@ -16,10 +16,14 @@ const Progress = ({ typeProgress, value, content }: IProgress) => {
         )}
       </div>
 
-      <div>
-        <p className="font-semibold text-[14px] md:text-[16xp]">{content}</p>
+      <div className="w-full ">
+        <p
+          className={`font-semibold text-[14px] md:text-[16xp] text-ellipsis overflow-hidden whitespace-nowrap w-full ${value === 3 && 'md:pr-9 pr-4'}`}
+        >
+          {content}
+        </p>
         <span
-          className={`font-semibold text-[14px] md:text-[16xp] ${typeProgress === 'concluded' ? 'text-[#00AA1F]' : 'text-[#9F9F9F]'}`}
+          className={`font-semibold text-[14px] md:text-[16px] w-full ${typeProgress === 'concluded' ? 'text-[#00AA1F]' : 'text-[#9F9F9F]'}`}
         >
           {typeProgress === 'concluded' ? 'Feito' : typeProgress === 'inProgress' ? 'Em andamento' : 'Pendente'}
         </span>

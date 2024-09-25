@@ -7,7 +7,7 @@ import { UsestoreData } from './useStoreData'
 const UseEnrollStudent = () => {
   const navigate = useNavigate()
   const nextForm = '/register/document-form'
-  const errorMessage = 'Erro ao enviar o formulário'
+  const errorMessage = 'Matrícula existente'
 
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
