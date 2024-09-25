@@ -10,7 +10,9 @@ interface ISubject {
   subject: string
 }
 interface ITableContent {
-  user: any
+  error: any
+  isLoading: boolean
+  notes: any
 }
 type IHeadLine = {
   colSpan: number

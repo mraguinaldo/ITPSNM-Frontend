@@ -7,7 +7,7 @@ import { useContext, useState } from 'react'
 import type { IHeader } from './interfaces'
 import { SelectedLevelContenxts } from '../contexts/selected-level-context'
 
-const Header = ({ details, user }: IHeader) => {
+const Header = ({ user }: IHeader) => {
   const [modalState, setModalState] = useState(false)
   const { selectedLevel, setSelectedLevel }: any = useContext(SelectedLevelContenxts)
 
@@ -23,14 +23,19 @@ const Header = ({ details, user }: IHeader) => {
   return (
     <header className="flex items-end justify-between flex-wrap gap-16">
       <div id="student" className="flex flex-col gap-4 w-[600px]">
-        <h2 className="text-[24px] sm:text-[32px] font-semibold">{user?.userName}</h2>
+        <h2 className="text-[24px] sm:text-[32px] font-semibold">{user?.enrollment.students.fullName}</h2>
         <ul id="details" className="flex w-full gap-4 flex-wrap">
-          {details.map(({ id, detailType, content }) => (
-            <li key={id} className="text-[14px] sm:text-[16px]">
-              {detailType}
-              <span className="text-[#737373] text-[14px] sm:text-[16px]">{content}</span>
-            </li>
-          ))}
+          <li className="text-[14px] sm:text-[16px]">
+            Nº
+            <span className="text-[#737373] text-[14px] sm:text-[16px]">{user?.enrollment.id}</span>
+          </li>
+          <li className="text-[14px] sm:text-[16px]">
+            <span className="text-[#737373] text-[14px] sm:text-[16px]">{selectedLevel?.content}</span>
+          </li>
+          <li className="text-[14px] sm:text-[16px]">
+            Curso:
+            <span className="text-[#737373] text-[14px] sm:text-[16px]"> {user?.enrollment.courses.name}</span>
+          </li>
         </ul>
         <div className="relative w-full max-w-[160px]">
           <button
@@ -38,7 +43,7 @@ const Header = ({ details, user }: IHeader) => {
             className="text-[#1E1E1E] w-full py-3 px-6 bg-[#F4F4F4] flex gap-2 rounded-[50px] items-center font-semibold justify-between cursor-pointer text-[14px] sm:text-[16px] absolute z-50"
             onClick={() => setModalState((prev) => !prev)}
           >
-            {selectedLevel?.level}
+            {selectedLevel?.content}
             <CaretDown
               size={18}
               color="#2F2F2F"
@@ -49,8 +54,8 @@ const Header = ({ details, user }: IHeader) => {
             className={`top-8 ${modalState ? 'pt-8 opacity-100' : 'pt-0 opacity-0'}`}
             modalState={modalState}
           >
-            {LEVELS.map(({ id, level }) => (
-              <SelectedArea key={id} area={level} onClick={() => changeGradeReport(id)} />
+            {LEVELS.map(({ id, content }) => (
+              <SelectedArea key={id} area={content} onClick={() => changeGradeReport(id)} />
             ))}
           </OptionsModal>
         </div>

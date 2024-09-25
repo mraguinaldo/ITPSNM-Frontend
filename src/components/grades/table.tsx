@@ -1,24 +1,24 @@
-import { useContext } from 'react'
 import { FinalAssessment } from './final-assessment'
 import { HeadLine } from './headLine'
 import { TypeAssessment } from './type-assessment'
 import { Table } from './data'
-import { Grade } from './grade'
 import { Subject } from './subject'
 import type { ITableContent } from './interfaces'
-import React from 'react'
-import { SelectedLevelContenxts } from '../contexts/selected-level-context'
+import { Grade } from './grade'
 
-const TableContent = ({ user }: ITableContent) => {
+const TableContent = ({ error, isLoading, notes }: ITableContent) => {
   const average = 12
-  const { selectedLevel }: any = useContext(SelectedLevelContenxts)
 
-  if (!selectedLevel) {
+  if (isLoading) {
     return (
-      <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-dvh">
+      <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px]">
         Buscando Notas...
       </h1>
     )
+  }
+
+  if (error) {
+    return <h1 className="text-red-500">Erro ao buscar notas</h1>
   }
 
   return (
@@ -38,17 +38,35 @@ const TableContent = ({ user }: ITableContent) => {
             </tr>
           </thead>
           <tbody>
-            {user?.grades[selectedLevel?.ordinalFormClass].map((item: any) => (
-              <tr key={item.id}>
-                <Subject key={item.id} subject={item.subject} />
-                {item.notes.map((currentSubject: any, index: number) => (
-                  <React.Fragment key={currentSubject.id}>
-                    <Grade grade={currentSubject.note} visible />
-                    {(index === 3 || index === 7) && <Grade grade={0} visible={false} />}
-                  </React.Fragment>
-                ))}
-              </tr>
-            ))}
+            {notes
+              ? notes.map((item: any) => (
+                  <tr key={item.id}>
+                    <Subject subject={item.subjects.name} />
+                    <Grade key={`${item.id}-pf1`} grade={item.pf1} visible />
+                    <Grade key={`${item.id}-pf2`} grade={item.pf2} visible />
+                    <Grade key={`${item.id}-pft`} grade={item.pft} visible />
+                    <Grade key={`${item.id}-mt1`} grade={item.mt1} visible />
+
+                    <Grade key={`${item.id}-empty1`} grade={0} visible={false} />
+
+                    <Grade key={`${item.id}-ps1`} grade={item.ps1} visible />
+                    <Grade key={`${item.id}-ps2`} grade={item.ps2} visible />
+                    <Grade key={`${item.id}-pst`} grade={item.pst} visible />
+                    <Grade key={`${item.id}-mt2`} grade={item.mt2} visible />
+
+                    <Grade key={`${item.id}-empty2`} grade={0} visible={false} />
+
+                    <Grade key={`${item.id}-pt1`} grade={item.pt1} visible />
+                    <Grade key={`${item.id}-pt2`} grade={item.pt2} visible />
+                    <Grade key={`${item.id}-ptt`} grade={item.ptt} visible />
+                    <Grade key={`${item.id}-mt3`} grade={item.mt3} visible />
+
+                    <Grade key={`${item.id}-nee`} grade={item.nee} visible />
+                    <Grade key={`${item.id}-mf`} grade={item.mf} visible />
+                    <Grade key={`${item.id}-mfd`} grade={item.mfd} visible />
+                  </tr>
+                ))
+              : ''}
           </tbody>
         </table>
       </div>
