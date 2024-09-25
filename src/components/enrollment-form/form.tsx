@@ -67,7 +67,6 @@ const Form = () => {
           errorMessage={errors.identityCardNumber?.message}
           inputType="text"
           placeholder="Nº do Bilhete de Identidade"
-          className="pointer-events-none"
           {...register('identityCardNumber')}
         />
         <div className="flex w-full gap-3">

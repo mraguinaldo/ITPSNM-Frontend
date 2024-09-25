@@ -1,7 +1,17 @@
+import { useLocation } from 'react-router-dom'
 import { Carousel } from '../carousel'
 import type { IMainForm } from './interface'
+import { useEffect } from 'react'
 
 const MainForm = ({ children, title, allProgress }: IMainForm) => {
+  const location = useLocation()
+
+  const { pathname } = location
+
+  useEffect(() => {
+    if (pathname) window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <section className="py-36">
       <div className="w-full max-w-[1296px] m-auto px-6 flex flex-col xl:flex-row items-start gap-6 justify-between">
