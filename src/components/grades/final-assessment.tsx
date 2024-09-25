@@ -7,7 +7,7 @@ const FinalAssessment = ({ average }: IFinalAssessment) => {
         Resultado
       </span>
 
-      <div className="w-full max-w-[124px] px-3 h-full flex bg-[#F2F1F1] justify-center items-center">
+      <div className="w-full max-w-[124px] pt-10 px-3 h-full flex bg-[#F2F1F1] justify-center items-center">
         <h2
           className={`text-[14px] md:text-[16px] uppercase font-semibold ${average < 10 ? 'text-[#E70F0F]' : 'text-[#3757FF]'}`}
         >

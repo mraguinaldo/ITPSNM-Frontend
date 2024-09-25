@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { UseGetData } from '../../../hooks/useGetData'
-import { FAKEUSERS } from '../../../utils'
+
 import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLastName'
 import { Toast } from '../../toast'
 import { Logo } from '../../logo'
@@ -11,40 +9,26 @@ import { STTUDENT_OPTIONS } from './data'
 import { SelectedArea } from '../../selected-area'
 import { QuestionModal } from '../../modals/question'
 import { Check, X } from 'phosphor-react'
+import { useQueryClient } from 'react-query'
 
 const HeaderForAuthenticatedUsers = () => {
-  const navigate = useNavigate()
-  const [authenticatedUser, setAuthenticatedUser] = useState<any>()
-  const [nameExtracted, setNameExtracted] = useState<string>('')
   const [modalState, setModalState] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
+  const queryClient = useQueryClient()
+
+  const user: any = queryClient.getQueryData(['userData'])
 
   const handleScroll = useCallback(() => setModalState(false), [])
 
-  const fetchUserData = useCallback(() => {
-    const loginData: { email: string; password: string } = UseGetData('LoginData')
-    const { email, password } = loginData
-
-    const user = FAKEUSERS.find((user) => user.email === email && user.password === password)
-
-    if (user) {
-      setAuthenticatedUser(user)
-
-      const fullName = UseExtractFirstAndLastName(user?.userName)
-      if (fullName) setNameExtracted(fullName)
-    } else {
-      navigate('/login')
-    }
-  }, [navigate])
+  console.log('User', user)
 
   useEffect(() => {
-    fetchUserData()
     window.addEventListener('scroll', handleScroll)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [fetchUserData, handleScroll])
+  }, [handleScroll])
 
   const handleStudentOptionClick = (content: string, href: string) => {
     setModalState(false)
@@ -53,14 +37,12 @@ const HeaderForAuthenticatedUsers = () => {
     if (isLogout) {
       return setQuestionModalState(true)
     }
-    navigate(href)
+    console.log(href)
   }
 
   const signOut = () => {
     setQuestionModalState(false)
     Toast({ message: 'Sessão Terminada', theme: 'light', toastType: 'success' })
-    localStorage.setItem('LoginData', '')
-    navigate('/login')
   }
 
   const toggleModalState = () => setModalState((prevState) => !prevState)
@@ -71,8 +53,8 @@ const HeaderForAuthenticatedUsers = () => {
         <Logo />
         <div className="w-full max-w-[240px] md:max-w-[400px] relative">
           <AuthenticatedUser
-            fullName={nameExtracted}
-            userType={authenticatedUser?.userType || ''}
+            fullName={user && UseExtractFirstAndLastName(user.enrollment.students.fullName)}
+            userType={'dsdss'}
             avatar="/men-00.png"
             className="items-center justify-end"
             onClick={toggleModalState}

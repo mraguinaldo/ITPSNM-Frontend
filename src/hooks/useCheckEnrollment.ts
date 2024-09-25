@@ -45,7 +45,7 @@ const UseCheckEnrollment = () => {
     },
     {
       onSuccess: (data) => {
-        queryClient.setQueryData(['currentEnrollment'], data)
+        queryClient.setQueryData(['userData'], data)
       },
       onError: (error) => {
         console.error('Erro:', error)
