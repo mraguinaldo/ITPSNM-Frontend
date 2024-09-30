@@ -21,7 +21,6 @@ type IHeadLine = {
 }
 interface IHeader {
   user: any
-  details: any[]
 }
 interface IFinalAssessment {
   average: number

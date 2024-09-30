@@ -11,4 +11,11 @@ const Search_Types = [
   },
 ]
 
-export { Search_Types }
+const initialValues = {
+  searchValue: '',
+  isModalOpen: false,
+  selectedSearchMode: Search_Types[0].value,
+  currentSearchType: Search_Types[0].searchType,
+}
+
+export { Search_Types, initialValues }

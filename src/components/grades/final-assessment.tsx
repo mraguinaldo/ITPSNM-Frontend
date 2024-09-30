@@ -11,7 +11,7 @@ const FinalAssessment = ({ average }: IFinalAssessment) => {
         <h2
           className={`text-[14px] md:text-[16px] uppercase font-semibold ${average < 10 ? 'text-[#E70F0F]' : 'text-[#3757FF]'}`}
         >
-          {average < 10 ? 'Reprovado' : 'Aprovado'}
+          {average === 0 ? '_' : average > 10 ? 'Aprovado' : 'Reprovado'}
         </h2>
       </div>
     </div>

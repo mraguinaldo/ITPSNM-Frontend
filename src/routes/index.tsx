@@ -17,6 +17,7 @@ import { EnrollmentForm } from '../components/enrollment-form'
 import { DocumentForm } from '../components/document-form'
 import { Register } from '../pages/register'
 import { CongratulationsPage } from '../components/congratulations-page'
+import { PostNote } from '../components/post-note'
 
 function Routes() {
   return (
@@ -47,6 +48,7 @@ function Routes() {
           <Route path="users-table" element={<UsersTable />} />
           <Route path="student-grades" element={<StudentGrades />} />
           <Route path="courses-table" element={<CoursesTable />} />
+          <Route path="post-note" element={<PostNote />} />
         </Route>
         <Route path="*" element={<Home />} />
       </Router>

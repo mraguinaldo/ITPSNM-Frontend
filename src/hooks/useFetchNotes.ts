@@ -42,15 +42,9 @@ const UseFetchNotes = () => {
   return useMutation<NotesResponse, Error, any>({
     mutationFn: async ({ userData }: { userData: any }) => {
       const response = await API.get(`/notes/${userData?.enrollmentId}/grades?level=${userData?.level}`)
-      const { notes }: NotesResponse = response.data as NotesResponse
-      return notes as unknown as NotesResponse
-    },
-    onSuccess: (data: any) => {
-      console.log(data)
-    },
-    onError: (error: any) => {
-      console.error('Erro ao buscar as notas', error)
-    },
+      const { notes }: any = response.data as NotesResponse
+      return notes as NotesResponse
+    }
   })
 }
 

@@ -5,11 +5,11 @@ import { OptionsModal } from '../modals/options-modal'
 import { SelectedArea } from '../selected-area'
 import { useContext, useState } from 'react'
 import type { IHeader } from './interfaces'
-import { SelectedLevelContenxts } from '../contexts/selected-level-context'
+import { ApplicationContexts } from '../contexts/applicationContexts'
 
 const Header = ({ user }: IHeader) => {
   const [modalState, setModalState] = useState(false)
-  const { selectedLevel, setSelectedLevel }: any = useContext(SelectedLevelContenxts)
+  const { selectedLevel, setSelectedLevel }: any = useContext(ApplicationContexts)
 
   const changeGradeReport = (selectedLevelId: number) => {
     setModalState((prev) => !prev)
@@ -20,22 +20,21 @@ const Header = ({ user }: IHeader) => {
     UseDownloadFile({ elementId })
   }
 
+  const Li = (deitalType: string, content: string) => (
+    <li key={content} className="text-[14px] sm:text-[16px]">
+      {deitalType}
+      <span className="text-[#737373] text-[14px] sm:text-[16px]">{content}</span>
+    </li>
+  )
+
   return (
     <header className="flex items-end justify-between flex-wrap gap-16">
       <div id="student" className="flex flex-col gap-4 w-[600px]">
         <h2 className="text-[24px] sm:text-[32px] font-semibold">{user?.enrollment.students.fullName}</h2>
         <ul id="details" className="flex w-full gap-4 flex-wrap">
-          <li className="text-[14px] sm:text-[16px]">
-            Nº
-            <span className="text-[#737373] text-[14px] sm:text-[16px]">{user?.enrollment.id}</span>
-          </li>
-          <li className="text-[14px] sm:text-[16px]">
-            <span className="text-[#737373] text-[14px] sm:text-[16px]">{selectedLevel?.content}</span>
-          </li>
-          <li className="text-[14px] sm:text-[16px]">
-            Curso:
-            <span className="text-[#737373] text-[14px] sm:text-[16px]"> {user?.enrollment.courses.name}</span>
-          </li>
+          {Li('Nº ', `${user?.enrollment.id}`)}
+          {Li('', `${selectedLevel?.content}`)}
+          {Li('Curso: ', `${user?.enrollment.courses.name}`)}
         </ul>
         <div className="relative w-full max-w-[160px]">
           <button

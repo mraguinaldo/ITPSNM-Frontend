@@ -14,6 +14,7 @@ import { Input } from '../../components/inputs/normal'
 import { UseEnrollStudent } from '../../hooks/useEnrollStudent'
 import { ProgressBar } from '../../components/progress-bar'
 import { UseFetchCourses } from '../../hooks/useFetchCourses'
+import { UsestoreData } from '../../hooks/useStoreData'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -39,10 +40,6 @@ const Form = () => {
     dispatch({ type: actions.changeStateOfChevron, payload: state.modalState !== value ? value : 100 })
   }
 
-  const toggleLevel = (value: number) => {
-    dispatch({ type: actions.toggleLevel, payload: value })
-  }
-
   useEffect(() => {
     const data = UseGetData('IdentityCard')
     if (data) {
@@ -53,6 +50,7 @@ const Form = () => {
   const onSubmit = (data: any) => {
     try {
       useEnrollStudent({ formData: data })
+      UsestoreData('enrollment', data)
     } catch (error) {
       console.log(error)
     }
@@ -107,7 +105,7 @@ const Form = () => {
               key={id}
               value={id}
               checked={state.level === id}
-              onClick={() => toggleLevel(id)}
+              onClick={() => dispatch({ type: actions.toggleLevel, payload: id })}
               label={level}
               {...register('levelId')}
             />
