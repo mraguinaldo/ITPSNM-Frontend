@@ -1,17 +1,28 @@
-import { useEffect, useState } from 'react'
-import { UseGetData } from '../../hooks/useGetData'
+import { useContext, useEffect } from 'react'
 import { RegistrationNumberCopier } from '../registration-number-copier'
 import { CongratulationsCard } from '../cards/congratulations'
+import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
+import { ProgressBar } from '../progress-bar'
+import { ApplicationContexts } from '../contexts/applicationContexts'
 
 const CongratulationsPage = () => {
-  const [user, setUser] = useState<any>()
+  const { data: user, mutate: useCheckEnrollment, isLoading } = UseCheckEnrollment()
+  const { enrollmentNumber }: any = useContext(ApplicationContexts)
 
   useEffect(() => {
-    const enrollmentData = UseGetData('studentData')
-    const personalData = UseGetData('IdentityCard')
-    const currentUser = { enrollmentData, personalData }
-    if (enrollmentData && personalData) setUser(currentUser)
-  }, [])
+    const fetchData = async () => {
+      const params = new URLSearchParams({
+        [enrollmentNumber && 'enrollmentNumber']: enrollmentNumber?.id,
+      })
+      useCheckEnrollment(params)
+    }
+
+    fetchData()
+  }, [useCheckEnrollment, enrollmentNumber])
+
+  if (isLoading) {
+    return <ProgressBar />
+  }
 
   return (
     <section className="py-36">
@@ -25,7 +36,7 @@ const CongratulationsPage = () => {
             </p>
           </div>
           <div className="flex flex-col gap-6">
-            <RegistrationNumberCopier content={user?.personalData.phone} />
+            <RegistrationNumberCopier content={user?.enrollment.id.toString() || ''} />
             <p className="text-[#2f2f2fc6] text-[14px] md:text-[16px]">
               <span className="text-[#4F92E0] uppercase">Nota: </span>
               Este número será necessário para verificar a aprovação da sua matrícula. Recomendamos que o guarde.
@@ -34,12 +45,17 @@ const CongratulationsPage = () => {
         </div>
 
         <CongratulationsCard
-          avatar="/men-01.png"
-          course={user?.enrollmentData.course}
-          fullName={user?.enrollmentData.fullName}
-          level={user?.enrollmentData.level}
-          phoneNumber={user?.personalData.phone}
-          registrationNumber={user?.personalData.phone}
+          avatar="/default.jpeg"
+          course={user?.enrollment.courses.name || ''}
+          fullName={user?.enrollment.students.fullName || ''}
+          level={
+            user?.enrollment.levels.name === 'CLASS_10'
+              ? '10ª Classe'
+              : user?.enrollment.levels.name === 'CLASS_11'
+                ? '11ª Classe'
+                : '12ª Classe'
+          }
+          registrationNumber={user?.enrollment.id.toString() || ''}
         />
       </div>
     </section>

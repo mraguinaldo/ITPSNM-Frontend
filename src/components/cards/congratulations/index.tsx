@@ -1,13 +1,6 @@
 import type { ICongratulationsCard } from './interface'
 
-const CongratulationsCard = ({
-  course,
-  avatar,
-  fullName,
-  level,
-  phoneNumber,
-  registrationNumber,
-}: ICongratulationsCard) => {
+const CongratulationsCard = ({ course, avatar, fullName, level, registrationNumber }: ICongratulationsCard) => {
   const STUDENT_DATA = [
     {
       id: 0,
@@ -23,11 +16,6 @@ const CongratulationsCard = ({
       id: 2,
       field: '',
       content: level,
-    },
-    {
-      id: 3,
-      field: 'Telefone: ',
-      content: phoneNumber,
     },
   ]
 

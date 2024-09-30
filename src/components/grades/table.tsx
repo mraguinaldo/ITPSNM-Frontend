@@ -6,19 +6,13 @@ import { Subject } from './subject'
 import type { ITableContent } from './interfaces'
 import { Grade } from './grade'
 
-const TableContent = ({ error, isLoading, notes }: ITableContent) => {
-  const average = 12
-
+const TableContent = ({ isLoading, notes }: ITableContent) => {
   if (isLoading) {
     return (
       <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px]">
         Buscando Notas...
       </h1>
     )
-  }
-
-  if (error) {
-    return <h1 className="text-red-500">Erro ao buscar notas</h1>
   }
 
   return (
@@ -38,40 +32,42 @@ const TableContent = ({ error, isLoading, notes }: ITableContent) => {
             </tr>
           </thead>
           <tbody>
-            {notes
-              ? notes.map((item: any) => (
-                  <tr key={item.id}>
-                    <Subject subject={item.subjects.name} />
-                    <Grade key={`${item.id}-pf1`} grade={item.pf1} visible />
-                    <Grade key={`${item.id}-pf2`} grade={item.pf2} visible />
-                    <Grade key={`${item.id}-pft`} grade={item.pft} visible />
-                    <Grade key={`${item.id}-mt1`} grade={item.mt1} visible />
-
-                    <Grade key={`${item.id}-empty1`} grade={0} visible={false} />
-
-                    <Grade key={`${item.id}-ps1`} grade={item.ps1} visible />
-                    <Grade key={`${item.id}-ps2`} grade={item.ps2} visible />
-                    <Grade key={`${item.id}-pst`} grade={item.pst} visible />
-                    <Grade key={`${item.id}-mt2`} grade={item.mt2} visible />
-
-                    <Grade key={`${item.id}-empty2`} grade={0} visible={false} />
-
-                    <Grade key={`${item.id}-pt1`} grade={item.pt1} visible />
-                    <Grade key={`${item.id}-pt2`} grade={item.pt2} visible />
-                    <Grade key={`${item.id}-ptt`} grade={item.ptt} visible />
-                    <Grade key={`${item.id}-mt3`} grade={item.mt3} visible />
-
-                    <Grade key={`${item.id}-nee`} grade={item.nee} visible />
-                    <Grade key={`${item.id}-mf`} grade={item.mf} visible />
-                    <Grade key={`${item.id}-mfd`} grade={item.mfd} visible />
-                  </tr>
-                ))
-              : ''}
+            {notes ? (
+              notes.map((item: any) => (
+                <tr key={item.id}>
+                  <Subject subject={item.subjects.name} />
+                  <Grade key={`${item.id}-pf1`} grade={item.pf1} visible />
+                  <Grade key={`${item.id}-pf2`} grade={item.pf2} visible />
+                  <Grade key={`${item.id}-pft`} grade={item.pft} visible />
+                  <Grade key={`${item.id}-mt1`} grade={item.mt1} visible />
+                  <Grade key={`${item.id}-empty1`} grade={0} visible={false} />
+                  <Grade key={`${item.id}-ps1`} grade={item.ps1} visible />
+                  <Grade key={`${item.id}-ps2`} grade={item.ps2} visible />
+                  <Grade key={`${item.id}-pst`} grade={item.pst} visible />
+                  <Grade key={`${item.id}-mt2`} grade={item.mt2} visible />
+                  <Grade key={`${item.id}-empty2`} grade={0} visible={false} />
+                  <Grade key={`${item.id}-pt1`} grade={item.pt1} visible />
+                  <Grade key={`${item.id}-pt2`} grade={item.pt2} visible />
+                  <Grade key={`${item.id}-ptt`} grade={item.ptt} visible />
+                  <Grade key={`${item.id}-mt3`} grade={item.mt3} visible />
+                  <Grade key={`${item.id}-nee`} grade={item.nee} visible />
+                  <Grade key={`${item.id}-mf`} grade={item.mf} visible />
+                  <Grade key={`${item.id}-mfd`} grade={item.mfd} visible />
+                  <Grade key={`${item.id}-resource`} grade={item.resource} visible />
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={20} className="text-center font-bold pt-3">
+                  Notas não encontradas 😔
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      <FinalAssessment average={average} />
+      <FinalAssessment average={notes ? notes[notes.length - 1].mfd : 0} />
     </div>
   )
 }

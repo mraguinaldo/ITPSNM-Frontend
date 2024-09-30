@@ -1,29 +1,28 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import { Footer } from '../../components/footer'
 import { Button } from '../../components/button'
 import { OptionsModal } from '../../components/modals/options-modal'
 import { SelectedArea } from '../../components/selected-area'
-import { Search_Types } from './data'
+import { initialValues, Search_Types } from './data'
 import { CaretDown } from 'phosphor-react'
 import { Header } from '../../components/headers/normal'
 import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import { ProgressBar } from '../../components/progress-bar'
 import { useSearchParams } from 'react-router-dom'
+import { reducer } from './reducer'
+import { actions } from './actions'
 
 const CheckEnrollment = () => {
-  const [searchValue, setSearchValue] = useState<string>('')
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [selectedSearchMode, setSelectedSearchMode] = useState<string>(Search_Types[0].value)
-  const [currentSearchType, setCurrentSearchType] = useState<string>(Search_Types[0].searchType)
   const [, setSearchParams] = useSearchParams()
+  const [state, dispatch] = useReducer(reducer, initialValues)
   const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading, error } = UseCheckEnrollment()
 
-  const toggleModal = () => setIsModalOpen((prev) => !prev)
+  const { searchValue, isModalOpen, selectedSearchMode, currentSearchType } = state
 
   const handleSearchModeChange = (modeValue: string, modeType: string) => {
-    setSelectedSearchMode(modeValue)
-    setCurrentSearchType(modeType)
-    toggleModal()
+    dispatch({ type: actions.toggleSearchMode, payload: modeValue })
+    dispatch({ type: actions.changeSearchType, payload: modeType })
+    dispatch({ type: actions.changeModalState, payload: !isModalOpen })
   }
 
   const handleSearch = (event: any) => {
@@ -50,7 +49,7 @@ const CheckEnrollment = () => {
                 <button
                   type="button"
                   className="text-[#1E1E1E] w-full py-3 px-6 bg-[#F4F4F4] flex gap-2 rounded-[8px] items-center justify-between cursor-pointer text-[14px] sm:text-[16px] absolute z-50"
-                  onClick={toggleModal}
+                  onClick={() => dispatch({ type: actions.changeModalState, payload: !isModalOpen })}
                 >
                   Consultar pelo {selectedSearchMode}
                   <CaretDown
@@ -59,7 +58,7 @@ const CheckEnrollment = () => {
                     className={`duration-100 cursor-pointer ${isModalOpen ? 'rotate-[-180deg]' : 'rotate-0'}`}
                   />
                 </button>
-                <OptionsModal className="top-10" modalState={isModalOpen}>
+                <OptionsModal className="top-10" modalState={state.isModalOpen}>
                   {Search_Types.map(({ id, searchType, value }) => (
                     <SelectedArea key={id} area={value} onClick={() => handleSearchModeChange(value, searchType)} />
                   ))}
@@ -75,7 +74,7 @@ const CheckEnrollment = () => {
                 id="registrationNumber"
                 placeholder={`Digite o seu ${selectedSearchMode}...`}
                 className="w-full max-w-[445px] rounded-[8px] border-none bg-transparent p-4 text-[14px] lg:text-[18px] leading-[130%] text-[#000] outline-none"
-                onChange={(e) => setSearchValue(e.currentTarget.value)}
+                onChange={(e) => dispatch({ type: actions.toggleSearchValue, payload: e.currentTarget.value })}
               />
               <div className="flex w-full items-center justify-center max-w-[150px]">
                 <Button

@@ -15,6 +15,7 @@ import { UseSendStudentPersonalData } from '../../hooks/useSendStudentPersonalDa
 import { ProgressBar } from '../../components/progress-bar'
 import { UseFetchProvinces } from '../../hooks/useFetchProvinces'
 import { UseFetchCounties } from '../../hooks/useFetchCounties'
+import { UsestoreData } from '../../hooks/useStoreData'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -61,6 +62,7 @@ const Form = () => {
   const onSubmit = (data: any) => {
     try {
       sendStudentPersonalData({ formData: data })
+      UsestoreData('IdentityCard', data)
     } catch (error) {
       console.log(error)
     }

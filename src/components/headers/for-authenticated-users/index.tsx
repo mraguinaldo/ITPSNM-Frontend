@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLastName'
 import { Toast } from '../../toast'
 import { Logo } from '../../logo'
 import { AuthenticatedUser } from '../../authenticated-user'
@@ -9,26 +8,12 @@ import { STTUDENT_OPTIONS } from './data'
 import { SelectedArea } from '../../selected-area'
 import { QuestionModal } from '../../modals/question'
 import { Check, X } from 'phosphor-react'
-import { useQueryClient } from 'react-query'
 
 const HeaderForAuthenticatedUsers = () => {
   const [modalState, setModalState] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
-  const queryClient = useQueryClient()
-
-  const user: any = queryClient.getQueryData(['userData'])
 
   const handleScroll = useCallback(() => setModalState(false), [])
-
-  console.log('User', user)
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [handleScroll])
 
   const handleStudentOptionClick = (content: string, href: string) => {
     setModalState(false)
@@ -45,7 +30,13 @@ const HeaderForAuthenticatedUsers = () => {
     Toast({ message: 'Sessão Terminada', theme: 'light', toastType: 'success' })
   }
 
-  const toggleModalState = () => setModalState((prevState) => !prevState)
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [handleScroll])
 
   return (
     <header className="w-full fixed z-[100] bg-[#000C13] border-b border-[#f0f0f0]">
@@ -53,11 +44,12 @@ const HeaderForAuthenticatedUsers = () => {
         <Logo />
         <div className="w-full max-w-[240px] md:max-w-[400px] relative">
           <AuthenticatedUser
-            fullName={user && UseExtractFirstAndLastName(user.enrollment.students.fullName)}
+            // fullName={user && UseExtractFirstAndLastName(user.enrollment.students.fullName)}
+            fullName={'César Aguinaldo'}
             userType={'dsdss'}
-            avatar="/men-00.png"
+            avatar={'/default.jpeg'}
             className="items-center justify-end"
-            onClick={toggleModalState}
+            onClick={() => setModalState((prev) => !prev)}
             onMouseEnter={() => setModalState(true)}
           />
           <StudentOptionsModal className="right-0 top-20" modalState={modalState}>
