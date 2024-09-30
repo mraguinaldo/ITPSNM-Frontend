@@ -3,6 +3,7 @@ interface IInput {
   className?: string
   onClick?: () => void
   Icon?: any
+  iconClick?: () => void
   placeholder?: string
   errorMessage?: string | undefined
   option?: boolean

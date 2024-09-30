@@ -16,6 +16,7 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
     chevronState,
     hiddenLabel,
     value,
+    iconClick,
     ...rest
   } = props
 
@@ -38,7 +39,6 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
         onClick={onClick}
         className={`flex h-[56px] w-full items-center gap-2 rounded-[4px] border-2 px-4 ${className} duration-200 ${errorMessage ? 'border-[#FB7373] border-opacity-100' : 'border-[#AFAFAF] border-opacity-20 focus-within:border-[#AFAFAF]'} ${option || (inputType === 'file' && 'cursor-pointer focus-within:border-[#AFAFAF]')}`}
       >
-        {Icon && <Icon size={24} color={errorMessage ? '#F03E33' : '#2F2F2F'} />}
         {inputType === 'file' ? (
           <>
             <button
@@ -72,6 +72,9 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
             className={`duration-100 cursor-pointer ${chevronState ? 'rotate-[-180deg]' : 'rotate-0'}`}
           />
         ) : null}
+        {Icon && (
+          <Icon size={24} color={errorMessage ? '#F03E33' : '#2F2F2F'} onClick={iconClick} className="cursor-pointer" />
+        )}
       </div>
 
       <span
