@@ -1,9 +1,8 @@
 const actions = {
   changeStateOfChevron: 'changeStateOfChevron',
   toggleModalState: 'toggleModalState',
-  changeLevel: 'changeLevel',
-  toggleQuarter: 'toggleQuarter',
-  switchSubject: 'switchSubject',
+  toggleUserType: 'toggleUserType',
+  changeInputType: 'changeInputType',
   reset: 'reset',
 }
 

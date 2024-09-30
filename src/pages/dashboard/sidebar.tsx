@@ -47,7 +47,7 @@ const SideBar = () => {
 
   return (
     <>
-      <aside className="flex lg:hidden modal">
+      <aside className="flex lg:hidden modal z-[2000]">
         <header className="w-full bg-[#1A1C1D] fixed z-[100]">
           <div className="w-full max-w-[1296px] m-auto px-6 flex items-center justify-between h-[78px] lg:h-[96px]">
             <AuthenticatedUser

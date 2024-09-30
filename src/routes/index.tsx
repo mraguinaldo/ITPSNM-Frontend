@@ -45,7 +45,6 @@ function Routes() {
           <Route path="employees-table" element={<EmployeesTable />} />
           <Route path="users-table" element={<UsersTable />} />
           <Route path="enrollments-table" element={<EnrollmentsTable />} />
-          <Route path="users-table" element={<UsersTable />} />
           <Route path="student-grades" element={<StudentGrades />} />
           <Route path="courses-table" element={<CoursesTable />} />
           <Route path="post-note" element={<PostNote />} />

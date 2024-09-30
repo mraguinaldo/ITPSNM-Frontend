@@ -21,7 +21,6 @@ import { UseCreateFormData } from '../../hooks/useCreateFormData'
 import { UseGetData } from '../../hooks/useGetData'
 import { UsePostNote } from '../../hooks/usePostNote'
 import { Toast } from '../toast'
-// import { UseFetchNotes } from '../../hooks/useFetchNotes'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -30,13 +29,12 @@ const Form = () => {
 
   const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading: searchingEnrollment } = UseCheckEnrollment()
   const { mutate: usePostNote, isLoading: LaunchingNote, error, isSuccess } = UsePostNote()
-  // const { mutate: useFetchNotes, data: notes } = UseFetchNotes()
 
   const {
     register,
     handleSubmit,
     setValue,
-    // watch,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaForm),
@@ -51,9 +49,6 @@ const Form = () => {
       nee: undefined,
     },
   })
-
-  // let currentLevel = watch('level')
-  // let currentSubject = watch('subjectId')
 
   const toggleModalState = (value: number) => {
     dispatch({ type: actions.toggleModalState, payload: state.modalState !== value ? value : 100 })
@@ -79,16 +74,6 @@ const Form = () => {
     }
   }
 
-  // useEffect(() => {
-  //   const fetchNotes = async (enrollmentId: number, level: string) => {
-  //     const userData = { enrollmentId, level }
-
-  //     useFetchNotes({ userData })
-  //   }
-
-  //   fetchNotes(enrollmentFound?.enrollment.id || 0, currentLevel || enrollmentFound?.enrollment.levels.name || '')
-  // }, [useFetchNotes, enrollmentFound, currentLevel])
-
   useEffect(() => {
     if (identityCardNumber) {
       const params = new URLSearchParams({
@@ -105,24 +90,14 @@ const Form = () => {
     }
     if (isSuccess) {
       Toast({ message: 'Nota lançada 🥳', theme: 'light', toastType: 'success' })
+      reset()
+      dispatch({ type: actions.reset })
     }
-  }, [error, isSuccess])
-
-  // useEffect(()=>{
-  //   if(currentSubject){
-  //     notes?.map((note: any)=> {
-  //        if(note.subjectId === currentSubject){
-  //         setValue('p1', note.p1, { shouldValidate: true })
-  //         setValue('p2', note.p2, { shouldValidate: true })
-  //         setValue('pt', note.p3, { shouldValidate: true })
-  //        }
-  //     })
-  //   }
-  // },[notes, currentSubject])
+  }, [error, isSuccess, reset])
 
   return (
     <section className="flex gap-6 flex-col w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white h-dvh">
-      {searchingEnrollment || (LaunchingNote && <ProgressBar />)}
+      {(searchingEnrollment || LaunchingNote) && <ProgressBar />}
       <Link to="/admin/dashboard/students-table" className="hover:bg-slate-300 rounded-full p-2 w-fit">
         <ArrowLeft size={18} />
       </Link>

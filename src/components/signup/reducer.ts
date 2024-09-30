@@ -14,25 +14,20 @@ const reducer = (state: any, action: any) => {
         ...state,
         modalState: payload,
       }
-    case actions.changeLevel:
+    case actions.toggleUserType:
       return {
         ...state,
-        level: payload,
+        role: payload,
       }
-    case actions.switchSubject:
+    case actions.changeInputType:
       return {
         ...state,
-        subject: payload,
+        showPassword: payload,
       }
-    case actions.toggleQuarter:
+    case actions.reset:
       return {
-        ...state,
-        quarter: payload,
+        initialValues,
       }
-      case actions.reset:
-        return {
-          initialValues
-        }
     default:
       return {
         ...state,
