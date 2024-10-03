@@ -13,6 +13,24 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 8px;
   }
 
+  .scroll-transparent::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .scroll-transparent::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scroll-transparent::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 6px;
+  }
+  
+  .scroll-transparent:hover::-webkit-scrollbar-thumb {
+    background: rgba(188, 188, 188, 0.179);
+  }
+
   .form::-webkit-scrollbar-track,
   .form::-webkit-scrollbar-thumb,
   .form::-webkit-scrollbar-thumb:hover {

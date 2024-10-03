@@ -49,4 +49,10 @@ const STUDENT_OPTIONS = [
   },
 ]
 
-export { tableHeader, STUDENT_OPTIONS }
+const initialValues = {
+  selectedStudent: '',
+  studentStatus: '',
+  modalStateForBlocking: false,
+}
+
+export { tableHeader, STUDENT_OPTIONS, initialValues }

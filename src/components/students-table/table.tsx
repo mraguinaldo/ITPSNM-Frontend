@@ -1,91 +1,128 @@
-import { DotsThree, X } from 'phosphor-react'
+import { Check, DotsThree, X } from 'phosphor-react'
 import { Student } from '../student'
-import { STUDENT_OPTIONS, tableHeader } from './data'
+import { initialValues, STUDENT_OPTIONS, tableHeader } from './data'
 import { ApplicationContexts } from '../contexts/applicationContexts'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useReducer } from 'react'
 import { StudentOptionsModal } from './modals/student-options'
-import { ModalForBlocking } from './modals/modal-for-blocking'
 import { Link } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
 import { UsestoreData } from '../../hooks/useStoreData'
+import { QuestionModal } from '../modals/question'
+import { UseBlockStudent } from '../../hooks/useBlockStudent'
+import { ProgressBar } from '../progress-bar'
+import { reducer } from './reducer'
+import { actions } from './action'
 
 const Students = ({ students }: { students: any }) => {
-  const [currentStudent, setCurrentStudent] = useState<string>('')
   const { studentsFound }: any = useContext(ApplicationContexts)
-  const [modalStateForBlocking, setModalStateForBlocking] = useState<boolean>(false)
+  const [state, dispatch] = useReducer(reducer, initialValues)
+  const {
+    mutate: useBlockStudent,
+    isLoading: blockingTheStudent,
+    isError: errorWhenBlockingStudent,
+    isSuccess: blockedStudent,
+  } = UseBlockStudent()
 
   const closeLockModal = () => {
-    setModalStateForBlocking(false)
-    setCurrentStudent('')
+    dispatch({ type: actions.toggleLockModalState, payload: false })
+
+    dispatch({ type: actions.changeSelectedStudent, payload: '' })
   }
 
-  const handleBlockOptionClick = () => {
-    setModalStateForBlocking(true)
+  const handleBlockOptionClick = (email: string, status: boolean) => {
+    dispatch({ type: actions.toggleLockModalState, payload: true })
+    dispatch({ type: actions.changeSelectedStudent, payload: email })
+
+    dispatch({ type: actions.toggleStudentStatus, payload: status })
   }
 
   const handleStudentClick = (studentId: string) => {
-    setCurrentStudent((prev) => (prev === studentId ? '' : studentId))
+    dispatch({ type: actions.changeSelectedStudent, payload: state.selectedStudent === studentId ? '' : studentId })
   }
 
-  const renderStudentRow = (student: any) => (
-    <Student.Root className="mb-3" key={student.identityCardNumber}>
-      <th className="flex items-center gap-3 py-3 w-[360px]">
-        <Student.Image img="/default.jpeg" alt={student.fullName} />
-        <Student.Name name={student.students.fullName} />
-      </th>
-      <th className="text-left p-3 w-[172px]">
-        <Student.Level level={UseRenameClass(student.levels)} />
-      </th>
-      <th className="text-left p-3 w-[172px]">
-        <Student.Course course={student.courses.name} />
-      </th>
-      <th className="text-left p-3 w-[172px]">
-        <Student.State locked={false} />
-      </th>
-      <th className="text-left p-3 w-[68px]">
-        <Student.BtnActions
-          icon={
-            currentStudent === student.identityCardNumber ? (
-              <X color="#161616" size={14} />
+  useEffect(() => {
+    if (blockingTheStudent) dispatch({ type: actions.toggleLockModalState, payload: false })
+  }, [blockingTheStudent])
+
+  useEffect(() => {
+    if (blockedStudent || errorWhenBlockingStudent) {
+      dispatch({ type: actions.changeSelectedStudent, payload: '' })
+    }
+  }, [blockedStudent, errorWhenBlockingStudent])
+
+  const renderStudentRow = (student: any) =>
+    student.students.User && (
+      <Student.Root className="mb-3" key={student.identityCardNumber}>
+        <th className="flex items-center gap-3 py-3 w-[360px]">
+          <Student.Image img="/default.jpeg" alt={student.fullName} />
+          <Student.Name name={student.students.fullName} />
+        </th>
+        <th className="text-left p-3 w-[172px]">
+          <Student.Level level={UseRenameClass(student.levels)} />
+        </th>
+        <th className="text-left p-3 w-[172px]">
+          <Student.Course course={student.courses.name} />
+        </th>
+
+        <th
+          className="text-left p-3 w-[172px]"
+          onClick={() => handleBlockOptionClick(student.students.User.email, !student.students.User.isBlocked)}
+        >
+          <Student.State locked={student.students.User.isBlocked} />
+        </th>
+        <th className="text-left p-3 w-[68px]">
+          <Student.BtnActions
+            icon={
+              state.selectedStudent === student.identityCardNumber ? (
+                <X color="#161616" size={14} />
+              ) : (
+                <DotsThree color="#161616" size={32} />
+              )
+            }
+            onClick={() => handleStudentClick(student.identityCardNumber)}
+          />
+        </th>
+        <StudentOptionsModal isVisible={state.selectedStudent === student.identityCardNumber}>
+          {STUDENT_OPTIONS.map(({ Icon, id, option, href }) =>
+            href ? (
+              <Link
+                to={href}
+                key={id}
+                onClick={() => UsestoreData('chosenStudent', student.identityCardNumber)}
+                className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
+              >
+                <Icon size={14} color="#000" /> {option}
+              </Link>
             ) : (
-              <DotsThree color="#161616" size={32} />
-            )
-          }
-          onClick={() => handleStudentClick(student.identityCardNumber)}
-        />
-      </th>
-      <StudentOptionsModal isVisible={currentStudent === student.identityCardNumber}>
-        {STUDENT_OPTIONS.map(({ Icon, id, option, href }) =>
-          href ? (
-            <Link
-              to={href}
-              key={id}
-              onClick={() => UsestoreData('chosenStudent', student.identityCardNumber)}
-              className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
-            >
-              <Icon size={14} color="#000" /> {option}
-            </Link>
-          ) : (
-            <span
-              key={id}
-              className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
-              onClick={() => option === 'Bloquear' && handleBlockOptionClick()}
-            >
-              <Icon size={14} color="#000" /> {option}
-            </span>
-          ),
-        )}
-      </StudentOptionsModal>
-    </Student.Root>
-  )
+              <button
+                type="button"
+                key={id}
+                className="bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c]"
+                onClick={() =>
+                  option === 'Bloquear' &&
+                  handleBlockOptionClick(student.students.User.email, !student.students.User.isBlocked)
+                }
+              >
+                <Icon size={14} color="#000" />{' '}
+                {option === 'Bloquear' && student.students.User.isBlocked ? 'Desbloquear' : option}
+              </button>
+            ),
+          )}
+        </StudentOptionsModal>
+      </Student.Root>
+    )
 
   return (
-    <div id="students" className="py-12 w-full overflow-x-auto">
-      <ModalForBlocking
-        identityCardNumber={currentStudent}
-        modalStateForBlocking={modalStateForBlocking}
-        closeModal={closeLockModal}
-        onClick={closeLockModal}
+    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent">
+      {blockingTheStudent && <ProgressBar />}
+      <QuestionModal
+        title={state.studentStatus ? 'Deseja bloquear o estudante?' : 'Confirmar o desbloqueio do estudante'}
+        paragraph={state.studentStatus ? 'O estudante deixará de ter acesso ao sistema.' : ''}
+        visible={state.modalStateForBlocking}
+        iconReject={<X color="#fff" size={24} />}
+        iconConfirm={<Check color="#fff" size={24} />}
+        reject={closeLockModal}
+        confirm={() => useBlockStudent({ formData: { status: state.studentStatus, email: state.selectedStudent } })}
       />
 
       <table className="w-full">

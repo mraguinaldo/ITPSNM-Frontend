@@ -6,7 +6,7 @@ const ApplicationContexts = createContext<IUseContextType | undefined>(undefined
 
 const UseContextProvider = ({ children }: { children: ReactNode }) => {
   const [selectedLevel, setSelectedLevel] = useState<ISelectedLevel>(LEVELS[0])
-  const [enrollmentNumber, setEnrollmentNumber] = useState<IEnrollmentNumber>({ id: 1 })
+  const [enrollmentNumber, setEnrollmentNumber] = useState<IEnrollmentNumber>({ id: 7 })
   const [identityCardNumber, setIdentityCardNumber] = useState<IEnrollmentNumber>({})
   const [studentsFound, setStudentsFound] = useState<any>([])
 

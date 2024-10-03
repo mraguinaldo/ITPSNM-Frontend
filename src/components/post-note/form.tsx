@@ -96,7 +96,7 @@ const Form = () => {
   }, [error, isSuccess, reset])
 
   return (
-    <section className="flex gap-6 flex-col w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white h-dvh">
+    <section className="flex gap-6 flex-col w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white">
       {(searchingEnrollment || LaunchingNote) && <ProgressBar />}
       <Link to="/admin/dashboard/students-table" className="hover:bg-slate-300 rounded-full p-2 w-fit">
         <ArrowLeft size={18} />
