@@ -21,7 +21,7 @@ const tableHeader = [
   },
   {
     id: 5,
-    content: 'Estado',
+    content: 'Acesso ao sistema',
   },
   {
     id: 6,
@@ -30,15 +30,16 @@ const tableHeader = [
 ]
 
 const ROLES = [
-  { id: 0, role: 'STUDENT', content: 'Estudante' },
-  { id: 1, role: 'ADMIN', content: 'Administrador' },
-  { id: 2, role: 'TEACHER', content: 'Professor' },
-  { id: 3, role: 'EMPLOYEE', content: 'Funcionário' },
+  { id: 0, role: 'STUDENT', content: 'Estudantes' },
+  { id: 1, role: 'ADMIN', content: 'Administradores' },
+  { id: 2, role: 'TEACHER', content: 'Professores' },
+  { id: 3, role: 'EMPLOYEE', content: 'Funcionários' },
 ]
 const initialValues = {
-  currentRole: { role: 'STUDENT', content: 'Estudante' },
+  currentRole: { role: 'STUDENT', content: 'Estudantes' },
   modalState: false,
   signupFormStatus: false,
   currentEmail: '',
 }
+
 export { tableHeader, ROLES, initialValues }

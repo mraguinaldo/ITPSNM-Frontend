@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
 
-const UseBlockStudent = () => {
+const UseBlockStudent = (key: string) => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -11,7 +11,7 @@ const UseBlockStudent = () => {
       return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['enrollments'])
+      queryClient.invalidateQueries([`${key}`])
     },
   })
 }
