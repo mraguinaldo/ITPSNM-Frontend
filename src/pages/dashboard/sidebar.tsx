@@ -79,7 +79,7 @@ const SideBar = () => {
         </div>
       </aside>
 
-      <aside className="bg-[#1A1C1D] left-0 hidden lg:flex flex-col items-center justify-between p-5 px-10 py-11 w-full max-w-[344px] h-screen overflow-y-scroll gap-20 fixed">
+      <aside className="bg-[#1A1C1D] left-0 hidden lg:flex flex-col items-center justify-between p-5 px-10 py-11 w-full max-w-[344px] h-screen overflow-y-scroll gap-20 fixed scroll-transparent">
         <AuthenticatedUser
           fullName="Rosa Bunga"
           userType="secretária"

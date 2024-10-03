@@ -1,5 +1,5 @@
 interface IAuthenticatedUser {
-  fullName: string
+  fullName?: string
   avatar: string
   userType: string
   className?: string

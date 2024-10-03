@@ -5,6 +5,7 @@ interface IQuestionModal {
   iconConfirm: any
   iconReject: any
   title: string
+  paragraph?: string
 }
 
 export type { IQuestionModal }

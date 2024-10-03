@@ -9,12 +9,8 @@ const UsePostNote = () => {
 
       return response.data
     },
-    onSuccess: (data: any) => {
-      console.log(data)
-    },
-    onError: (error: any) => {
-      console.log(error)
-    },
+    onSuccess: () => {},
+    onError: () => {},
   })
 }
 

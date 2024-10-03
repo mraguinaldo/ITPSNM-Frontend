@@ -14,6 +14,7 @@ interface Level {
 interface Student {
   fullName: string
   id: number
+  type: string
 }
 
 interface Enrollment {
@@ -40,7 +41,7 @@ const UseCheckEnrollment = () => {
 
   return useMutation<IEnrollments, Error, URLSearchParams>(
     async (searchParams: URLSearchParams) => {
-      const response = await API.get(`/enrollment?${searchParams.toString()}`)
+      const response = await API.get(`/enrollments?${searchParams.toString()}`)
       return response.data as IEnrollments
     },
     {

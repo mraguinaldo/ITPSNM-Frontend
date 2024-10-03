@@ -1,8 +1,8 @@
 import type { IInputSearch } from './interface'
 
-const InputSearch = ({ placeholder, icon, onChange }: IInputSearch) => {
+const InputSearch = ({ placeholder, icon, onChange, className }: IInputSearch) => {
   return (
-    <div id="input" className="flex h-10 w-full items-center gap-2 rounded-[8px] bg-[#F4F4F4] p-2">
+    <div id="input" className={`flex h-10 w-full items-center gap-2 rounded-[8px] bg-[#F4F4F4] p-2 ${className}`}>
       {icon && icon}
       <input
         type="text"
