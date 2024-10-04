@@ -18,6 +18,7 @@ import { DocumentForm } from '../components/document-form'
 import { Register } from '../pages/register'
 import { CongratulationsPage } from '../components/congratulations-page'
 import { PostNote } from '../components/post-note'
+import { FormToEditEmployee } from '../components/form-to-edit-employee'
 
 function Routes() {
   return (
@@ -48,6 +49,7 @@ function Routes() {
           <Route path="student-grades" element={<StudentGrades />} />
           <Route path="courses-table" element={<CoursesTable />} />
           <Route path="post-note" element={<PostNote />} />
+          <Route path="form-to-edit-employee" element={<FormToEditEmployee />} />
         </Route>
         <Route path="*" element={<Home />} />
       </Router>

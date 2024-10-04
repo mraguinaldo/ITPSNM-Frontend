@@ -8,7 +8,6 @@ const actions = {
   displaySignupModal: 'displaySignupModal',
   toggleEmail: 'toggleEmail',
   reset: 'reset',
-  toggleDefaultModalState: 'toggleDefaultModalState',
 }
 
 export { actions }
