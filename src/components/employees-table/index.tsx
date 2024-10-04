@@ -7,10 +7,13 @@ import { FormToRegisterEmployee } from './form'
 import { HeadLine } from './headline'
 import { Property } from './property'
 import { reducer } from './reducer'
-import { ArrowLeft, MagnifyingGlass } from 'phosphor-react'
+import { ArrowLeft, MagnifyingGlass, Pen, Trash } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 import { UseformatDate } from '../../hooks/useFormatDate'
+import { DefaultModal } from '../modals/default'
+import { Link } from 'react-router-dom'
+import { UsestoreData } from '../../hooks/useStoreData'
 
 const EmployeesTable = () => {
   const { data: employees, isLoading }: any = UseGetEmployees()
@@ -74,11 +77,13 @@ const EmployeesTable = () => {
                   key={employee.id}
                   className="hover:bg-[#ebebeb97] cursor-pointer"
                   onClick={() => {
-                    alert(employee.fullName)
+                    UsestoreData('chosenEmployee', employee.id)
+                    dispatch({ type: actions.toggleDefaultModalState, payload: true })
                   }}
                 >
                   <Property property={employee.fullName} />
                   <Property property={employee.phone} />
+                  <Property property={employee.alternativePhone ? employee.alternativePhone : '_'} />
                   <Property property={employee.residence} />
                   <Property property={employee.gender === 'MALE' ? 'Masculino' : 'Feminino'} />
                   <Property property={UseGettMaritalStatus(employee.maritalStatus, employee.gender)} />
@@ -92,6 +97,29 @@ const EmployeesTable = () => {
           </table>
         </div>
       </div>
+      <DefaultModal
+        display={state.defaultModalState}
+        closeModal={() => dispatch({ type: actions.toggleDefaultModalState, payload: false })}
+      >
+        <div className="flex flex-col w-full items-start">
+          <Link
+            to="/admin/dashboard/form-to-edit-employee"
+            className="bg-transparent flex gap-2 items-center hover:bg-[#9d9d9d56] rounded-md px-4 py-2 w-full"
+            onClick={() => dispatch({ type: actions.toggleDefaultModalState, payload: false })}
+          >
+            <Pen size={18} color="#2d2d2d" />
+            Editar funcionário
+          </Link>
+          <button
+            type="button"
+            className="bg-transparent flex gap-2 items-center px-4 py-2 w-full hover:bg-[#9d9d9d56] rounded-md"
+            onClick={() => alert('Eliminar')}
+          >
+            <Trash size={18} color="#2d2d2d" />
+            Eliminar funcionário
+          </button>
+        </div>
+      </DefaultModal>
     </div>
   )
 }

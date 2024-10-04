@@ -46,12 +46,6 @@ const reducer = (state: any, action: any) => {
         currentEmail: action.payload,
       }
     }
-    case actions.toggleDefaultModalState: {
-      return {
-        ...state,
-        defaultModalState: action.payload,
-      }
-    }
     case actions.reset: {
       return {
         initialValues,

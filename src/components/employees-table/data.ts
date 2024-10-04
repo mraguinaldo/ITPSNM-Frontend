@@ -9,30 +9,34 @@ const tableHeader = [
   },
   {
     id: 2,
-    content: 'Residência',
+    content: 'Telefone alternativo',
   },
   {
     id: 3,
-    content: 'Género',
+    content: 'Residência',
   },
   {
     id: 4,
-    content: 'Estado civil',
+    content: 'Género',
   },
   {
     id: 5,
-    content: 'Nº do Bilhete de Identidade',
+    content: 'Estado civil',
   },
   {
     id: 6,
-    content: 'Data de nascimento',
+    content: 'Nº do Bilhete de Identidade',
   },
   {
     id: 7,
-    content: 'Data de emissão do BI',
+    content: 'Data de nascimento',
   },
   {
     id: 8,
+    content: 'Data de emissão do BI',
+  },
+  {
+    id: 9,
     content: 'Data de expiração do BI',
   },
 ]
@@ -45,6 +49,7 @@ const initialValues = {
   province: '',
   county: '',
   signupFormStatus: false,
+  defaultModalState: false,
 }
 
 const fields = [
