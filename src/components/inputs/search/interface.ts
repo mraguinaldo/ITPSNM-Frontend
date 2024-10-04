@@ -4,6 +4,7 @@ interface IInputSearch {
   onChange: (e: any) => void
   className?: string
   onKeyDown?: (e: any) => void
+  value?: string
 }
 
 export type { IInputSearch }
