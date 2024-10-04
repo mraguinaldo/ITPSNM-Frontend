@@ -4,7 +4,7 @@ const HeadLine = ({ colSpan, content, visible }: IHeadLine) => {
   return (
     <th
       colSpan={colSpan}
-      className={`border-[1px] text-white border-b-[#D9D9D9] text-[14px] sm:text-[16px] p-2 ${visible ? 'opacity-1' : 'opacity-0'}`}
+      className={`border-[1px] text-white border-b-[#D9D9D9] text-[14px] sm:text-[16px] py-2 px-6 ${visible ? 'opacity-1' : 'opacity-0'}`}
     >
       {content}
     </th>

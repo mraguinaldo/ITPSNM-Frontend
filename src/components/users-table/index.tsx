@@ -141,6 +141,7 @@ const UsersTable = () => {
                     onClick={() => catchUser({ email: state.currentEmail })}
                   />
                 }
+                value={state.currentEmail}
                 onKeyDown={(e: any) => fetchUser(e)}
                 onChange={(e: any) => dispatch({ type: actions.toggleEmail, payload: e.currentTarget.value })}
               />
