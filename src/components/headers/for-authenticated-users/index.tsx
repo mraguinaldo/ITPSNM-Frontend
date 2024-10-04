@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Toast } from '../../toast'
 import { Logo } from '../../logo'
@@ -10,17 +10,18 @@ import { QuestionModal } from '../../modals/question'
 import { Check, X } from 'phosphor-react'
 import { PasswordUpdateForm } from '../../reset-password'
 import { DefaultModal } from '../../modals/default'
-import { UseCheckEnrollment } from '../../../hooks/useCheckEnrollment'
-import { ApplicationContexts } from '../../contexts/applicationContexts'
 import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLastName'
+import { UsePickUpAuthenticatedStudent } from '../../../hooks/usePickUpAuthenticatedStudent'
+import { ProgressBar } from '../../progress-bar'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const HeaderForAuthenticatedUsers = () => {
   const [modalState, setModalState] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
   const [modalStateToChangePassword, setModalStateToChangePassword] = useState<boolean>(false)
-  const { enrollmentNumber }: any = useContext(ApplicationContexts)
-
-  const { data: user, mutate } = UseCheckEnrollment()
+  const navigate = useNavigate()
+  const user = UsePickUpAuthenticatedStudent()
 
   const handleScroll = useCallback(() => setModalState(false), [])
 
@@ -40,16 +41,12 @@ const HeaderForAuthenticatedUsers = () => {
     console.log(href)
   }
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams({
-      [enrollmentNumber && 'enrollmentNumber']: enrollmentNumber?.id,
-    })
-    mutate(searchParams)
-  }, [mutate, enrollmentNumber])
-
   const signOut = () => {
+    Cookies.remove('token')
     setQuestionModalState(false)
     Toast({ message: 'Sessão Terminada', theme: 'light', toastType: 'success' })
+
+    navigate('/login')
   }
 
   useEffect(() => {
@@ -59,6 +56,10 @@ const HeaderForAuthenticatedUsers = () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [handleScroll])
+
+  if (!user) {
+    return <ProgressBar />
+  }
 
   return (
     <header className="w-full fixed z-[100] bg-[#000C13] border-b border-[#f0f0f0]">
@@ -70,8 +71,8 @@ const HeaderForAuthenticatedUsers = () => {
         <div className="w-full max-w-[240px] md:max-w-[400px] relative">
           {user && (
             <AuthenticatedUser
-              fullName={UseExtractFirstAndLastName(user.enrollment.students.fullName)}
-              userType={user.enrollment.students.type}
+              fullName={UseExtractFirstAndLastName(user.students.fullName)}
+              userType={user.students.type}
               avatar={'/default.jpeg'}
               className="items-center justify-end"
               onClick={() => setModalState((prev) => !prev)}

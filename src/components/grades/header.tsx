@@ -30,11 +30,11 @@ const Header = ({ user }: IHeader) => {
   return (
     <header className="flex items-end justify-between flex-wrap gap-16">
       <div id="student" className="flex flex-col gap-4 w-[600px]">
-        <h2 className="text-[24px] sm:text-[32px] font-semibold">{user?.enrollment.students.fullName}</h2>
+        <h2 className="text-[24px] sm:text-[32px] font-semibold">{user?.students.fullName}</h2>
         <ul id="details" className="flex w-full gap-4 flex-wrap">
-          {Li('Nº ', `${user?.enrollment.id}`)}
+          {Li('Nº ', `${user?.id}`)}
           {Li('', `${selectedLevel?.content}`)}
-          {Li('Curso: ', `${user?.enrollment.courses.name}`)}
+          {Li('Curso: ', `${user?.courses.name}`)}
         </ul>
         <div className="relative w-full max-w-[160px]">
           <button
