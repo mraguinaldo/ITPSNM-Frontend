@@ -1,36 +1,30 @@
 import { Header } from './header'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useCallback } from 'react'
 
 import { TableContent } from './table'
 import { UseFetchNotes } from '../../hooks/useFetchNotes'
-import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import { ApplicationContexts } from '../contexts/applicationContexts'
+import { UsePickUpAuthenticatedStudent } from '../../hooks/usePickUpAuthenticatedStudent'
 
 const Grades = () => {
-  const { mutate: useFetchNotes, data: notes, isLoading, error } = UseFetchNotes()
-  const { mutate: useCheckEnrollment, data: user } = UseCheckEnrollment()
+  const user = UsePickUpAuthenticatedStudent()
 
-  const { selectedLevel, enrollmentNumber }: any = useContext(ApplicationContexts)
+  const { mutate: fetchNotes, data: notes, isLoading, error } = UseFetchNotes()
+  const { selectedLevel }: any = useContext(ApplicationContexts)
 
-  useEffect(() => {
-    const fetchEnrollment = async () => {
-      const params = new URLSearchParams({
-        [enrollmentNumber && 'enrollmentNumber']: enrollmentNumber?.id,
-      })
-      useCheckEnrollment(params)
-    }
-
-    fetchEnrollment()
-  }, [useCheckEnrollment, enrollmentNumber])
-
-  useEffect(() => {
-    const fetchNotes = async (enrollmentId: number, level: string) => {
+  const handleFetchNotes = useCallback(
+    (enrollmentId: number, level: string) => {
       const userData = { enrollmentId, level }
-      useFetchNotes({ userData })
-    }
+      fetchNotes({ userData })
+    },
+    [fetchNotes],
+  )
 
-    fetchNotes(enrollmentNumber?.id, selectedLevel?.level)
-  }, [useFetchNotes, selectedLevel, enrollmentNumber])
+  useEffect(() => {
+    if (user && selectedLevel) {
+      handleFetchNotes(user.id, selectedLevel.level)
+    }
+  }, [handleFetchNotes, selectedLevel, user])
 
   if (!user) {
     return (

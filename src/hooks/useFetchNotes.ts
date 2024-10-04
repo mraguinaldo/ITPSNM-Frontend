@@ -1,5 +1,6 @@
 import { useMutation } from 'react-query'
 import { API } from '../services/api'
+import Cookies from 'js-cookie'
 
 interface Subject {
   id: number
@@ -39,12 +40,17 @@ interface NotesResponse {
 }
 
 const UseFetchNotes = () => {
+  const token = Cookies.get('token')
   return useMutation<NotesResponse, Error, any>({
     mutationFn: async ({ userData }: { userData: any }) => {
-      const response = await API.get(`/notes/${userData?.enrollmentId}/grades?level=${userData?.level}`)
+      const response = await API.get(`/notes/${userData?.enrollmentId}/grades?level=${userData?.level}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       const { notes }: any = response.data as NotesResponse
       return notes as NotesResponse
-    }
+    },
   })
 }
 

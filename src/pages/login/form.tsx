@@ -2,15 +2,11 @@ import { Input } from '../../components/inputs/normal'
 import { Button } from '../../components/button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useNavigate } from 'react-router-dom'
-import { UsestoreData } from '../../hooks/useStoreData'
 import { schemaForm } from './schema'
-import { UseCatchFakeUser } from '../../hooks/useCatchFakeUser'
-import { Toast } from '../../components/toast'
+import { UseLogin } from '../../hooks/useLogin'
 
 const Form = () => {
-  const navigate = useNavigate()
-
+  const { mutate: useLogin } = UseLogin()
   const {
     register,
     handleSubmit,
@@ -25,19 +21,7 @@ const Form = () => {
 
   const onSubmit = (data: any) => {
     try {
-      const formData = new FormData()
-
-      const userFound = UseCatchFakeUser(data?.email, data?.password)
-
-      if (userFound) {
-        formData.append('email', data?.email)
-        formData.append('password', data?.password)
-
-        UsestoreData('LoginData', formData)
-        navigate('/student/grade-view-area')
-      } else {
-        Toast({ message: 'Credências errada!', theme: 'colored', toastType: 'error' })
-      }
+      useLogin({ loginData: data })
     } catch (error) {
       console.log(error)
     }

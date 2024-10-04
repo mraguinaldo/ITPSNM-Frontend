@@ -57,7 +57,6 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
               ref={ref}
               placeholder={placeholder}
               className={`w-full border-none bg-transparent text-[14px] py-4 text-[#2F2F2F] outline-none placeholder:text-[14px] placeholder:font-medium placeholder:text-[#AFAFAF] ${option || placeholder === 'Escolha sua área de atuação' ? 'cursor-pointer' : ''} ${value ? 'opacity-0' : 'opacity-100'}`}
-              autoComplete={inputType === 'password' ? 'current-password' : 'off'}
               readOnly={!!option}
               {...rest}
               id={label}
