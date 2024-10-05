@@ -39,13 +39,13 @@ const STUDENT_OPTIONS = [
     id: 1,
     option: 'Lançar nota',
     Icon: Scroll,
-    href: '/admin/dashboard/post-note',
+    href: '/admin/painel/lancar-nota',
   },
   {
     id: 2,
     option: 'Mostrar dados',
     Icon: UserRectangle,
-    href: '/admin/dashboard/studant-data',
+    href: '/admin/painel',
   },
 ]
 

@@ -6,37 +6,37 @@ const NAVIGATION_LINKS: INavigationLinks[] = [
     id: 0,
     content: 'Estudantes',
     Icon: Student,
-    href: '/admin/dashboard',
+    href: '/admin/painel',
   },
   {
     id: 1,
     content: 'Funcionários',
     Icon: Users,
-    href: '/admin/dashboard/employees-table',
+    href: '/admin/painel/tabela-de-funcionarios',
   },
   {
     id: 2,
     content: 'Matrículas',
     Icon: Book,
-    href: '/admin/dashboard/enrollments-table',
+    href: '/admin/painel/tabela-de-matriculas',
   },
   {
     id: 3,
     content: 'Cursos',
     Icon: GraduationCap,
-    href: '/admin/dashboard/courses-table',
+    href: '/admin/painel/tabela-de-cursos',
   },
   {
     id: 4,
     content: 'Pautas de estudante',
     Icon: Scroll,
-    href: '/admin/dashboard/student-grades',
+    href: '/admin/painel/pautas-de-alunos',
   },
   {
     id: 5,
     content: 'Usuários',
     Icon: ShieldCheck,
-    href: '/admin/dashboard/users-table',
+    href: '/admin/painel/tabela-de-usuarios',
   },
 ]
 

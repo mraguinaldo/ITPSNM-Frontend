@@ -2,6 +2,7 @@
 import { type ReactNode, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UseAuth } from './useAuth'
+import { ProgressBar } from '../components/progress-bar'
 
 interface PrivateRouteProps {
   children: ReactNode
@@ -21,7 +22,11 @@ const PrivateRoute = ({ children, allowedRoles, redirectTo }: PrivateRouteProps)
     }
   }, [auth, navigate, redirectTo, allowedRoles])
 
-  if (!auth || !allowedRoles.includes(auth.role || '')) {
+  if (!auth) {
+    return <ProgressBar />
+  }
+
+  if (!allowedRoles.includes(auth.role || '')) {
     return null
   }
 

@@ -103,7 +103,7 @@ const EmployeesTable = () => {
       >
         <div className="flex flex-col w-full items-start">
           <Link
-            to="/admin/dashboard/form-to-edit-employee"
+            to="/admin/painel/editar-funcionario"
             className="bg-transparent flex gap-2 items-center hover:bg-[#9d9d9d56] rounded-md px-4 py-2 w-full"
             onClick={() => dispatch({ type: actions.toggleDefaultModalState, payload: false })}
           >
