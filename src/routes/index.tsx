@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes as Router } from 'react-router-dom'
 import { Home } from '../pages/home'
-
 import { CheckEnrollment } from '../pages/check-enrollment'
 import { GradeViewArea } from '../pages/see-student-grade'
 import { Login } from '../pages/login'
@@ -24,33 +23,44 @@ function Routes() {
   return (
     <BrowserRouter>
       <Router>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />}>
-          <Route path="personal-data-form" element={<PersonalDataForm />} />
+        <Route path="/" element={<Register />}>
+          <Route index element={<PersonalDataForm />} />
           <Route path="enrollment-form" element={<EnrollmentForm />} />
           <Route path="document-form" element={<DocumentForm />} />
           <Route path="congratulations-page" element={<CongratulationsPage />} />
         </Route>
+
+        <Route path="/login" element={<Login />} />
         <Route path="/check-enrollment" element={<CheckEnrollment />} />
+
         <Route
           path="/student/grade-view-area"
           element={
-            <PrivateRoute path="/login">
+            <PrivateRoute allowedRoles={['STUDENT']} redirectTo="/login">
               <GradeViewArea />
             </PrivateRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin/dashboard" element={<Dashboard />}>
-          <Route path="students-table" element={<StudentsTable />} />
+
+        <Route
+          path="/admin/dashboard"
+          element={
+            <PrivateRoute allowedRoles={['ADMIN', 'TEACHER']} redirectTo="/login">
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<StudentsTable />} />
+          <Route path="post-note" element={<PostNote />} />
+
           <Route path="employees-table" element={<EmployeesTable />} />
           <Route path="users-table" element={<UsersTable />} />
           <Route path="enrollments-table" element={<EnrollmentsTable />} />
           <Route path="student-grades" element={<StudentGrades />} />
           <Route path="courses-table" element={<CoursesTable />} />
-          <Route path="post-note" element={<PostNote />} />
           <Route path="form-to-edit-employee" element={<FormToEditEmployee />} />
         </Route>
+
         <Route path="*" element={<Home />} />
       </Router>
     </BrowserRouter>

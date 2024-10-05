@@ -16,7 +16,15 @@ const UseLogin = () => {
       Cookies.set('token', data.token)
       Cookies.set('role', data.role)
       Cookies.set('userId', data.userId)
-      navigate('/student/grade-view-area')
+      if (data.role === 'STUDENT') {
+        navigate('/student/grade-view-area')
+      } else if (data.role === 'ADMIN') {
+        navigate('/admin/dashboard')
+      } else if (data.role === 'TEACHER') {
+        navigate('/admin/dashboard/students-table')
+      } else {
+        navigate('/login')
+      }
     },
     onError: (error: any) => {
       console.log(error)

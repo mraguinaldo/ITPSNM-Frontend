@@ -1,32 +1,31 @@
+// src/routes/PrivateRoute.tsx
 import { type ReactNode, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
+import { UseAuth } from './useAuth'
 
-interface PropsType {
+interface PrivateRouteProps {
   children: ReactNode
-  path: string
+  allowedRoles: string[]
+  redirectTo: string
 }
 
-const useAuth = () => {
-  const token = Cookies.get('token')
-
-  if (!token) {
-    return null
-  }
-
-  return token
-}
-
-const PrivateRoute = ({ children, path }: PropsType) => {
-  const token = useAuth()
+const PrivateRoute = ({ children, allowedRoles, redirectTo }: PrivateRouteProps) => {
+  const auth = UseAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!token) {
-      navigate(path)
+    if (!auth?.token) {
+      navigate(redirectTo)
+    } else if (!allowedRoles.includes(auth.role || '')) {
+      navigate(redirectTo)
     }
-  }, [token, navigate, path])
+  }, [auth, navigate, redirectTo, allowedRoles])
 
-  return token ? <>{children}</> : null
+  if (!auth || !allowedRoles.includes(auth.role || '')) {
+    return null
+  }
+
+  return <>{children}</>
 }
+
 export { PrivateRoute }

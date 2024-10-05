@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { Toast } from '../../toast'
 import { Logo } from '../../logo'
 import { AuthenticatedUser } from '../../authenticated-user'
 import { StudentOptionsModal } from '../../modals/student/options'
@@ -13,14 +12,13 @@ import { DefaultModal } from '../../modals/default'
 import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLastName'
 import { UsePickUpAuthenticatedStudent } from '../../../hooks/usePickUpAuthenticatedStudent'
 import { ProgressBar } from '../../progress-bar'
-import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
+import { UseSignOut } from '../../../hooks/useSignout'
 
 const HeaderForAuthenticatedUsers = () => {
   const [modalState, setModalState] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
   const [modalStateToChangePassword, setModalStateToChangePassword] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const { signOut } = UseSignOut()
   const user = UsePickUpAuthenticatedStudent()
 
   const handleScroll = useCallback(() => setModalState(false), [])
@@ -39,14 +37,6 @@ const HeaderForAuthenticatedUsers = () => {
     }
 
     console.log(href)
-  }
-
-  const signOut = () => {
-    Cookies.remove('token')
-    setQuestionModalState(false)
-    Toast({ message: 'Sessão Terminada', theme: 'light', toastType: 'success' })
-
-    navigate('/login')
   }
 
   useEffect(() => {
@@ -72,11 +62,10 @@ const HeaderForAuthenticatedUsers = () => {
           {user && (
             <AuthenticatedUser
               fullName={UseExtractFirstAndLastName(user.students.fullName)}
-              userType={user.students.type}
+              userType={user.students.type === 'REGULAR' ? 'Normal' : 'Bolseiro'}
               avatar={'/default.jpeg'}
               className="items-center justify-end"
               onClick={() => setModalState((prev) => !prev)}
-              onMouseEnter={() => setModalState(true)}
             />
           )}
           <StudentOptionsModal className="right-0 top-20" modalState={modalState}>
@@ -97,7 +86,10 @@ const HeaderForAuthenticatedUsers = () => {
         iconReject={<X color="#fff" size={24} />}
         iconConfirm={<Check color="#fff" size={24} />}
         reject={() => setQuestionModalState(false)}
-        confirm={signOut}
+        confirm={() => {
+          setQuestionModalState(false)
+          signOut()
+        }}
       />
     </header>
   )
