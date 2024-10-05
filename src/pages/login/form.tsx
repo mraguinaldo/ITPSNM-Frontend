@@ -5,11 +5,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { schemaForm } from './schema'
 import { UseLogin } from '../../hooks/useLogin'
 import { CircleNotch, Eye, EyeClosed } from 'phosphor-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
+import { ProgressBar } from '../../components/progress-bar'
 
 const Form = () => {
   const { mutate: useLogin, isLoading } = UseLogin()
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const token = Cookies.get('token')
+  const role = Cookies.get('role')
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -22,6 +28,16 @@ const Form = () => {
     },
   })
 
+  useEffect(() => {
+    if (token && role) {
+      if (role === 'STUDENT') {
+        navigate('/aluno/relatorio-de-notas')
+      } else if (role === 'ADMIN' || role === 'TEACHER' || role === 'EMPLOYEE') {
+        navigate('/admin/painel')
+      }
+    }
+  }, [navigate, token, role])
+
   const onSubmit = async (data: any) => {
     try {
       useLogin({ loginData: data })
@@ -29,6 +45,11 @@ const Form = () => {
       console.log(error)
     }
   }
+
+  if (token && role) {
+    return <ProgressBar />
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full'}>
       <Input
