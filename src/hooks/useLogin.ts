@@ -24,9 +24,9 @@ const UseLogin = () => {
       return response.data
     },
     onSuccess: (data: any) => {
-      Cookies.set('token', data.token)
-      Cookies.set('role', data.role)
-      Cookies.set('userId', data.userId)
+      Cookies.set('token', data.token, { expires: 7 })
+      Cookies.set('role', data.role, { expires: 7 })
+      Cookies.set('userId', data.userId, { expires: 7 })
 
       const redirectPath = roleRedirectMap[data.role]
 

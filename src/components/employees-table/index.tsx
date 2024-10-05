@@ -7,7 +7,7 @@ import { FormToRegisterEmployee } from './form'
 import { HeadLine } from './headline'
 import { Property } from './property'
 import { reducer } from './reducer'
-import { ArrowLeft, MagnifyingGlass, Pen, Trash } from 'phosphor-react'
+import { ArrowLeft, Lock, MagnifyingGlass, Pen, Trash } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 import { UseformatDate } from '../../hooks/useFormatDate'
@@ -117,6 +117,14 @@ const EmployeesTable = () => {
           >
             <Trash size={18} color="#2d2d2d" />
             Eliminar funcionário
+          </button>
+          <button
+            type="button"
+            className="bg-transparent flex gap-2 items-center px-4 py-2 w-full hover:bg-[#9d9d9d56] rounded-md"
+            onClick={() => alert('Eliminar')}
+          >
+            <Lock size={18} color="#2d2d2d" />
+            Alterar senha
           </button>
         </div>
       </DefaultModal>
