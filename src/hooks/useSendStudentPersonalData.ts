@@ -6,7 +6,7 @@ import { Toast } from '../components/toast'
 
 const UseSendStudentPersonalData = () => {
   const navigate = useNavigate()
-  const nextForm = '/enrollment-form'
+  const nextForm = '/formulario-para-matricula'
   const errorMessage = 'Erro ao enviar o formulário'
 
   return useMutation({

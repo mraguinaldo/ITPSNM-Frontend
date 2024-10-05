@@ -13,10 +13,12 @@ import { UseHandleFileChange } from '../../hooks/useHandleFileChange'
 import { ImagePreview } from '../../components/Image-preview'
 import { useMutation } from 'react-query'
 import { API } from '../../services/api'
+import { useNavigate } from 'react-router-dom'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const [studentImage, setStudantImage] = useState<string>()
+  const navigate = useNavigate()
 
   const {
     register,
@@ -57,6 +59,7 @@ const Form = () => {
     },
     onSuccess: (data: any) => {
       console.log('DATA', data)
+      navigate('/pagina-de-felicitacao')
     },
     onError: (error: any) => {
       console.log('ERRO', error)
