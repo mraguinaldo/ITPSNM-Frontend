@@ -60,7 +60,7 @@ function Routes() {
           <Route path="editar-funcionario" element={<FormToEditEmployee />} />
         </Route>
 
-        <Route path="*" element={<Register />} />
+        <Route path="*" element={<Login />} />
       </Router>
     </BrowserRouter>
   )
