@@ -6,7 +6,7 @@ const NAVIGATION_LINKS: INavigationLinks[] = [
     id: 0,
     content: 'Estudantes',
     Icon: Student,
-    href: '/admin/dashboard/students-table',
+    href: '/admin/dashboard',
   },
   {
     id: 1,

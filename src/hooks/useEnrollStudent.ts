@@ -6,7 +6,7 @@ import { UsestoreData } from './useStoreData'
 
 const UseEnrollStudent = () => {
   const navigate = useNavigate()
-  const nextForm = '/register/document-form'
+  const nextForm = '/document-form'
   const errorMessage = 'Matrícula existente'
 
   return useMutation({

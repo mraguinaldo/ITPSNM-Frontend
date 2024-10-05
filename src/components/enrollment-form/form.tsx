@@ -99,7 +99,7 @@ const Form = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <p className="text-[16px] font-medium text-[#2F2F2F]">Estado civil</p>
+          <p className="text-[16px] font-medium text-[#2F2F2F]">Classe</p>
           {LEVELS.map(({ id, level }) => (
             <RadioButton
               key={id}

@@ -1,23 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { AuthenticatedUser } from '../../components/authenticated-user'
 import { NAVIGATION_LINKS } from './data'
 import { Check, List, X } from 'phosphor-react'
-import { useEffect, useState } from 'react'
 import { QuestionModal } from '../../components/modals/question'
 import { RenderButtons } from './render-button'
+import { UseSignOut } from '../../hooks/useSignout'
+import { useState } from 'react'
 
 const SideBar = () => {
   const [activeLink, setActiveLink] = useState<number>(0)
   const [menuMobileStatus, setMenuMobileStatus] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
-  const navigate = useNavigate()
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    const defaultRoute = NAVIGATION_LINKS[0].href
-
-    if (defaultRoute) navigate(defaultRoute)
-  }, [])
+  const { signOut } = UseSignOut()
 
   const handleMenuToggle = () => setMenuMobileStatus((prev) => !prev)
 
@@ -39,11 +33,6 @@ const SideBar = () => {
       ))}
     </nav>
   )
-
-  const signOut = () => {
-    setQuestionModalState(false)
-    alert('Sessão terminada!')
-  }
 
   return (
     <>
@@ -97,7 +86,10 @@ const SideBar = () => {
         iconReject={<X color="#fff" size={24} />}
         iconConfirm={<Check color="#fff" size={24} />}
         reject={() => setQuestionModalState(false)}
-        confirm={signOut}
+        confirm={() => {
+          setQuestionModalState(false)
+          signOut()
+        }}
       />
     </>
   )

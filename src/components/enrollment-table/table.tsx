@@ -52,22 +52,22 @@ const Students = ({ students }: { students: any }) => {
 
   const renderStudentRow = (student: any) => (
     <Student.Root className="mb-3" key={student.identityCardNumber}>
-      <th className="flex items-left gap-3 py-3 ">
+      <th className="flex items-left gap-3 p-3 w-[360px]">
         <Student.Name name={student.students.fullName} />
       </th>
-      <th className="text-left py-3 ">
-        <Student.Level level={UseRenameClass(student.levels)} />
+      <th className="text-left p-3 w-[172px]">
+        <Student.Level level={UseRenameClass(student.levels.name)} />
       </th>
-      <th className="text-left py-3 ">
+      <th className="text-left p-3 w-[172px]">
         <Student.Course course={student.courses.name} />
       </th>
-      <th className="flex justify-center text-center p-3">
+      <th className="flex justify-center items-center text-center p-3 w-[172px]">
         <Student.Course
           course={`${student.docsState === 'PENDING' && student.paymentState === 'PENDING' ? 'Pendente' : 'Aceite'}`}
           className={`hover:brightness-50 duration-150 flex items-center justify-center rounded-[38px] w-full max-w-[140px] py-2 font-semibold ${student.docsState === 'PENDING' && student.paymentState === 'PENDING' ? 'bg-[#d0553d9f]' : 'bg-[#3dd0899f]  '}`}
         />
       </th>
-      <th className="text-left py-3 w-[68px]">
+      <th className="text-left p-3 w-[68px]">
         <Student.BtnActions
           icon={
             state.selectedStudent === student.identityCardNumber ? (
@@ -123,7 +123,7 @@ const Students = ({ students }: { students: any }) => {
           <tr className="border-b border-[#E8E8E8]">
             {tableHeader.map(({ id, content }) => (
               <th
-                className={`w-auto py-3 text-[14px] lg:text-[16px] font-normal text-[#363636] ${content === 'Estado da matrícula' ? 'text-center' : 'text-left '}`}
+                className={`w-auto p-3 whitespace-nowrap text-[14px] lg:text-[16px] font-normal text-[#363636] ${content === 'Estado da matrícula' ? 'text-left' : 'text-left '}`}
                 key={id}
               >
                 {content}
