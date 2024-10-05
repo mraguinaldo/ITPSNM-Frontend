@@ -22,7 +22,7 @@ const Form = () => {
     },
   })
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     try {
       useLogin({ loginData: data })
     } catch (error) {
@@ -44,7 +44,7 @@ const Form = () => {
         inputType={showPassword ? 'text' : 'password'}
         Icon={showPassword ? EyeClosed : Eye}
         iconClick={() => setShowPassword((prev) => !prev)}
-        placeholder="Digite a nova palavra-passe"
+        placeholder="Digite a sua palavra-passe"
         {...register('password')}
       />
       <div className="pt-3 w-full">

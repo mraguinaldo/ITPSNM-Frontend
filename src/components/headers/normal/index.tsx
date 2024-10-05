@@ -34,12 +34,14 @@ const Header = () => {
           <Link to="/" className="flex gap-2 items-center font-medium text-[#fff]">
             Ajuda <Question size={24} color="#fff" />
           </Link>
-          <Button
-            className="bg-[#F8C40D] text-black py-2 px-7 duration-100 hover:bg-[#f8c50dde]"
-            content="Entrar"
-            type="button"
-            onClick={() => navigate('/Login')}
-          />
+          <div>
+            <Button
+              className="bg-[#F8C40D] text-black py-2 px-7 h-[42px] duration-100 hover:bg-[#f8c50dde]"
+              content="Entrar"
+              type="button"
+              onClick={() => navigate('/Login')}
+            />
+          </div>
         </div>
         <div className="flex lg:hidden">
           {menuMobileStatus ? (

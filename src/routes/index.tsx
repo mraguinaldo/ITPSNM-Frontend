@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes as Router } from 'react-router-dom'
-import { Home } from '../pages/home'
 import { CheckEnrollment } from '../pages/check-enrollment'
 import { GradeViewArea } from '../pages/see-student-grade'
 import { Login } from '../pages/login'
@@ -25,16 +24,16 @@ function Routes() {
       <Router>
         <Route path="/" element={<Register />}>
           <Route index element={<PersonalDataForm />} />
-          <Route path="enrollment-form" element={<EnrollmentForm />} />
-          <Route path="document-form" element={<DocumentForm />} />
-          <Route path="congratulations-page" element={<CongratulationsPage />} />
+          <Route path="formulario-para-matricula" element={<EnrollmentForm />} />
+          <Route path="formulario-de-documentos" element={<DocumentForm />} />
+          <Route path="pagina-de-felicitacao" element={<CongratulationsPage />} />
         </Route>
 
         <Route path="/login" element={<Login />} />
-        <Route path="/check-enrollment" element={<CheckEnrollment />} />
+        <Route path="/consultar-estado-da-matricula" element={<CheckEnrollment />} />
 
         <Route
-          path="/student/grade-view-area"
+          path="/aluno/relatorio-de-notas"
           element={
             <PrivateRoute allowedRoles={['STUDENT']} redirectTo="/login">
               <GradeViewArea />
@@ -43,7 +42,7 @@ function Routes() {
         />
 
         <Route
-          path="/admin/dashboard"
+          path="/admin/painel"
           element={
             <PrivateRoute allowedRoles={['ADMIN', 'TEACHER']} redirectTo="/login">
               <Dashboard />
@@ -51,17 +50,17 @@ function Routes() {
           }
         >
           <Route index element={<StudentsTable />} />
-          <Route path="post-note" element={<PostNote />} />
+          <Route path="lancar-nota" element={<PostNote />} />
 
-          <Route path="employees-table" element={<EmployeesTable />} />
-          <Route path="users-table" element={<UsersTable />} />
-          <Route path="enrollments-table" element={<EnrollmentsTable />} />
-          <Route path="student-grades" element={<StudentGrades />} />
-          <Route path="courses-table" element={<CoursesTable />} />
-          <Route path="form-to-edit-employee" element={<FormToEditEmployee />} />
+          <Route path="tabela-de-funcionarios" element={<EmployeesTable />} />
+          <Route path="tabela-de-usuarios" element={<UsersTable />} />
+          <Route path="tabela-de-matriculas" element={<EnrollmentsTable />} />
+          <Route path="pautas-de-alunos" element={<StudentGrades />} />
+          <Route path="tabela-de-cursos" element={<CoursesTable />} />
+          <Route path="editar-funcionario" element={<FormToEditEmployee />} />
         </Route>
 
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<Register />} />
       </Router>
     </BrowserRouter>
   )

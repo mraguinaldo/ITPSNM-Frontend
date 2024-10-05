@@ -4,27 +4,33 @@ import { API } from '../services/api'
 import { useNavigate } from 'react-router-dom'
 import { Toast } from '../components/toast'
 
+interface LoginData {
+  email: string
+  password: string
+}
+
 const UseLogin = () => {
   const navigate = useNavigate()
-  return useMutation({
-    mutationFn: async ({ loginData }: { loginData: any }) => {
-      const response = await API.post('/auth', loginData)
 
+  const roleRedirectMap: any = {
+    STUDENT: '/aluno/relatorio-de-notas',
+    ADMIN: '/admin/painel',
+    TEACHER: '/admin/painel',
+  }
+
+  return useMutation({
+    mutationFn: async ({ loginData }: { loginData: LoginData }) => {
+      const response = await API.post('/auth', loginData)
       return response.data
     },
     onSuccess: (data: any) => {
       Cookies.set('token', data.token)
       Cookies.set('role', data.role)
       Cookies.set('userId', data.userId)
-      if (data.role === 'STUDENT') {
-        navigate('/student/grade-view-area')
-      } else if (data.role === 'ADMIN') {
-        navigate('/admin/dashboard')
-      } else if (data.role === 'TEACHER') {
-        navigate('/admin/dashboard/students-table')
-      } else {
-        navigate('/login')
-      }
+
+      const redirectPath = roleRedirectMap[data.role]
+
+      if (redirectPath) navigate(redirectPath)
     },
     onError: (error: any) => {
       console.log(error)

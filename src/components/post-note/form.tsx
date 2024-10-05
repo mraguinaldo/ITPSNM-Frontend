@@ -98,7 +98,7 @@ const Form = () => {
   return (
     <section className="flex gap-6 flex-col w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white">
       {(searchingEnrollment || LaunchingNote) && <ProgressBar />}
-      <Link to="/admin/dashboard" className="hover:bg-slate-300 rounded-full p-2 w-fit">
+      <Link to="/admin/painel" className="hover:bg-slate-300 rounded-full p-2 w-fit">
         <ArrowLeft size={18} />
       </Link>
       <div>
