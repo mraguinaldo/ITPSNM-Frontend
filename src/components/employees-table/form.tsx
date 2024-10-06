@@ -16,6 +16,7 @@ import { UseFetchProvinces } from '../../hooks/useFetchProvinces'
 import { UseFetchCounties } from '../../hooks/useFetchCounties'
 import { UseSendEmployeePersonalData } from '../../hooks/useSendEmployeePersonalData'
 import { Toast } from '../toast'
+import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 
 const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -28,6 +29,7 @@ const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
     handleSubmit,
     setValue,
     reset,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaForm),
@@ -54,8 +56,12 @@ const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
     dispatch({ type: actions.changeStateOfChevron, payload: state.modalState !== value ? value : 100 })
   }
 
-  const changeGender = (value: number) => {
+  const changeGender = (value: number, gender: string) => {
     dispatch({ type: actions.changeGender, payload: value })
+    dispatch({
+      type: actions.toggleMaritalStatus,
+      payload: UseGettMaritalStatus(getValues('maritalStatus') || '', gender),
+    })
   }
 
   useEffect(() => {
@@ -118,7 +124,7 @@ const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
               key={id}
               value={gender}
               checked={state.genderId === id}
-              onClick={() => changeGender(id)}
+              onClick={() => changeGender(id, gender)}
               label={content}
               {...register('gender')}
             />
