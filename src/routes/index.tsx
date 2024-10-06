@@ -17,6 +17,7 @@ import { Register } from '../pages/register'
 import { CongratulationsPage } from '../components/congratulations-page'
 import { PostNote } from '../components/post-note'
 import { FormToEditEmployee } from '../components/form-to-edit-employee'
+import { ShowStudentData } from '../components/show-student-data'
 
 function Routes() {
   return (
@@ -51,6 +52,7 @@ function Routes() {
         >
           <Route index element={<StudentsTable />} />
           <Route path="lancar-nota" element={<PostNote />} />
+          <Route path="dados-da-matricula" element={<ShowStudentData />} />
 
           <Route path="tabela-de-funcionarios" element={<EmployeesTable />} />
           <Route path="tabela-de-usuarios" element={<UsersTable />} />

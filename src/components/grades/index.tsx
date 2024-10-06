@@ -1,5 +1,5 @@
 import { Header } from './header'
-import { useContext, useEffect, useCallback } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { TableContent } from './table'
 import { UseFetchNotes } from '../../hooks/useFetchNotes'
@@ -12,19 +12,16 @@ const Grades = () => {
   const { mutate: fetchNotes, data: notes, isLoading, error } = UseFetchNotes()
   const { selectedLevel }: any = useContext(ApplicationContexts)
 
-  const handleFetchNotes = useCallback(
-    (enrollmentId: number, level: string) => {
+  useEffect(() => {
+    const handleFetchNotes = (enrollmentId: number, level: string) => {
       const userData = { enrollmentId, level }
       fetchNotes({ userData })
-    },
-    [fetchNotes],
-  )
+    }
 
-  useEffect(() => {
     if (user && selectedLevel) {
       handleFetchNotes(user.id, selectedLevel.level)
     }
-  }, [handleFetchNotes, selectedLevel, user])
+  }, [selectedLevel, user, fetchNotes])
 
   if (!user) {
     return (

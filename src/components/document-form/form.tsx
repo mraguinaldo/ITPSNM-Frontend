@@ -84,7 +84,7 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex gap-6 flex-col">
-      <div className="flex gap-3 flex-col w-full max-w-[280px]:">
+      <div className="flex gap-3 flex-col w-full max-w-[280px]">
         <label htmlFor="Foto" className="cursor-pointer ">
           Foto
         </label>
@@ -112,26 +112,7 @@ const Form = () => {
         {...register('REPORT_CARD')}
         onChange={(e) => handleFileChange('REPORT_CARD', actions.handleChangeCertificate, e)}
       />
-      {/* <Input
-        errorMessage={errors.medicalCertificate?.message}
-        inputType="file"
-        Icon={IdentificationBadge}
-        fileName={state.medicalCertificate}
-        placeholder={state.medicalCertificate}
-        label="Atestado médico"
-        {...register('medicalCertificate')}
-        onChange={(e) => handleFileChange('medicalCertificate', actions.handleChangeMedicalCertificate, e)}
-      /> */}
-      {/* <Input
-        errorMessage={errors.vaccineCard?.message}
-        inputType="file"
-        Icon={UserRectangle}
-        fileName={state.vaccineCard}
-        placeholder={state.vaccineCard}
-        label="Cartão de vacina"
-        {...register('vaccineCard')}
-        onChange={(e) => handleFileChange('vaccineCard', actions.handleChangeVaccineCard, e)}
-      /> */}
+
       <Input
         errorMessage={errors.IDENTITY_CARD?.message}
         inputType="file"
@@ -142,16 +123,6 @@ const Form = () => {
         {...register('IDENTITY_CARD')}
         onChange={(e) => handleFileChange('IDENTITY_CARD', actions.handleChangeIdentityCard, e)}
       />
-      {/* <Input
-        errorMessage={errors.receiptOfPayment?.message}
-        inputType="file"
-        Icon={Vault}
-        fileName={state.receiptOfPayment}
-        placeholder={state.receiptOfPayment}
-        label="Comprovativo do pagamento"
-        {...register('receiptOfPayment')}
-        onChange={(e) => handleFileChange('receiptOfPayment', actions.handleChangeReceiptOfPayment, e)}
-      /> */}
       <div className="pt-3 w-full">
         <Button type="submit" content="Próximo" />
       </div>

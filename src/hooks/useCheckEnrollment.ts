@@ -15,6 +15,17 @@ interface Student {
   fullName: string
   id: number
   type: string
+  alternativePhone: string
+  dateOfBirth: any
+  emissionDate: any
+  gender: string
+  height: any
+  identityCardNumber: string
+  maritalStatus: string
+  mother: string
+  father: string
+  residence: string
+  phone: string
 }
 
 interface Enrollment {

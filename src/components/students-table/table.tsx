@@ -4,7 +4,7 @@ import { initialValues, STUDENT_OPTIONS, tableHeader } from './data'
 import { ApplicationContexts } from '../contexts/applicationContexts'
 import { useContext, useEffect, useReducer } from 'react'
 import { StudentOptionsModal } from './modals/student-options'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { QuestionModal } from '../modals/question'
@@ -16,6 +16,8 @@ import { actions } from './action'
 const Students = ({ students }: { students: any }) => {
   const { studentsFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
+  const location = useLocation()
+
   const {
     mutate: useBlockStudent,
     isLoading: blockingTheStudent,
@@ -88,7 +90,10 @@ const Students = ({ students }: { students: any }) => {
               <Link
                 to={href}
                 key={id}
-                onClick={() => UsestoreData('chosenStudent', student.identityCardNumber)}
+                onClick={() => {
+                  UsestoreData('chosenStudent', student.identityCardNumber)
+                  UsestoreData('previousRoute', location.pathname)
+                }}
                 className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
               >
                 <Icon size={14} color="#000" /> {option}

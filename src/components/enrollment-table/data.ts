@@ -38,7 +38,7 @@ const STUDENT_OPTIONS = [
     id: 2,
     option: 'Mostrar dados',
     Icon: UserRectangle,
-    href: '/admin/dashboard/studant-data',
+    href: '/admin/painel/dados-da-matricula',
   },
 ]
 
