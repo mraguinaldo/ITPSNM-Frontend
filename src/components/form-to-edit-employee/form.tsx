@@ -15,6 +15,7 @@ import { Toast } from '../toast'
 import { UseEditEmployee } from '../../hooks/useEditEmployee'
 import { UseGetData } from '../../hooks/useGetData'
 import { UseGetEmployee } from '../../hooks/useGetEmployee'
+import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -26,6 +27,7 @@ const Form = () => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaForm),
@@ -49,8 +51,12 @@ const Form = () => {
     dispatch({ type: actions.changeStateOfChevron, payload: newValue })
   }
 
-  const changeGender = (value: number) => {
+  const changeGender = (value: number, gender: string) => {
     dispatch({ type: actions.changeGender, payload: value })
+    dispatch({
+      type: actions.toggleMaritalStatus,
+      payload: UseGettMaritalStatus(getValues('maritalStatus') || '', gender),
+    })
   }
 
   useEffect(() => {
@@ -70,6 +76,16 @@ const Form = () => {
       for (const field of fields) {
         setValue(field, employeeFound?.employee[field], { shouldValidate: true })
       }
+
+      dispatch({
+        type: actions.toggleMaritalStatus,
+        payload: UseGettMaritalStatus(employeeFound?.employee.maritalStatus, employeeFound?.employee.gender),
+      })
+
+      dispatch({
+        type: actions.changeGender,
+        payload: employeeFound?.employee.gender === 'MALE' ? 0 : 1,
+      })
 
       setValue('dateOfBirth', employeeFound?.employee.dateOfBirth.split('T')[0], { shouldValidate: true })
       setValue('emissionDate', employeeFound?.employee.emissionDate.split('T')[0], { shouldValidate: true })
@@ -122,9 +138,9 @@ const Form = () => {
           {GENRES.map(({ id, content, gender }) => (
             <RadioButton
               key={id}
-              value={gender}
+              value={state.genderId === id && gender}
               checked={state.genderId === id}
-              onClick={() => changeGender(id)}
+              onClick={() => changeGender(id, gender)}
               label={content}
               {...register('gender')}
             />
@@ -206,7 +222,7 @@ const Form = () => {
           />
         </div>
         <div className="pt-3 w-full">
-          <Button type="submit" content="Próximo" />
+          <Button type="submit" content="Atualizar" />
         </div>
       </form>
     </>

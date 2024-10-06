@@ -64,7 +64,7 @@ const reducer = (state: any, action: any) => {
     case actions.handleStudentEditing: {
       return {
         ...state,
-        editStudent: action.payload,
+        editStudent: payload,
       }
     }
     default:

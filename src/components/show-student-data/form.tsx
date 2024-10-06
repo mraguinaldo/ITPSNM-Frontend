@@ -40,6 +40,7 @@ const Form = () => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaForm),
@@ -69,8 +70,12 @@ const Form = () => {
     dispatch({ type: actions.changeStateOfChevron, payload: state.modalState !== value ? value : 100 })
   }
 
-  const changeGender = (value: number) => {
+  const changeGender = (value: number, gender: string) => {
     dispatch({ type: actions.changeGender, payload: value })
+    dispatch({
+      type: actions.toggleMaritalStatus,
+      payload: UseGettMaritalStatus(getValues('maritalStatus') || '', gender),
+    })
   }
 
   const changeStudentPhoto = () => {
@@ -286,7 +291,7 @@ const Form = () => {
               key={id}
               value={gender}
               checked={state.gender === id}
-              onClick={() => changeGender(id)}
+              onClick={() => changeGender(id, gender)}
               label={content}
               {...register('gender')}
             />
