@@ -41,22 +41,8 @@ export const schemaForm = yup.object().shape({
     .required('A altura é obrigatória')
     .min(1, 'A altura deve ser maior ou igual a 1')
     .max(5, 'A altura deve ser menor ou igual a 5'),
-  residence: yup
-    .string()
-    .required('A residência é obrigratório')
-    .min(5, 'A residência deve ter no mínimo 5 letras')
-    .test('residence-validation', 'Endereço inválido', (residence) => {
-      const regEx = /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
-      if (residence.match(regEx)) return true
-    }),
-  natural: yup
-    .string()
-    .required('A naturalidade é obrigratório')
-    .min(4, 'Deve ter no mínimo 4 letras')
-    .test('natural-validation', 'Naturalidade inválida', (natural) => {
-      const regEx = /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
-      if (natural.match(regEx)) return true
-    }),
+  residence: yup.string().required('A residência é obrigratório'),
+  natural: yup.string().required('A naturalidade é obrigratório'),
   phone: yup
     .string()
     .required('O número de telefone é obrigatório!!')

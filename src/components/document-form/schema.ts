@@ -20,10 +20,10 @@ export const schemaForm = yup.object().shape({
   REPORT_CARD: yup
     .mixed()
     .required('Carregue a sua declaração ou certificado')
-    .test('file-validation', 'Arquivo deve ser PDF, até 10MB.', (value) => {
+    .test('file-validation', 'Arquivo deve ser PDF, até 1MB.', (value) => {
       if (typeof value === 'object') {
         const { size, type } = value as File
-        if (size <= 10000000 && type === 'application/pdf') {
+        if (size <= 1000000 && type === 'application/pdf') {
           return true
         }
       }
@@ -42,10 +42,10 @@ export const schemaForm = yup.object().shape({
   IDENTITY_CARD: yup
     .mixed()
     .required('Carregue o seu bilhete de identidade')
-    .test('file-validation', 'Arquivo deve ser PDF, até 10MB.', (value) => {
+    .test('file-validation', 'Arquivo deve ser PDF, até 1MB.', (value) => {
       if (typeof value === 'object') {
         const { size, type } = value as File
-        if (size <= 10000000 && type === 'application/pdf') {
+        if (size <= 1000000 && type === 'application/pdf') {
           return true
         }
       }

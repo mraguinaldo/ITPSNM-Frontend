@@ -55,7 +55,7 @@ const UseLogin = () => {
       } else if (error.response.data.message === 'Account blocked due to multiple failed login attempts.') {
         Toast({
           message:
-            'Conta bloqueada devido a várias tentativas de login malsucedidas! Entre em contacto com o sector administrativo',
+            'Conta bloqueada devido a várias tentativas de login mal sucedidas! Entre em contacto com o sector administrativo',
           theme: 'colored',
           toastType: 'error',
         })

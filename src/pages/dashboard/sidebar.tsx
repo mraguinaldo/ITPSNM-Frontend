@@ -1,17 +1,27 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthenticatedUser } from '../../components/authenticated-user'
 import { NAVIGATION_LINKS } from './data'
 import { Check, List, X } from 'phosphor-react'
 import { QuestionModal } from '../../components/modals/question'
 import { RenderButtons } from './render-button'
 import { UseSignOut } from '../../hooks/useSignout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { UsestoreData } from '../../hooks/useStoreData'
+import { UseGetData } from '../../hooks/useGetData'
 
 const SideBar = () => {
-  const [activeLink, setActiveLink] = useState<number>(0)
+  const activeLink = UseGetData('activeLink')
+  const currentRoute = UseGetData('currentRoute')
   const [menuMobileStatus, setMenuMobileStatus] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
+  const navigate = useNavigate()
   const { signOut } = UseSignOut()
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (!activeLink) UsestoreData('activeLink', 0)
+    if (currentRoute) navigate(currentRoute)
+  }, [])
 
   const handleMenuToggle = () => setMenuMobileStatus((prev) => !prev)
 
@@ -23,7 +33,8 @@ const SideBar = () => {
           to={href}
           className={`flex gap-4 font-normal px-6 py-4 rounded-md ${activeLink === id ? 'bg-[#F8C40D] text-[#000] font-semibold' : 'text-white hover:opacity-80'}`}
           onClick={() => {
-            setActiveLink(id)
+            UsestoreData('activeLink', id)
+            UsestoreData('currentRoute', href)
             isMobile && handleMenuToggle()
           }}
         >
