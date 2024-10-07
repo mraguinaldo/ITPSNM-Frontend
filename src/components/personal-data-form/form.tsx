@@ -198,7 +198,7 @@ const Form = () => {
               value={state.county}
               {...register('countyId')}
             />
-            <OptionsModal modalState={state.modalState === 1}>
+            <OptionsModal modalState={state.modalState === 1} maximumHeight={true}>
               {typeof counties === 'object' &&
                 counties?.map((county: any) => (
                   <SelectedArea

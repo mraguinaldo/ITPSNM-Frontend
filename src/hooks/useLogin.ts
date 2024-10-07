@@ -27,6 +27,7 @@ const UseLogin = () => {
       Cookies.set('token', data.token, { expires: 7 })
       Cookies.set('role', data.role, { expires: 7 })
       Cookies.set('userId', data.userId, { expires: 7 })
+      Cookies.set('enrollmentNumber', data.enrollmentNumber, { expires: 7 })
 
       const redirectPath = roleRedirectMap[data.role]
 

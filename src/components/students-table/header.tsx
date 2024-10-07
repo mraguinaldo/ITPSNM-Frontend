@@ -13,7 +13,7 @@ const DataTableHeader = ({ totalStudents, students }: IDataTableHeader) => {
 
   const searchStudent = (currentTarget: string) => {
     const currentStudents = students.items.filter((item: any) => {
-      return item.students.fullName.toLowerCase().includes(currentTarget.toLowerCase())
+      return item?.students?.fullName.toLowerCase().includes(currentTarget.toLowerCase())
     })
 
     setStudentsFound(currentStudents)

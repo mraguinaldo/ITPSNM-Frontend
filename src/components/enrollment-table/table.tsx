@@ -13,7 +13,14 @@ import { ProgressBar } from '../progress-bar'
 import { reducer } from './reducer'
 import { actions } from './action'
 
-const Students = ({ students }: { students: any }) => {
+interface IStudents {
+  fetchEnrollmentsApproved: () => void
+  fetchEnrollmentsPending: () => void
+  students: any
+  enrollmentType: string
+}
+
+const Students = ({ students, fetchEnrollmentsApproved, fetchEnrollmentsPending, enrollmentType }: IStudents) => {
   const { studentsFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
   const location = useLocation()
@@ -54,41 +61,44 @@ const Students = ({ students }: { students: any }) => {
 
   const renderStudentRow = (student: any) => (
     <Student.Root className="mb-3" key={student.identityCardNumber}>
+      <th className="text-left p-3 w-[172px]">
+        <Student.Level level={student.id} />
+      </th>
       <th className="flex items-left gap-3 p-3 w-[360px]">
-        <Student.Name name={student.students.fullName} />
+        <Student.Name name={student.students?.fullName} />
       </th>
       <th className="text-left p-3 w-[172px]">
-        <Student.Level level={UseRenameClass(student.levels.name)} />
+        <Student.Level level={UseRenameClass(student.levels?.name)} />
       </th>
       <th className="text-left p-3 w-[172px]">
-        <Student.Course course={student.courses.name} />
+        <Student.Course course={student.courses?.name} />
       </th>
       <th className="flex justify-center items-center text-center p-3 w-[172px]">
         <Student.Course
-          course={`${student.docsState === 'PENDING' && student.paymentState === 'PENDING' ? 'Pendente' : 'Aceite'}`}
-          className={`hover:brightness-50 duration-150 flex items-center justify-center rounded-[38px] w-full max-w-[140px] py-2 font-semibold ${student.docsState === 'PENDING' && student.paymentState === 'PENDING' ? 'bg-[#d0553d9f]' : 'bg-[#3dd0899f]  '}`}
+          course={`${student.docsState === 'PENDING' && student?.paymentState === 'PENDING' ? 'Pendente' : 'Aprovada'}`}
+          className={`hover:brightness-50 duration-150 flex items-center justify-center rounded-[38px] w-full max-w-[140px] py-2 font-semibold ${student?.docsState === 'PENDING' && student?.paymentState === 'PENDING' ? 'bg-[#d0553d9f]' : 'bg-[#3dd0899f]  '}`}
         />
       </th>
       <th className="text-left p-3 w-[68px]">
         <Student.BtnActions
           icon={
-            state.selectedStudent === student.identityCardNumber ? (
+            state.selectedStudent === student?.identityCardNumber ? (
               <X color="#161616" size={14} />
             ) : (
               <DotsThree color="#161616" size={32} />
             )
           }
-          onClick={() => handleStudentClick(student.identityCardNumber)}
+          onClick={() => handleStudentClick(student?.identityCardNumber)}
         />
       </th>
-      <StudentOptionsModal isVisible={state.selectedStudent === student.identityCardNumber}>
+      <StudentOptionsModal isVisible={state.selectedStudent === student?.identityCardNumber}>
         {STUDENT_OPTIONS.map(({ Icon, id, option, href }) =>
           href ? (
             <Link
               to={href}
               key={id}
               onClick={() => {
-                UsestoreData('chosenStudent', student.identityCardNumber)
+                UsestoreData('chosenStudent', student?.identityCardNumber)
                 UsestoreData('previousRoute', location.pathname)
               }}
               className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
@@ -122,7 +132,22 @@ const Students = ({ students }: { students: any }) => {
         reject={closeLockModal}
         confirm={() => useBlockStudent({ formData: { status: state.studentStatus, email: state.selectedStudent } })}
       />
-
+      <div className="flex gap-4 flex-wrap pb-8">
+        <button
+          type="button"
+          className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+          onClick={fetchEnrollmentsPending}
+        >
+          PENDENTES
+        </button>
+        <button
+          type="button"
+          className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc00]' : 'border-[#dcdcdc]'}`}
+          onClick={fetchEnrollmentsApproved}
+        >
+          Aprovadas
+        </button>
+      </div>
       <table className="w-full">
         <thead>
           <tr className="border-b border-[#E8E8E8]">

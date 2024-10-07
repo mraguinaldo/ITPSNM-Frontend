@@ -1,7 +1,7 @@
-import { useContext } from 'react'
+// import { useContext } from 'react'
 import { InputSearch } from '../inputs/search'
 import { MagnifyingGlass } from 'phosphor-react'
-import { ApplicationContexts } from '../contexts/applicationContexts'
+// import { ApplicationContexts } from '../contexts/applicationContexts'
 
 interface IDataTableHeader {
   totalStudents: number
@@ -9,14 +9,15 @@ interface IDataTableHeader {
 }
 
 const DataTableHeader = ({ totalStudents, students }: IDataTableHeader) => {
-  const { setStudentsFound }: any = useContext(ApplicationContexts)
+  // const { setStudentsFound }: any = useContext(ApplicationContexts)
 
   const searchStudent = (currentTarget: string) => {
     const currentStudents = students.items.filter((item: any) => {
-      return item.students.fullName.toLowerCase().includes(currentTarget.toLowerCase())
+      return item?.students?.fullName?.toLowerCase().includes(currentTarget.toLowerCase())
     })
 
-    setStudentsFound(currentStudents)
+    console.log(currentStudents)
+    // setStudentsFound(currentStudents)
   }
 
   return (

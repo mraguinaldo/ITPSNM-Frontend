@@ -53,7 +53,7 @@ const UsersTable = () => {
     if (passwordRestored) {
       Toast({ message: 'Senha restaurada com sucesso', theme: 'light', toastType: 'success' })
     } else if (passwordNotRestored) {
-      Toast({ message: 'Falha ao restaurar a senha', theme: 'colored', toastType: 'error' })
+      Toast({ message: 'Erro ao resetar a senha', theme: 'colored', toastType: 'error' })
     }
   }, [passwordRestored, passwordNotRestored])
 
@@ -69,45 +69,45 @@ const UsersTable = () => {
     user && (
       <Student.Root className="mb-4" key={user.id}>
         <td className="p-4 text-left">
-          <Student.Name name={user.email} />
+          <Student.Name name={user?.email} />
         </td>
         <td className="p-4 text-left">
-          <Student.Course course={user.email} />
+          <Student.Course course={user?.email} />
         </td>
         <td className="p-4 text-center">
           <Student.Course
             course={
-              user.role === 'STUDENT'
+              user?.role === 'STUDENT'
                 ? 'Estudante'
-                : user.role === 'EMPLOYEE'
+                : user?.role === 'EMPLOYEE'
                   ? 'Funcionário'
-                  : user.role === 'TEACHER'
+                  : user?.role === 'TEACHER'
                     ? 'Professor'
                     : 'Administrador'
             }
           />
         </td>
-        <td className="p-4 text-center flex justify-center items-center">
+        {/* <td className="p-4 text-center flex justify-center items-center">
           <Student.Course
-            course={user.isActive ? 'Ativa' : 'Desativada'}
-            className={`hover:brightness-50 duration-150 flex items-center justify-center rounded-[38px] w-full max-w-[140px] py-2 font-semibold ${user.isActive ? 'bg-[#3dd0899f] ' : 'bg-[#d0553d9f] '}`}
+            course={user?.isActive ? 'Ativa' : 'Desativada'}
+            className={`hover:brightness-50 duration-150 flex items-center justify-center rounded-[38px] w-full max-w-[140px] py-2 font-semibold ${user?.isActive ? 'bg-[#3dd0899f] ' : 'bg-[#d0553d9f] '}`}
           />
-        </td>
+        </td> */}
         <td className="p-4 text-center">
           <Student.Course
-            course={user.loginAttempt}
-            className={`font-semibold ${user.loginAttempt > 3 && 'text-[#d0553d9f] '}`}
+            course={user?.loginAttempt}
+            className={`font-semibold ${user?.loginAttempt > 3 && 'text-[#d0553d9f] '}`}
           />
         </td>
         <td
           className="p-4 text-center flex justify-center items-center"
-          onClick={() => blockStudent({ formData: { email: user.email, status: !user.isBlocked } })}
+          onClick={() => blockStudent({ formData: { email: user?.email, status: !user?.isBlocked } })}
         >
-          <Student.State locked={user.isBlocked} />
+          <Student.State locked={user?.isBlocked} />
         </td>
         <td className="p-4 text-center">
           <Student.Course
-            onClick={() => resetPassword({ formData: { email: user.email } })}
+            onClick={() => resetPassword({ formData: { email: user?.email } })}
             course={'Resetar'}
             className="hover:bg-[#d1d1d140] duration-150 flex items-center justify-center border border-[#a7a7a755] text-black rounded-[38px] py-2 px-6"
           />
@@ -156,7 +156,7 @@ const UsersTable = () => {
                 </button>
               )}
             </div>
-            <div className="relative w-full max-w-[180px] mt-4 h-[68px]">
+            <div className="relative w-full max-w-[200px] mt-4 h-[68px]">
               <button
                 type="button"
                 className="text-[#1E1E1E] w-full py-3 px-6 bg-[#F4F4F4] flex gap-2 rounded-[50px] items-center font-semibold justify-between cursor-pointer text-[14px] sm:text-[16px] absolute z-50"
@@ -211,7 +211,7 @@ const UsersTable = () => {
             {userFound ? renderStudentRow(userFound.user) : users && (users.users.items || []).map(renderStudentRow)}
           </tbody>
         </table>
-        {users.users.items.length <= 0 && (
+        {!userFound && users.users.items.length <= 0 && (
           <h1 className="w-full h-64 flex items-center justify-center text-[24px] sm:text-[32px] font-semibold">
             Sem {state.currentRole.content}
           </h1>

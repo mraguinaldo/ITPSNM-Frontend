@@ -10,16 +10,14 @@ import { Check, X } from 'phosphor-react'
 import { PasswordUpdateForm } from '../../reset-password'
 import { DefaultModal } from '../../modals/default'
 import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLastName'
-import { UsePickUpAuthenticatedStudent } from '../../../hooks/usePickUpAuthenticatedStudent'
-import { ProgressBar } from '../../progress-bar'
 import { UseSignOut } from '../../../hooks/useSignout'
 
-const HeaderForAuthenticatedUsers = () => {
+const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
   const [modalState, setModalState] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
   const [modalStateToChangePassword, setModalStateToChangePassword] = useState<boolean>(false)
+
   const { signOut } = UseSignOut()
-  const user = UsePickUpAuthenticatedStudent()
 
   const handleScroll = useCallback(() => setModalState(false), [])
 
@@ -47,27 +45,21 @@ const HeaderForAuthenticatedUsers = () => {
     }
   }, [handleScroll])
 
-  if (!user) {
-    return <ProgressBar />
-  }
-
   return (
     <header className="w-full fixed z-[100] bg-[#000C13] border-b border-[#f0f0f0]">
       <div className="w-full max-w-[1296px] m-auto px-6 flex items-center justify-between h-[78px]">
         <DefaultModal closeModal={() => setModalStateToChangePassword(false)} display={modalStateToChangePassword}>
-          <PasswordUpdateForm />
+          <PasswordUpdateForm email={student?.enrollment?.students?.User.email} />
         </DefaultModal>
         <Logo />
         <div className="w-full max-w-[240px] md:max-w-[400px] relative">
-          {user && (
-            <AuthenticatedUser
-              fullName={UseExtractFirstAndLastName(user.students.fullName)}
-              userType={user.students.type === 'REGULAR' ? 'Normal' : 'Bolseiro'}
-              avatar={'/default.jpeg'}
-              className="items-center justify-end"
-              onClick={() => setModalState((prev) => !prev)}
-            />
-          )}
+          <AuthenticatedUser
+            fullName={UseExtractFirstAndLastName(student?.enrollment?.students?.fullName)}
+            userType={student ? (student?.enrollment?.students?.type === 'REGULAR' ? 'Normal' : 'Bolseiro') : ''}
+            avatar={'/default.jpeg'}
+            className="items-center justify-end"
+            onClick={() => setModalState((prev) => !prev)}
+          />
           <StudentOptionsModal className="right-0 top-20" modalState={modalState}>
             {STTUDENT_OPTIONS.map(({ id, content, Icon, href }) => (
               <SelectedArea

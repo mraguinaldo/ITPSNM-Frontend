@@ -37,6 +37,13 @@ export const schemaForm = yup.object().shape({
     })
     .min(0, 'Deve ser maior ou igual a 0')
     .max(20, 'Deve ser menor ou igual a 20'),
+  ims: yup
+    .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value
+    })
+    .min(0, 'Deve ser maior ou igual a 0')
+    .max(20, 'Deve ser menor ou igual a 20'),
   resource: yup
     .number()
     .transform((value, originalValue) => {

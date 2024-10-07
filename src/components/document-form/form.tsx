@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { Input } from '../../components/inputs/normal'
 import { Button } from '../../components/button'
 import { useForm } from 'react-hook-form'
@@ -14,6 +14,7 @@ import { ImagePreview } from '../../components/Image-preview'
 import { useMutation } from 'react-query'
 import { API } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
+import { UseGetData } from '../../hooks/useGetData'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -27,7 +28,12 @@ const Form = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaForm),
-    defaultValues: initialValues,
+    defaultValues: {
+      REPORT_CARD: 'Carregue a sua declaração ou certificado',
+      IDENTITY_CARD: 'Carregue o seu bilhete de identidade',
+      PHOTO: 'Carregue a sua foto',
+      identityCardNumber: undefined,
+    },
   })
 
   const changeStudentPhoto = () => {
@@ -66,6 +72,13 @@ const Form = () => {
     },
   })
 
+  useEffect(() => {
+    const data = UseGetData('enrollment')
+    if (data) {
+      setValue('identityCardNumber', data.identityCardNumber, { shouldValidate: true })
+    }
+  }, [setValue])
+
   const onSubmit = (data: any) => {
     try {
       data.enrollmentId = 2
@@ -102,6 +115,13 @@ const Form = () => {
           onChange={(e) => handleFileChange('PHOTO', actions.handleChangeImage, e)}
         />
       </div>
+      <Input
+        label="Nº do Bilhete de Identidade"
+        errorMessage={errors.identityCardNumber?.message}
+        inputType="text"
+        placeholder="Nº do Bilhete de Identidade"
+        {...register('identityCardNumber')}
+      />
       <Input
         errorMessage={errors.REPORT_CARD?.message}
         inputType="file"

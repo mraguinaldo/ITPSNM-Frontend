@@ -16,7 +16,7 @@ import { ProgressBar } from '../progress-bar'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
-  const { mutate: useCreateUser, isLoading: creatingUser, isSuccess, error } = UseCreateUser()
+  const { mutate: useCreateUser, isLoading: creatingUser, isSuccess } = UseCreateUser()
   const showUsername = false
 
   const {
@@ -53,7 +53,7 @@ const Form = () => {
 
       const renamedData = {
         ...rest,
-        [state.role === 'TEACHER' || state.role === 'ADMIN' ? 'employeeId' : 'enrollmentId']: currentUserId,
+        [data.role === 'TEACHER' || data.role === 'ADMIN' ? 'employeeId' : 'enrollmentId']: currentUserId,
       }
 
       useCreateUser({ formData: renamedData })
@@ -63,15 +63,12 @@ const Form = () => {
   }
 
   useEffect(() => {
-    if (error) {
-      Toast({ message: 'Erro ao criar usuário', theme: 'colored', toastType: 'error' })
-    }
     if (isSuccess) {
       Toast({ message: 'Usuário criado 🥳', theme: 'light', toastType: 'success' })
       reset()
       dispatch({ type: actions.reset })
     }
-  }, [error, isSuccess, reset])
+  }, [isSuccess, reset])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full'}>

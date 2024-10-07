@@ -23,6 +23,7 @@ const Header = () => {
               <Link
                 key={id}
                 to={target}
+                target={content === 'Requisitos' ? '_blank' : '_self'}
                 className="flex text-white gap-2 duration-100 items-center font-normal hover:text-[#ffffffb1]"
               >
                 {content} {Icon && <Icon size={24} className="hover:text-[#ABA7A7] duration-75" />}
