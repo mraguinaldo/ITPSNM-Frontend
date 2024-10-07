@@ -15,6 +15,7 @@ import { actions } from './actions'
 const CheckEnrollment = () => {
   const [, setSearchParams] = useSearchParams()
   const [state, dispatch] = useReducer(reducer, initialValues)
+
   const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading, error } = UseCheckEnrollment()
 
   const { searchValue, isModalOpen, selectedSearchMode, currentSearchType } = state

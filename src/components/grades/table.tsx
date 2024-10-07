@@ -53,6 +53,7 @@ const TableContent = ({ isLoading, notes }: ITableContent) => {
                   <Grade key={`${item.id}-nee`} grade={item.nee} visible />
                   <Grade key={`${item.id}-mf`} grade={item.mf} visible />
                   <Grade key={`${item.id}-mfd`} grade={item.mfd} visible />
+                  <Grade key={`${item.id}-ims`} grade={item.ims} visible />
                   <Grade key={`${item.id}-resource`} grade={item.resource} visible />
                 </tr>
               ))

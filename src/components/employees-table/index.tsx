@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom'
 import { UsestoreData } from '../../hooks/useStoreData'
 
 const EmployeesTable = () => {
-  const { data: employees, isLoading }: any = UseGetEmployees()
+  const { data: employees, isLoading }: any = UseGetEmployees(1)
   const [state, dispatch] = useReducer(reducer, initialValues)
   const [employeesFound, setEmployeesFound] = useState<any>()
 
@@ -35,7 +35,7 @@ const EmployeesTable = () => {
   return (
     <div className="w-full pl-8 py-16 lg:p-11 lg:rounded-[16px] bg-white flex flex-col gap-8">
       <h1 className={`text-[24px] font-semibold leading-9 ${state.signupFormStatus ? 'hidden' : 'flex'}`}>
-        Total de funcionários ({employees.employees.items.length})
+        Total de funcionários ({employees?.employees?.totalItems})
       </h1>
       <div className="flex items-center justify-between flex-wrap gap-5 w-full pr-4">
         <button
@@ -72,7 +72,7 @@ const EmployeesTable = () => {
             </thead>
 
             <tbody>
-              {(employeesFound ? employeesFound : employees.employees.items || []).map((employee: any) => (
+              {(employeesFound ? employeesFound : employees?.employees?.items || []).map((employee: any) => (
                 <tr
                   key={employee.id}
                   className="hover:bg-[#ebebeb97] cursor-pointer"
@@ -81,6 +81,7 @@ const EmployeesTable = () => {
                     dispatch({ type: actions.toggleDefaultModalState, payload: true })
                   }}
                 >
+                  <Property property={employee.id} />
                   <Property property={employee.fullName} />
                   <Property property={employee.phone} />
                   <Property property={employee.alternativePhone ? employee.alternativePhone : '_'} />

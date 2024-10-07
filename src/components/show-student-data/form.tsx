@@ -5,11 +5,9 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schemaForm } from './schema'
 import { SelectedArea } from '../../components/selected-area'
-import { GENRES, MARITAL_STATUS, initialValues } from './data'
+import { GENRES, initialValues, MARITAL_STATUS } from './data'
 import { RadioButton } from '../../components/radio-button'
 import { OptionsModal } from '../../components/modals/options-modal'
-import { reducer } from './reducer'
-import { actions } from './actions'
 
 // import { UseSendStudentPersonalData } from '../../hooks/useSendStudentPersonalData'
 import { ProgressBar } from '../../components/progress-bar'
@@ -25,6 +23,8 @@ import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import { UseGetData } from '../../hooks/useGetData'
 import { Link, useSearchParams } from 'react-router-dom'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
+import { reducer } from './reducer'
+import { actions } from './actions'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)

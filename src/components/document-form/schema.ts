@@ -6,6 +6,11 @@ interface FileValue {
 }
 
 export const schemaForm = yup.object().shape({
+  identityCardNumber: yup
+    .string()
+    .required('O número do bilhete é obrigatório')
+    .min(12, 'O número do bilhete deve ter no minimo 12 caracteres')
+    .max(14, 'O número do bilhete deve ter no máximo 14 caracteres'),
   PHOTO: yup
     .mixed()
     .required('Carregue a sua foto')

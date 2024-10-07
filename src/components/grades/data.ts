@@ -3,7 +3,7 @@ const Table = {
     { id: 0, content: 'Disciplinas', visible: true, colSpan: 0 },
     { id: 1, content: 'Iº Trimestre', visible: true, colSpan: 5 },
     { id: 2, content: 'IIº Trimestre', visible: true, colSpan: 5 },
-    { id: 3, content: 'IIIº Trimestre', visible: true, colSpan: 8 },
+    { id: 3, content: 'IIIº Trimestre', visible: true, colSpan: 9 },
   ],
   TEST_TYPES: [
     { id: 0, testType: '0', visible: false },
@@ -24,7 +24,8 @@ const Table = {
     { id: 15, testType: 'NEE', visible: true },
     { id: 16, testType: 'MF', visible: true },
     { id: 17, testType: 'MFD', visible: true },
-    { id: 18, testType: 'REC', visible: true },
+    { id: 18, testType: 'IMS', visible: true },
+    { id: 19, testType: 'REC', visible: true },
   ],
 }
 

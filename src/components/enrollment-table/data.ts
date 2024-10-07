@@ -8,22 +8,26 @@ interface PropsTypeTableHeader {
 const tableHeader: PropsTypeTableHeader[] = [
   {
     id: 0,
-    content: 'Nome',
+    content: 'Nº',
   },
   {
     id: 1,
-    content: 'Classe',
+    content: 'Nome',
   },
   {
     id: 2,
-    content: 'Curso',
+    content: 'Classe',
   },
   {
     id: 3,
-    content: 'Estado da matrícula',
+    content: 'Curso',
   },
   {
     id: 4,
+    content: 'Estado da matrícula',
+  },
+  {
+    id: 5,
     content: 'Ações',
   },
 ]

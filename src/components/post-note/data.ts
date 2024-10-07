@@ -7,6 +7,11 @@ const quarters = [
 const Subjects = [
   { subjectId: 1, subject: 'Matemática' },
   { subjectId: 2, subject: 'Física' },
+  { subjectId: 3, subject: 'Língua Portuguesa' },
+  { subjectId: 4, subject: 'Geografia' },
+  { subjectId: 5, subject: 'Análise De Dados' },
+  { subjectId: 6, subject: 'Banco De Dados' },
+  { subjectId: 7, subject: 'Matemática Discreta' },
 ]
 
 const Levels = [
@@ -25,6 +30,7 @@ const initialValues = {
   pt: undefined,
   resource: undefined,
   nee: undefined,
+  ims: undefined,
 
   county: '',
 }

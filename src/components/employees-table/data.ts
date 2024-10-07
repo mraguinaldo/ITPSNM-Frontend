@@ -1,42 +1,46 @@
 const tableHeader = [
   {
     id: 0,
-    content: 'Nome',
+    content: 'Nº',
   },
   {
     id: 1,
-    content: 'Telefone',
+    content: 'Nome',
   },
   {
     id: 2,
-    content: 'Telefone alternativo',
+    content: 'Telefone',
   },
   {
     id: 3,
-    content: 'Residência',
+    content: 'Telefone alternativo',
   },
   {
     id: 4,
-    content: 'Género',
+    content: 'Residência',
   },
   {
     id: 5,
-    content: 'Estado civil',
+    content: 'Género',
   },
   {
     id: 6,
-    content: 'Nº do Bilhete de Identidade',
+    content: 'Estado civil',
   },
   {
     id: 7,
-    content: 'Data de nascimento',
+    content: 'Nº do Bilhete de Identidade',
   },
   {
     id: 8,
-    content: 'Data de emissão do BI',
+    content: 'Data de nascimento',
   },
   {
     id: 9,
+    content: 'Data de emissão do BI',
+  },
+  {
+    id: 10,
     content: 'Data de expiração do BI',
   },
 ]

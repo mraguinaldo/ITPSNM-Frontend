@@ -64,7 +64,6 @@ const Form = () => {
           label="Nº do Bilhete de Identidade"
           errorMessage={errors.identityCardNumber?.message}
           inputType="text"
-          className="pointer-events-none"
           placeholder="Nº do Bilhete de Identidade"
           {...register('identityCardNumber')}
         />

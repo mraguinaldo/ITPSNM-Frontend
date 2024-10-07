@@ -1,13 +1,12 @@
-import { UseFetchEnrollments } from '../../hooks/useFetchEnrollments'
 import { DataTableHeader } from './header'
 import { Students } from './table'
-import { ProgressBar } from '../progress-bar'
+import { useQueryClient } from 'react-query'
 
 const StudentsTable = () => {
-  const { data: students, isLoading } = UseFetchEnrollments()
+  const queryClient = useQueryClient()
+  const students: any = queryClient.getQueryData(['enrollmentsAproved'])
 
-  if (isLoading) return <ProgressBar />
-  const totalStudents = students.items.filter((student: any) => student.students.User)
+  const totalStudents = students.items.filter((student: any) => student.students?.User)
 
   return (
     <section id="grade_report" className="bg-white lg:bg-black">

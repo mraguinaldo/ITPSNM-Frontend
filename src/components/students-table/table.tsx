@@ -53,10 +53,13 @@ const Students = ({ students }: { students: any }) => {
   }, [blockedStudent, errorWhenBlockingStudent])
 
   const renderStudentRow = (student: any) =>
-    student.students.User && (
+    student.students?.User && (
       <Student.Root className="mb-3" key={student.identityCardNumber}>
-        <th className="flex items-center gap-3 py-3 w-[360px]">
-          <Student.Image img="/default.jpeg" alt={student.fullName} />
+        <th className="text-left p-3 w-[172px]">
+          <Student.Level level={student.id} />
+        </th>
+        <th className="flex items-center gap-3 p-3 w-[360px]">
+          {/* <Student.Image img="/default.jpeg" alt={student.fullName} /> */}
           <Student.Name name={student.students.fullName} />
         </th>
         <th className="text-left p-3 w-[172px]">

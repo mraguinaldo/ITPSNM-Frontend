@@ -11,10 +11,10 @@ const tableHeader = [
     id: 2,
     content: 'Tipo de usúario',
   },
-  {
-    id: 3,
-    content: 'Estado da conta',
-  },
+  // {
+  //   id: 3,
+  //   content: 'Estado da conta',
+  // },
   {
     id: 4,
     content: 'Tentativas de login',

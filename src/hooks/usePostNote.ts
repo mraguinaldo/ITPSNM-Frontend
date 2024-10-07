@@ -7,7 +7,6 @@ const UsePostNote = () => {
 
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
-      console.log(formData)
       const response = await API.post('/notes', formData, {
         headers: {
           Authorization: `Bearer ${token}`,

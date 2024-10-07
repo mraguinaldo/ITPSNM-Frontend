@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schemaForm } from './schema'
 import { SelectedArea } from '../../components/selected-area'
-import { initialValues, Levels, quarters, Subjects } from './data'
+import { initialValues, Levels, quarters } from './data'
 
 import { OptionsModal } from '../../components/modals/options-modal'
 import { reducer } from './reducer'
@@ -21,6 +21,7 @@ import { UseCreateFormData } from '../../hooks/useCreateFormData'
 import { UseGetData } from '../../hooks/useGetData'
 import { UsePostNote } from '../../hooks/usePostNote'
 import { Toast } from '../toast'
+import { UseFetchSubjects } from '../../hooks/useFetchSubjects'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -29,6 +30,7 @@ const Form = () => {
 
   const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading: searchingEnrollment } = UseCheckEnrollment()
   const { mutate: usePostNote, isLoading: LaunchingNote, error, isSuccess } = UsePostNote()
+  const { data: subjects }: any = UseFetchSubjects()
 
   const {
     register,
@@ -47,6 +49,7 @@ const Form = () => {
       pt: undefined,
       resource: undefined,
       nee: undefined,
+      ims: undefined,
     },
   })
 
@@ -157,15 +160,15 @@ const Form = () => {
                 option
                 {...register('subjectId')}
               />
-              <OptionsModal modalState={state.modalState === 1}>
-                {Subjects.map(({ subject, subjectId }) => (
+              <OptionsModal modalState={state.modalState === 1} maximumHeight={true}>
+                {subjects?.map((subject: any) => (
                   <SelectedArea
-                    key={subjectId}
-                    area={subject}
+                    key={subject.id}
+                    area={subject.name}
                     onClick={() => {
                       toggleModalState(100)
-                      dispatch({ type: actions.switchSubject, payload: subject })
-                      setValue('subjectId', subjectId, { shouldValidate: true })
+                      dispatch({ type: actions.switchSubject, payload: subject.name })
+                      setValue('subjectId', subject.id, { shouldValidate: true })
                     }}
                   />
                 ))}
@@ -238,6 +241,13 @@ const Form = () => {
             inputType="number"
             placeholder="Digite a nota do exame..."
             {...register('nee')}
+          />
+          <Input
+            label="IMS"
+            errorMessage={errors.ims?.message}
+            inputType="number"
+            placeholder="Digite a nota da prova prática..."
+            {...register('ims')}
           />
         </div>
 
