@@ -3,11 +3,11 @@ import type { IEnrollments } from '../interfaces/interfaces'
 import { useQuery } from 'react-query'
 import Cookies from 'js-cookie'
 
-const UseFetchEnrollmentsApproved = () => {
+const UseFetchEnrollmentsApproved = (currentPage: number) => {
   const token = Cookies.get('token')
   return useQuery({
     queryFn: async () => {
-      const response = await API.get('/enrollments/all?paymentState=APPROVED&docsState=APPROVED', {
+      const response = await API.get(`/enrollments/all?paymentState=APPROVED&docsState=APPROVED&page=${currentPage}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

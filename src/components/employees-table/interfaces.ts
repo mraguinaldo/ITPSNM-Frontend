@@ -1,5 +1,5 @@
 interface IProperty {
-  property: string
+  property?: any
 }
 interface ITableContent {
   error: any

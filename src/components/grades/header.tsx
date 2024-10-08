@@ -28,7 +28,7 @@ const Header = ({ user }: IHeader) => {
   )
 
   return (
-    <header className="flex items-end justify-between flex-wrap gap-16">
+    <header className="flex items-end justify-between flex-wrap gap-16 w-full">
       <div id="student" className="flex flex-col gap-4 w-[600px]">
         <h2 className="text-[24px] sm:text-[32px] font-semibold">{user?.enrollment.students.fullName}</h2>
         <ul id="details" className="flex w-full gap-4 flex-wrap">

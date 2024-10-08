@@ -1,35 +1,108 @@
+import { useNavigate } from 'react-router-dom'
 import { DataTableHeader } from './header'
 import { Students } from './table'
 import { useEffect, useState } from 'react'
-import { useQueryClient } from 'react-query'
+import { UseFetchEnrollments } from '../../hooks/useFetchEnrollments'
+import { UseFetchEnrollmentsApproved } from '../../hooks/useFetchEnrollmentsApproved'
 
 const EnrollmentsTable = () => {
-  const [enrollmenType, setEnrollmenType] = useState<string>('PENDING')
-  const queryClient = useQueryClient()
+  const [currentPagePendingEnrollments, setCurrentPagePendingEnrollments] = useState<number>(1)
+  const [currentPageApprovedEnrollments, setCurrentPageApprovedEnrollments] = useState<number>(1)
+
+  const [enrollmentType, setEnrollmenType] = useState<string>('PENDING')
   const [students, setStudents] = useState<any>()
-  const enrollmentsPending: any = queryClient.getQueryData(['enrollments'])
-  const enrollmentsApproved: any = queryClient.getQueryData(['enrollmentsAproved'])
+  const redirectTo = useNavigate()
+  const {
+    data: enrollmentsPending,
+    error: errorWhenGettingPendingEnrollments,
+    refetch: useFetchEnrollments,
+  }: any = UseFetchEnrollments(currentPagePendingEnrollments)
+
+  const messageError = 'Unauthorized: Invalid token'
+
+  const {
+    data: enrollmentsApproved,
+    error: errorWhenGettingApprovedEnrollments,
+    refetch: useFetchEnrollmentsApproved,
+  }: any = UseFetchEnrollmentsApproved(currentPageApprovedEnrollments)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (currentPagePendingEnrollments && currentPageApprovedEnrollments) {
+      if (enrollmentType === 'PENDING') {
+        useFetchEnrollments()
+      } else {
+        useFetchEnrollmentsApproved()
+      }
+    }
+  }, [currentPageApprovedEnrollments, currentPagePendingEnrollments])
 
   useEffect(() => {
-    if (enrollmenType === 'PENDING') {
+    if (
+      errorWhenGettingApprovedEnrollments?.response?.data?.message === messageError ||
+      errorWhenGettingPendingEnrollments?.response?.data?.message === messageError
+    ) {
+      redirectTo('/login')
+    }
+  }, [errorWhenGettingApprovedEnrollments, redirectTo, errorWhenGettingPendingEnrollments])
+
+  useEffect(() => {
+    if (enrollmentType === 'PENDING') {
       setStudents(enrollmentsPending)
     } else {
       setStudents(enrollmentsApproved)
     }
-  }, [enrollmenType, enrollmentsApproved, enrollmentsPending])
+  }, [enrollmentType, enrollmentsApproved, enrollmentsPending])
 
   return (
     <section id="grade_report" className="bg-white lg:bg-black">
-      <div className="w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white">
+      <div className="flex flex-col gap-6 w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white">
         <DataTableHeader totalStudents={students?.totalItems} students={students} />
-        <Students
-          students={students}
-          fetchEnrollmentsApproved={() => setEnrollmenType('APPROVED')}
-          fetchEnrollmentsPending={() => setEnrollmenType('PENDING')}
-          enrollmentType={enrollmenType}
-          totalPendingEnrollments={enrollmentsPending?.items.length}
-          totalApprovedEnrollments={enrollmentsApproved?.items.length}
-        />
+        <div className="flex gap-4 flex-wrap">
+          <button
+            type="button"
+            className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+            onClick={() => setEnrollmenType('PENDING')}
+          >
+            PENDENTES ( {enrollmentsPending?.items?.length} )
+          </button>
+          <button
+            type="button"
+            className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc00]' : 'border-[#dcdcdc]'}`}
+            onClick={() => setEnrollmenType('APPROVED')}
+          >
+            Aprovadas ( {enrollmentsApproved?.items?.length} )
+          </button>
+        </div>
+        {!enrollmentsPending || !enrollmentsApproved ? (
+          <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-20">
+            Buscando matrículas...
+          </h1>
+        ) : (
+          <Students students={students} />
+        )}
+        <div className="flex gap-2 flex-wrap w-full">
+          {Array.from(
+            { length: enrollmentType === 'PENDING' ? enrollmentsPending?.totalPages : enrollmentsApproved?.totalPages },
+            (_, index: number) => (
+              <button
+                type="button"
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                key={index}
+                onClick={() => {
+                  if (enrollmentType === 'PENDING') {
+                    setCurrentPagePendingEnrollments(index + 1)
+                  } else {
+                    setCurrentPageApprovedEnrollments(index + 1)
+                  }
+                }}
+                className={`rounded-lg px-4 py-2 flex items-center justify-center ${currentPageApprovedEnrollments === index + 1 || currentPagePendingEnrollments === index + 1 ? 'bg-[#d8a429a9] font-semibold' : 'bg-[#b7b7b73b]'}`}
+              >
+                {index + 1}
+              </button>
+            ),
+          )}
+        </div>
       </div>
     </section>
   )

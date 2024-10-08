@@ -2,7 +2,7 @@ import { Student } from '../student'
 import { initialValues, ROLES, tableHeader, USER_OPTIONS } from './data'
 import { ArrowLeft, CaretDown, DotsThree, MagnifyingGlass, X } from 'phosphor-react'
 import { OptionsModal } from '../modals/options-modal'
-import { useEffect, useReducer } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { SelectedArea } from '../selected-area'
 import { UseFetchUsers } from '../../hooks/useFetchUsers'
 import { ProgressBar } from '../progress-bar'
@@ -22,9 +22,15 @@ import { DefaultModal } from '../modals/default'
 
 const UsersTable = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
+  const [currentPage, setCurrentPage] = useState<number>(1)
   const redirectTo = useNavigate()
 
-  const { data: users, isLoading: isLoadingUsers, error }: any = UseFetchUsers(state.currentRole.role)
+  const {
+    data: users,
+    isLoading: isLoadingUsers,
+    error,
+    refetch,
+  }: any = UseFetchUsers(state.currentRole.role, currentPage)
   const { mutate: blockStudent, isLoading: blockingTheStudent } = UseBlockStudent('users')
 
   const {
@@ -55,6 +61,10 @@ const UsersTable = () => {
       Toast({ message: 'Senha restaurada com sucesso', theme: 'light', toastType: 'success' })
     }
   }, [passwordRestored])
+
+  useEffect(() => {
+    if (currentPage) refetch()
+  }, [currentPage, refetch])
 
   if (isLoadingUsers) return <ProgressBar />
 
@@ -158,7 +168,6 @@ const UsersTable = () => {
         </StudentOptionsModal>
       </Student.Root>
     )
-
   return (
     <section className="w-full pl-4 pt-16 lg:py-11 lg:rounded-[16px] bg-white sm:h-dvh flex flex-col gap-4">
       {(isLoadingUser || blockingTheStudent || isResettingPassword) && <ProgressBar />}
@@ -243,8 +252,16 @@ const UsersTable = () => {
         <PasswordUpdateForm email={state.currentEmail} />
       </DefaultModal>
 
+      {!state.signupFormStatus && (
+        <div id="about__contacts" className="flex flex-col gap-3">
+          <h1 className="text-[20px] lg:text-[24px] font-semibold leading-9">
+            Total De Usuários {state.currentRole.content} ( {users?.users?.items?.length} )
+          </h1>
+        </div>
+      )}
+
       <div
-        className={`w-full overflow-x-scroll h-fit lg:overflow-y-scroll pb-48 scroll-transparent ${state.signupFormStatus ? 'hidden' : 'flex flex-col'}`}
+        className={`w-full overflow-x-scroll h-fit pb-10 scroll-transparent ${state.signupFormStatus ? 'hidden' : 'flex flex-col'}`}
       >
         <table className="w-full pt-20 scroll-transparent">
           <thead>
@@ -271,6 +288,21 @@ const UsersTable = () => {
           </h1>
         )}
       </div>
+      {!state.signupFormStatus && (
+        <div className="flex gap-2 flex-wrap w-full">
+          {Array.from({ length: users?.users?.totalPages }, (_, index: number) => (
+            <button
+              type="button"
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              key={index}
+              onClick={() => setCurrentPage(index + 1)}
+              className={`rounded-lg px-4 py-2 flex items-center justify-center ${currentPage === index + 1 ? 'bg-[#d8a429a9] font-semibold' : 'bg-[#b7b7b73b]'}`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </section>
   )
 }

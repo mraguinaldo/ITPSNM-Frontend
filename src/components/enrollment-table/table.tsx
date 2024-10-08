@@ -13,23 +13,11 @@ import { actions } from './action'
 import { UseApproveEnrollment } from '../../hooks/useApproveEnrollment'
 
 interface IStudents {
-  fetchEnrollmentsApproved: () => void
-  fetchEnrollmentsPending: () => void
   students: any
-  enrollmentType: string
-  totalApprovedEnrollments: any
-  totalPendingEnrollments: any
 }
 
-const Students = ({
-  students,
-  fetchEnrollmentsApproved,
-  fetchEnrollmentsPending,
-  enrollmentType,
-  totalApprovedEnrollments,
-  totalPendingEnrollments,
-}: IStudents) => {
-  const { studentsFound }: any = useContext(ApplicationContexts)
+const Students = ({ students }: IStudents) => {
+  const { enrollmentFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
   const {
     mutate: useApproveEnrollment,
@@ -43,13 +31,6 @@ const Students = ({
 
     dispatch({ type: actions.changeSelectedStudent, payload: '' })
   }
-
-  // const handleBlockOptionClick = (email: string, status: boolean) => {
-  //   dispatch({ type: actions.toggleLockModalState, payload: true })
-  //   dispatch({ type: actions.changeSelectedStudent, payload: email })
-
-  //   dispatch({ type: actions.toggleStudentStatus, payload: status })
-  // }
 
   const handleStudentClick = (studentId: string) => {
     dispatch({ type: actions.changeSelectedStudent, payload: state.selectedStudent === studentId ? '' : studentId })
@@ -167,7 +148,7 @@ const Students = ({
   )
 
   return (
-    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-48">
+    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-10">
       <QuestionModal
         title={'Deseja aprovar a matrícula?'}
         paragraph={'Após a aprovação da matrícula, a pessoa associada à matrícula se tornará estudante da instituição.'}
@@ -177,22 +158,6 @@ const Students = ({
         reject={closeLockModal}
         confirm={approveEnrollment}
       />
-      <div className="flex gap-4 flex-wrap pb-8">
-        <button
-          type="button"
-          className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
-          onClick={fetchEnrollmentsPending}
-        >
-          PENDENTES ( {totalPendingEnrollments} )
-        </button>
-        <button
-          type="button"
-          className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc00]' : 'border-[#dcdcdc]'}`}
-          onClick={fetchEnrollmentsApproved}
-        >
-          Aprovadas ( {totalApprovedEnrollments} )
-        </button>
-      </div>
       <table className="w-full">
         <thead>
           <tr className="border-b border-[#E8E8E8]">
@@ -208,7 +173,9 @@ const Students = ({
         </thead>
 
         <tbody className="w-full">
-          {(studentsFound?.length > 0 ? studentsFound : students?.items || []).map(renderStudentRow)}
+          {enrollmentFound
+            ? renderStudentRow(enrollmentFound?.enrollment)
+            : (students?.items || []).map(renderStudentRow)}
         </tbody>
       </table>
     </div>

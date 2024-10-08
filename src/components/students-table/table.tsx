@@ -14,7 +14,7 @@ import { reducer } from './reducer'
 import { actions } from './action'
 
 const Students = ({ students }: { students: any }) => {
-  const { studentsFound }: any = useContext(ApplicationContexts)
+  const { studentFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
   const location = useLocation()
 
@@ -63,7 +63,7 @@ const Students = ({ students }: { students: any }) => {
           <Student.Name name={student.students.fullName} />
         </th>
         <th className="text-left p-3 w-[172px]">
-          <Student.Level level={UseRenameClass(student.levels)} />
+          <Student.Level level={UseRenameClass(student.levels.name)} />
         </th>
         <th className="text-left p-3 w-[172px]">
           <Student.Course course={student.courses.name} />
@@ -121,7 +121,7 @@ const Students = ({ students }: { students: any }) => {
     )
 
   return (
-    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-48">
+    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-10">
       {blockingTheStudent && <ProgressBar />}
       <QuestionModal
         title={state.studentStatus ? 'Deseja bloquear o estudante?' : 'Confirmar o desbloqueio do estudante'}
@@ -145,7 +145,7 @@ const Students = ({ students }: { students: any }) => {
         </thead>
 
         <tbody className="w-full">
-          {(studentsFound?.length > 0 ? studentsFound : students?.items || []).map(renderStudentRow)}
+          {studentFound ? renderStudentRow(studentFound?.enrollment) : (students?.items || []).map(renderStudentRow)}
         </tbody>
       </table>
     </div>

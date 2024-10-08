@@ -8,8 +8,9 @@ import { UseSignOut } from '../../hooks/useSignout'
 import { useEffect, useState } from 'react'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { UseGetData } from '../../hooks/useGetData'
+import { UseExtractFirstAndLastName } from '../../hooks/useExtractFirstAndLastName'
 
-const SideBar = () => {
+const SideBar = ({ employee, role }: { employee: any; role: any }) => {
   const activeLink = UseGetData('activeLink')
   const currentRoute = UseGetData('currentRoute')
   const [menuMobileStatus, setMenuMobileStatus] = useState<boolean>(false)
@@ -52,9 +53,9 @@ const SideBar = () => {
         <header className="w-full bg-[#1A1C1D] fixed z-[100]">
           <div className="w-full max-w-[1296px] m-auto px-6 flex items-center justify-between h-[78px] lg:h-[96px]">
             <AuthenticatedUser
-              fullName="Rosa Bunga"
-              userType="secretária"
-              avatar="/men-00.png"
+              fullName={UseExtractFirstAndLastName(employee?.employee?.fullName)}
+              userType={role && role === 'ADMIN' ? 'Administrador' : role === 'Teacher' ? 'Professor' : 'Funcionário'}
+              avatar="/default.jpeg"
               avatarClassName="border-white"
               className="w-full pointer-events-none"
             />
@@ -82,9 +83,9 @@ const SideBar = () => {
 
       <aside className="bg-[#1A1C1D] left-0 hidden lg:flex flex-col items-center justify-between p-5 px-10 py-11 w-full max-w-[344px] h-screen overflow-y-scroll gap-20 fixed scroll-transparent">
         <AuthenticatedUser
-          fullName="Rosa Bunga"
-          userType="secretária"
-          avatar="/men-00.png"
+          fullName={UseExtractFirstAndLastName(employee?.employee?.fullName)}
+          userType={role && role === 'ADMIN' ? 'Administrador' : role === 'Teacher' ? 'Professor' : 'Funcionário'}
+          avatar="/default.jpeg"
           avatarClassName="border-white"
           className="w-full pointer-events-none"
         />

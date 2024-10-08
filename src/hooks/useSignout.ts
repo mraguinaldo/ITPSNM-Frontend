@@ -9,9 +9,9 @@ const UseSignOut = () => {
 
   const signOut = () => {
     Cookies.remove('token')
+    queryClient.invalidateQueries(['studentData'])
     navigate('/login')
     Toast({ message: 'Sessão Terminada', theme: 'light', toastType: 'success' })
-    queryClient.invalidateQueries(['studentData'])
   }
 
   return { signOut }

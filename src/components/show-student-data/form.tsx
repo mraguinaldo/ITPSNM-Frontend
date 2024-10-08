@@ -184,6 +184,9 @@ const Form = () => {
     }
   }
 
+  const shouldShowApproveButton =
+    enrollmentFound?.enrollment?.docsState !== 'APPROVED' || enrollmentFound?.enrollment?.paymentState !== 'APPROVED'
+
   return (
     <>
       {(searchingEnrollment || approvingTheEnrollment) && <ProgressBar />}
@@ -191,7 +194,7 @@ const Form = () => {
         <Link to={previousRoute} className="hover:bg-slate-300 rounded-full p-2 w-fit">
           <ArrowLeft size={18} />
         </Link>
-        {previousRoute !== '/admin/painel' && (
+        {shouldShowApproveButton && (
           <button
             type="button"
             onClick={() => approveEnrollment(enrollmentFound?.enrollment?.id)}

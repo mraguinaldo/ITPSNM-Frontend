@@ -35,6 +35,9 @@ const CheckEnrollment = () => {
     useCheckEnrollment(params)
   }
 
+  const pendingEnrollment =
+    enrollmentFound?.enrollment?.docsState === 'PENDING' && enrollmentFound?.enrollment?.docsState === 'PENDING'
+
   return (
     <>
       <Header />
@@ -89,14 +92,13 @@ const CheckEnrollment = () => {
           {error ? <h1 className="text-[24px] text-red-400 font-semibold">Matrícula não encontrada</h1> : ''}
           {enrollmentFound?.enrollment && (
             <div className="flex flex-col gap-2 items-center">
-              <h1 className="text-[24px] font-semibold border-b-blue-900">
-                {enrollmentFound.enrollment.docsState === 'PENDING' &&
-                enrollmentFound.enrollment.docsState === 'PENDING'
-                  ? 'MATRICULA PENDENTE'
-                  : 'MATRICULA APROVADA'}
+              <h1 className={`text-[24px] font-semibold ${pendingEnrollment ? 'text-black' : 'text-green-500'}`}>
+                {pendingEnrollment ? 'MATRICULA PENDENTE' : 'MATRICULA APROVADA'}
               </h1>
-              <h2>{enrollmentFound.enrollment.students.fullName}</h2>
-              <h2>{enrollmentFound.enrollment.identityCardNumber}</h2>
+              <div className="flex flex-col gap-2 items-center">
+                <h2>{enrollmentFound?.enrollment?.students?.fullName}</h2>
+                <h2>{enrollmentFound?.enrollment?.identityCardNumber}</h2>
+              </div>
             </div>
           )}
         </div>

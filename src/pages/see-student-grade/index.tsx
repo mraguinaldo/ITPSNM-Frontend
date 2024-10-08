@@ -3,12 +3,10 @@ import { Grades } from '../../components/grades'
 import { HeaderForAuthenticatedUsers } from '../../components/headers/for-authenticated-users'
 import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import Cookies from 'js-cookie'
-import { useQueryClient } from 'react-query'
 
 const GradeViewArea = () => {
+  const { mutate: useCheckEnrollment, data: student }: any = UseCheckEnrollment()
   const enrollmentNumber = Cookies.get('enrollmentNumber')
-  const queryClient = useQueryClient()
-  const student: any = queryClient.getQueryData(['studentData'])
 
   useEffect(() => {
     const changeBodyColor = () => {
@@ -18,7 +16,6 @@ const GradeViewArea = () => {
     changeBodyColor()
   }, [])
 
-  const { mutate: useCheckEnrollment }: any = UseCheckEnrollment()
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const params = new URLSearchParams({
@@ -26,6 +23,14 @@ const GradeViewArea = () => {
     })
     useCheckEnrollment(params)
   }, [])
+
+  if (!student) {
+    return (
+      <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-dvh">
+        Buscando Informações...
+      </h1>
+    )
+  }
 
   return (
     <main>

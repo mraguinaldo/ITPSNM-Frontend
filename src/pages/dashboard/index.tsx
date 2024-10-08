@@ -1,31 +1,31 @@
 import { SideBar } from './sidebar'
 import { MainContent } from './main-content'
-import { UseFetchEnrollments } from '../../hooks/useFetchEnrollments'
-import { UseFetchEnrollmentsApproved } from '../../hooks/useFetchEnrollmentsApproved'
-import { ProgressBar } from '../../components/progress-bar'
-import { useNavigate } from 'react-router-dom'
+import { UseGetEmployee } from '../../hooks/useGetEmployee'
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
 
 const Dashboard = () => {
-  const redirectTo = useNavigate()
-  const { data: enrollmentsPending, error: errorWhenGettingPendingEnrollments }: any = UseFetchEnrollments()
-  const { data: enrollmentsApproved, error: errorWhenGettingApprovedEnrollments }: any = UseFetchEnrollmentsApproved()
-  const messageError = 'Unauthorized: Invalid token'
+  const employeeId = Cookies.get('employeeNumber')
+  const role = Cookies.get('role')
+  const { mutate: useGetEmployee, data: employee } = UseGetEmployee()
 
-  if (
-    errorWhenGettingPendingEnrollments?.response?.data?.message === messageError ||
-    errorWhenGettingApprovedEnrollments?.response?.data?.message === messageError
-  ) {
-    redirectTo('/login')
-  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (employeeId) useGetEmployee(employeeId)
+  }, [])
 
-  if (!enrollmentsApproved || !enrollmentsPending) {
-    return <ProgressBar />
+  if (!employee) {
+    return (
+      <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-dvh">
+        Buscando Informações...
+      </h1>
+    )
   }
 
   return (
     <section className="w-full m-auto relative h-screen bg-[#000]">
       <div className="w-full justify-center flex flex-row bg-black">
-        <SideBar />
+        <SideBar employee={employee} role={role} />
         <MainContent />
       </div>
     </section>
