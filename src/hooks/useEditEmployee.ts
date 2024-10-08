@@ -18,6 +18,7 @@ const UseEditEmployee = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['employees'])
+      queryClient.invalidateQueries(['employee'])
     },
     onError: () => {
       Toast({ message: 'Erro ao editar funcionário', theme: 'colored', toastType: 'error' })

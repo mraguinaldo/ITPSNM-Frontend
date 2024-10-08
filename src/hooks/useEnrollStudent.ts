@@ -7,7 +7,8 @@ import Cookies from 'js-cookie'
 
 const UseEnrollStudent = () => {
   const navigate = useNavigate()
-  const nextForm = '/formulario-de-documentos'
+  // const nextForm = '/formulario-de-documentos'
+  const nextForm = '/pagina-de-felicitacao'
   const errorMessage = 'Matrícula existente'
   const token = Cookies.get('token')
 

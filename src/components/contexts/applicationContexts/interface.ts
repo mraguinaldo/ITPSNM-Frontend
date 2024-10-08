@@ -15,6 +15,10 @@ interface IStudentsFound {
   students: IEnrollments
 }
 
+interface IEnrollmentsFound {
+  students: IEnrollments
+}
+
 interface IUseContextType {
   selectedLevel: ISelectedLevel
   setSelectedLevel: Dispatch<SetStateAction<ISelectedLevel>>
@@ -22,8 +26,10 @@ interface IUseContextType {
   setEnrollmentNumber: Dispatch<SetStateAction<IEnrollmentNumber>>
   identityCardNumber: IEnrollmentNumber
   setIdentityCardNumber: Dispatch<SetStateAction<IEnrollmentNumber>>
-  studentsFound: IStudentsFound
-  setStudentsFound: Dispatch<SetStateAction<IStudentsFound>>
+  studentFound: IStudentsFound
+  setStudentFound: Dispatch<SetStateAction<IStudentsFound>>
+  enrollmentFound: IStudentsFound
+  setEnrollmentFound: Dispatch<SetStateAction<IEnrollmentsFound>>
 }
 
 export type { ISelectedLevel, IUseContextType, IEnrollmentNumber, IStudentsFound }

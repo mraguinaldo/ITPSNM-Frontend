@@ -1,27 +1,38 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { RegistrationNumberCopier } from '../registration-number-copier'
 import { CongratulationsCard } from '../cards/congratulations'
 import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import { ProgressBar } from '../progress-bar'
-import { ApplicationContexts } from '../contexts/applicationContexts'
+import { UseGetData } from '../../hooks/useGetData'
 
 const CongratulationsPage = () => {
-  const { data: user, mutate: useCheckEnrollment, isLoading } = UseCheckEnrollment()
-  const { enrollmentNumber }: any = useContext(ApplicationContexts)
+  const { data: user, mutate: useCheckEnrollment, isLoading, error: enrollmentNotFound } = UseCheckEnrollment()
+  const enrollment = UseGetData('enrollment')
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const fetchData = async () => {
-      const params = new URLSearchParams({
-        [enrollmentNumber && 'enrollmentNumber']: enrollmentNumber?.id,
-      })
-      useCheckEnrollment(params)
+      if (enrollment?.identityCardNumber) {
+        const params = new URLSearchParams({
+          identityCardNumber: enrollment.identityCardNumber,
+        })
+        useCheckEnrollment(params)
+      }
     }
 
     fetchData()
-  }, [useCheckEnrollment, enrollmentNumber])
+  }, [useCheckEnrollment])
 
   if (isLoading) {
     return <ProgressBar />
+  }
+
+  if (enrollmentNotFound) {
+    return (
+      <h1 className="text-[32px] md:text-[46px] font-medium h-dvh flex items-center justify-center">
+        Matrícula não encontrada
+      </h1>
+    )
   }
 
   return (

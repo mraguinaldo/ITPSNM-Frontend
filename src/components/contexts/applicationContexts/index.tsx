@@ -8,7 +8,8 @@ const UseContextProvider = ({ children }: { children: ReactNode }) => {
   const [selectedLevel, setSelectedLevel] = useState<ISelectedLevel>(LEVELS[0])
   const [enrollmentNumber, setEnrollmentNumber] = useState<IEnrollmentNumber>({ id: 7 })
   const [identityCardNumber, setIdentityCardNumber] = useState<IEnrollmentNumber>({})
-  const [studentsFound, setStudentsFound] = useState<any>([])
+  const [studentFound, setStudentFound] = useState<any>()
+  const [enrollmentFound, setEnrollmentFound] = useState<any>()
 
   return (
     <ApplicationContexts.Provider
@@ -17,10 +18,12 @@ const UseContextProvider = ({ children }: { children: ReactNode }) => {
         setSelectedLevel,
         enrollmentNumber,
         setEnrollmentNumber,
-        setStudentsFound,
-        studentsFound,
+        setStudentFound,
+        studentFound,
         identityCardNumber,
         setIdentityCardNumber,
+        enrollmentFound,
+        setEnrollmentFound,
       }}
     >
       {children}

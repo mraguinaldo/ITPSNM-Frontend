@@ -18,6 +18,8 @@ const UseCreateUser = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['users'])
+      queryClient.invalidateQueries(['enrollments'])
+      queryClient.invalidateQueries(['enrollmentsAproved'])
     },
     onError: (error: any) => {
       if (error.response.data.message === 'User Enrollment has in use.') {
