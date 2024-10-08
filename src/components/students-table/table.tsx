@@ -121,7 +121,7 @@ const Students = ({ students }: { students: any }) => {
     )
 
   return (
-    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent">
+    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-48">
       {blockingTheStudent && <ProgressBar />}
       <QuestionModal
         title={state.studentStatus ? 'Deseja bloquear o estudante?' : 'Confirmar o desbloqueio do estudante'}

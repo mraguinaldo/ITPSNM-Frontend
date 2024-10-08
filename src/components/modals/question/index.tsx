@@ -10,7 +10,7 @@ const QuestionModal = ({ visible, confirm, iconConfirm, iconReject, reject, titl
       </div>
 
       <div
-        className={`bg-[#1A1C1D] w-full max-w-[346px] z-20 flex flex-col px-6 py-4 justify-center items-center gap-4 rounded-xl ${visible ? 'animate-fadeOut' : 'animate-fadeIn'}`}
+        className={`bg-[#1A1C1D] w-full max-w-[426px] z-20 flex flex-col px-6 py-4 justify-center items-center gap-4 rounded-xl ${visible ? 'animate-fadeOut' : 'animate-fadeIn'}`}
       >
         <div className="flex flex-col items-center gap-2">
           <h2 className="text-[18px] lg:text-[20px] leading-9 text-white text-center">{title}</h2>

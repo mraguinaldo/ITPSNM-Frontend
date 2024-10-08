@@ -1,4 +1,4 @@
-import { Check, DotsThree, X } from 'phosphor-react'
+import { Check, CircleNotch, DotsThree, X } from 'phosphor-react'
 import { Student } from '../student'
 import { initialValues, STUDENT_OPTIONS, tableHeader } from './data'
 import { ApplicationContexts } from '../contexts/applicationContexts'
@@ -8,32 +8,38 @@ import { Link, useLocation } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { QuestionModal } from '../modals/question'
-import { UseBlockStudent } from '../../hooks/useBlockStudent'
-import { ProgressBar } from '../progress-bar'
 import { reducer } from './reducer'
 import { actions } from './action'
+import { UseApproveEnrollment } from '../../hooks/useApproveEnrollment'
 
 interface IStudents {
   fetchEnrollmentsApproved: () => void
   fetchEnrollmentsPending: () => void
   students: any
   enrollmentType: string
+  totalApprovedEnrollments: any
+  totalPendingEnrollments: any
 }
 
-const Students = ({ students, fetchEnrollmentsApproved, fetchEnrollmentsPending, enrollmentType }: IStudents) => {
+const Students = ({
+  students,
+  fetchEnrollmentsApproved,
+  fetchEnrollmentsPending,
+  enrollmentType,
+  totalApprovedEnrollments,
+  totalPendingEnrollments,
+}: IStudents) => {
   const { studentsFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
+  const {
+    mutate: useApproveEnrollment,
+    isLoading: approvingTheEnrollment,
+    isSuccess: approvedEnrollment,
+  } = UseApproveEnrollment()
   const location = useLocation()
 
-  const {
-    mutate: useBlockStudent,
-    isLoading: blockingTheStudent,
-    isError: errorWhenBlockingStudent,
-    isSuccess: blockedStudent,
-  } = UseBlockStudent('enrollments')
-
   const closeLockModal = () => {
-    dispatch({ type: actions.toggleLockModalState, payload: false })
+    dispatch({ type: actions.changeModalStateToApproveEnrollment, payload: false })
 
     dispatch({ type: actions.changeSelectedStudent, payload: '' })
   }
@@ -49,40 +55,77 @@ const Students = ({ students, fetchEnrollmentsApproved, fetchEnrollmentsPending,
     dispatch({ type: actions.changeSelectedStudent, payload: state.selectedStudent === studentId ? '' : studentId })
   }
 
-  useEffect(() => {
-    if (blockingTheStudent) dispatch({ type: actions.toggleLockModalState, payload: false })
-  }, [blockingTheStudent])
-
-  useEffect(() => {
-    if (blockedStudent || errorWhenBlockingStudent) {
-      dispatch({ type: actions.changeSelectedStudent, payload: '' })
+  const approveEnrollment = () => {
+    dispatch({
+      type: actions.changeModalStateToApproveEnrollment,
+      payload: false,
+    })
+    const formData = {
+      courseId: state.courseId,
+      levelId: state.levelId,
+      docsState: 'APPROVED',
+      paymentState: 'APPROVED',
     }
-  }, [blockedStudent, errorWhenBlockingStudent])
+
+    if (formData) {
+      useApproveEnrollment({ formData, enrollmentId: state?.enrollmentId })
+    }
+  }
+
+  const openModalToApproveEnrollment = (student: any) => {
+    dispatch({
+      type: actions.changeModalStateToApproveEnrollment,
+      payload: true,
+    })
+    dispatch({
+      type: actions.changeLevel,
+      payload: student?.levelId,
+    })
+    dispatch({
+      type: actions.changeEnrollmentId,
+      payload: student?.id,
+    })
+    dispatch({
+      type: actions.changeCourse,
+      payload: student?.courseId,
+    })
+  }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (approvedEnrollment) handleStudentClick(state.selectedStudent)
+  }, [approvedEnrollment])
 
   const renderStudentRow = (student: any) => (
     <Student.Root className="mb-3" key={student.identityCardNumber}>
       <th className="text-left p-3 w-[172px]">
-        <Student.Level level={student.id} />
+        <Student.Level level={student?.id} />
       </th>
       <th className="flex items-left gap-3 p-3 w-[360px]">
-        <Student.Name name={student.students?.fullName} />
+        <Student.Name name={student?.students?.fullName} />
       </th>
       <th className="text-left p-3 w-[172px]">
-        <Student.Level level={UseRenameClass(student.levels?.name)} />
+        <Student.Level level={UseRenameClass(student?.levels?.name)} />
       </th>
       <th className="text-left p-3 w-[172px]">
-        <Student.Course course={student.courses?.name} />
+        <Student.Course course={student?.courses?.name} />
       </th>
       <th className="flex justify-center items-center text-center p-3 w-[172px]">
         <Student.Course
-          course={`${student.docsState === 'PENDING' && student?.paymentState === 'PENDING' ? 'Pendente' : 'Aprovada'}`}
+          course={`${student?.docsState === 'PENDING' && student?.paymentState === 'PENDING' ? 'Pendente' : 'Aprovada'}`}
           className={`hover:brightness-50 duration-150 flex items-center justify-center rounded-[38px] w-full max-w-[140px] py-2 font-semibold ${student?.docsState === 'PENDING' && student?.paymentState === 'PENDING' ? 'bg-[#d0553d9f]' : 'bg-[#3dd0899f]  '}`}
         />
       </th>
       <th className="text-left p-3 w-[68px]">
         <Student.BtnActions
           icon={
-            state.selectedStudent === student?.identityCardNumber ? (
+            approvingTheEnrollment ? (
+              state.selectedStudent === student?.identityCardNumber ? (
+                <CircleNotch size={14} className="animate-rotate" />
+              ) : (
+                <DotsThree color="#161616" size={32} />
+              )
+            ) : state.selectedStudent === student?.identityCardNumber ? (
               <X color="#161616" size={14} />
             ) : (
               <DotsThree color="#161616" size={32} />
@@ -110,6 +153,9 @@ const Students = ({ students, fetchEnrollmentsApproved, fetchEnrollmentsPending,
               type="button"
               key={id}
               className="bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c]"
+              onClick={() => {
+                option === 'Confirmar matrícula' && openModalToApproveEnrollment(student)
+              }}
             >
               <Icon size={14} color="#000" />
               {option}
@@ -121,16 +167,15 @@ const Students = ({ students, fetchEnrollmentsApproved, fetchEnrollmentsPending,
   )
 
   return (
-    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent">
-      {blockingTheStudent && <ProgressBar />}
+    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-48">
       <QuestionModal
-        title={state.studentStatus ? 'Deseja bloquear o estudante?' : 'Confirmar o desbloqueio do estudante'}
-        paragraph={state.studentStatus ? 'O estudante deixará de ter acesso ao sistema.' : ''}
-        visible={state.modalStateForBlocking}
+        title={'Deseja aprovar a matrícula?'}
+        paragraph={'Após a aprovação da matrícula, a pessoa associada à matrícula se tornará estudante da instituição.'}
+        visible={state.modalStatusToConfirmEnrollment}
         iconReject={<X color="#fff" size={24} />}
         iconConfirm={<Check color="#fff" size={24} />}
         reject={closeLockModal}
-        confirm={() => useBlockStudent({ formData: { status: state.studentStatus, email: state.selectedStudent } })}
+        confirm={approveEnrollment}
       />
       <div className="flex gap-4 flex-wrap pb-8">
         <button
@@ -138,14 +183,14 @@ const Students = ({ students, fetchEnrollmentsApproved, fetchEnrollmentsPending,
           className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
           onClick={fetchEnrollmentsPending}
         >
-          PENDENTES
+          PENDENTES ( {totalPendingEnrollments} )
         </button>
         <button
           type="button"
           className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc00]' : 'border-[#dcdcdc]'}`}
           onClick={fetchEnrollmentsApproved}
         >
-          Aprovadas
+          Aprovadas ( {totalApprovedEnrollments} )
         </button>
       </div>
       <table className="w-full">

@@ -1,7 +1,10 @@
 const actions = {
   changeSelectedStudent: 'changeSelectedStudent',
   toggleStudentStatus: 'toggleStudentStatus',
-  toggleLockModalState: 'toggleLockModalState',
+  changeModalStateToApproveEnrollment: 'changeModalStateToApproveEnrollment',
+  changeLevel: 'changeLevel',
+  changeCourse: 'changeCourse',
+  changeEnrollmentId: 'changeEnrollmentId',
 }
 
 export { actions }

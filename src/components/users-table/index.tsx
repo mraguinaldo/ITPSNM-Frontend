@@ -1,6 +1,6 @@
 import { Student } from '../student'
-import { initialValues, ROLES, tableHeader } from './data'
-import { ArrowLeft, CaretDown, MagnifyingGlass } from 'phosphor-react'
+import { initialValues, ROLES, tableHeader, USER_OPTIONS } from './data'
+import { ArrowLeft, CaretDown, DotsThree, MagnifyingGlass, X } from 'phosphor-react'
 import { OptionsModal } from '../modals/options-modal'
 import { useEffect, useReducer } from 'react'
 import { SelectedArea } from '../selected-area'
@@ -14,11 +14,17 @@ import { actions } from './actions'
 import { UseCatchUser } from '../../hooks/useCatchUser'
 import { UseResetPassword } from '../../hooks/useResetPassword'
 import { Toast } from '../toast'
+import { Link, useNavigate } from 'react-router-dom'
+import { UsestoreData } from '../../hooks/useStoreData'
+import { StudentOptionsModal } from '../students-table/modals/student-options'
+import { PasswordUpdateForm } from '../reset-password'
+import { DefaultModal } from '../modals/default'
 
 const UsersTable = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
+  const redirectTo = useNavigate()
 
-  const { data: users, isLoading: isLoadingUsers }: any = UseFetchUsers(state.currentRole.role)
+  const { data: users, isLoading: isLoadingUsers, error }: any = UseFetchUsers(state.currentRole.role)
   const { mutate: blockStudent, isLoading: blockingTheStudent } = UseBlockStudent('users')
 
   const {
@@ -30,12 +36,7 @@ const UsersTable = () => {
     reset: resetUserFound,
   }: any = UseCatchUser()
 
-  const {
-    mutate: resetPassword,
-    isLoading: isResettingPassword,
-    isSuccess: passwordRestored,
-    isError: passwordNotRestored,
-  }: any = UseResetPassword()
+  const { mutate: resetPassword, isLoading: isResettingPassword, isSuccess: passwordRestored }: any = UseResetPassword()
 
   useEffect(() => {
     if (userSeen) {
@@ -52,10 +53,8 @@ const UsersTable = () => {
   useEffect(() => {
     if (passwordRestored) {
       Toast({ message: 'Senha restaurada com sucesso', theme: 'light', toastType: 'success' })
-    } else if (passwordNotRestored) {
-      Toast({ message: 'Erro ao resetar a senha', theme: 'colored', toastType: 'error' })
     }
-  }, [passwordRestored, passwordNotRestored])
+  }, [passwordRestored])
 
   if (isLoadingUsers) return <ProgressBar />
 
@@ -65,12 +64,22 @@ const UsersTable = () => {
     }
   }
 
+  if (error?.response?.data?.message === 'Unauthorized: Invalid token') {
+    redirectTo('/login')
+  }
+
+  const handleStudentClick = (user: string) => {
+    dispatch({ type: actions.changeSelectedUser, payload: state.selectedUser === user ? '' : user })
+  }
+
+  const changePassword = (email: string) => {
+    dispatch({ type: actions.toggleEmail, payload: email })
+    dispatch({ type: actions.changeModalStateToChangePassword, payload: true })
+  }
+
   const renderStudentRow = (user: any) =>
     user && (
       <Student.Root className="mb-4" key={user.id}>
-        <td className="p-4 text-left">
-          <Student.Name name={user?.email} />
-        </td>
         <td className="p-4 text-left">
           <Student.Course course={user?.email} />
         </td>
@@ -87,12 +96,6 @@ const UsersTable = () => {
             }
           />
         </td>
-        {/* <td className="p-4 text-center flex justify-center items-center">
-          <Student.Course
-            course={user?.isActive ? 'Ativa' : 'Desativada'}
-            className={`hover:brightness-50 duration-150 flex items-center justify-center rounded-[38px] w-full max-w-[140px] py-2 font-semibold ${user?.isActive ? 'bg-[#3dd0899f] ' : 'bg-[#d0553d9f] '}`}
-          />
-        </td> */}
         <td className="p-4 text-center">
           <Student.Course
             course={user?.loginAttempt}
@@ -112,12 +115,54 @@ const UsersTable = () => {
             className="hover:bg-[#d1d1d140] duration-150 flex items-center justify-center border border-[#a7a7a755] text-black rounded-[38px] py-2 px-6"
           />
         </td>
+        <th className="text-center p-3 w-[68px]">
+          <Student.BtnActions
+            icon={
+              state.selectedUser === user?.id ? (
+                <X color="#161616" size={14} className="w-[48px]" />
+              ) : (
+                <DotsThree color="#161616" size={32} className="w-[48px]" />
+              )
+            }
+            onClick={() => handleStudentClick(user?.id)}
+          />
+        </th>
+        <StudentOptionsModal isVisible={state.selectedUser === user?.id}>
+          {USER_OPTIONS.map(({ Icon, id, option, href }) =>
+            href ? (
+              <Link
+                to={href}
+                key={id}
+                onClick={() => {
+                  UsestoreData('chosenStudent', '')
+                  UsestoreData('previousRoute', location.pathname)
+                }}
+                className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
+              >
+                <Icon size={14} color="#000" /> {option}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                key={id}
+                className="bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c]"
+                onClick={() => {
+                  option === 'Alterar senha' && changePassword(user?.email)
+                  handleStudentClick(user?.id)
+                }}
+              >
+                <Icon size={14} color="#000" /> {option}
+              </button>
+            ),
+          )}
+        </StudentOptionsModal>
       </Student.Root>
     )
 
   return (
     <section className="w-full pl-4 pt-16 lg:py-11 lg:rounded-[16px] bg-white sm:h-dvh flex flex-col gap-4">
       {(isLoadingUser || blockingTheStudent || isResettingPassword) && <ProgressBar />}
+
       <div className="flex items-center justify-between flex-wrap gap-5 w-full pr-4">
         <button
           type="button"
@@ -188,9 +233,18 @@ const UsersTable = () => {
           </>
         )}
       </div>
+
       <Signup visible={state.signupFormStatus} />
+
+      <DefaultModal
+        closeModal={() => dispatch({ type: actions.changeModalStateToChangePassword, payload: false })}
+        display={state.modalStateToChangePassword}
+      >
+        <PasswordUpdateForm email={state.currentEmail} />
+      </DefaultModal>
+
       <div
-        className={`w-full overflow-x-scroll h-fit lg:overflow-y-scroll scroll-transparent ${state.signupFormStatus ? 'hidden' : 'flex flex-col'}`}
+        className={`w-full overflow-x-scroll h-fit lg:overflow-y-scroll pb-48 scroll-transparent ${state.signupFormStatus ? 'hidden' : 'flex flex-col'}`}
       >
         <table className="w-full pt-20 scroll-transparent">
           <thead>
@@ -208,10 +262,10 @@ const UsersTable = () => {
           </thead>
 
           <tbody className="w-full scroll-transparent">
-            {userFound ? renderStudentRow(userFound.user) : users && (users.users.items || []).map(renderStudentRow)}
+            {userFound ? renderStudentRow(userFound?.user) : users && (users?.users?.items || []).map(renderStudentRow)}
           </tbody>
         </table>
-        {!userFound && users.users.items.length <= 0 && (
+        {!userFound && users?.users?.items?.length <= 0 && (
           <h1 className="w-full h-64 flex items-center justify-center text-[24px] sm:text-[32px] font-semibold">
             Sem {state.currentRole.content}
           </h1>

@@ -15,7 +15,7 @@ import { ProgressBar } from '../../components/progress-bar'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { UseFetchCourses } from '../../hooks/useFetchCourses'
 import { LEVELS } from '../enrollment-form/data'
-import { ArrowLeft, Article, IdentificationCard, User } from 'phosphor-react'
+import { ArrowLeft, Article, Check, CircleNotch, IdentificationCard, User } from 'phosphor-react'
 import { UseHandleFileChange } from '../../hooks/useHandleFileChange'
 import type { FileField } from '../document-form/interfaces'
 import { ImagePreview } from '../Image-preview'
@@ -25,6 +25,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 import { reducer } from './reducer'
 import { actions } from './actions'
+import { UseApproveEnrollment } from '../../hooks/useApproveEnrollment'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -35,6 +36,11 @@ const Form = () => {
 
   const { data: courses } = UseFetchCourses()
   const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading: searchingEnrollment } = UseCheckEnrollment()
+  const {
+    mutate: useApproveEnrollment,
+    isLoading: approvingTheEnrollment,
+    isSuccess: approvedEnrollment,
+  } = UseApproveEnrollment()
 
   const {
     register,
@@ -163,12 +169,45 @@ const Form = () => {
     }
   }, [enrollmentFound, setValue])
 
+  const approveEnrollment = (enrollmentId: any) => {
+    const formData = {
+      courseId: enrollmentFound?.enrollment?.courses.id
+        ? enrollmentFound?.enrollment?.courses.id
+        : enrollmentFound?.enrollment?.courseId,
+      levelId: enrollmentFound?.enrollment?.levelId,
+      docsState: 'APPROVED',
+      paymentState: 'APPROVED',
+    }
+
+    if (formData) {
+      useApproveEnrollment({ formData, enrollmentId })
+    }
+  }
+
   return (
     <>
-      {searchingEnrollment && <ProgressBar />}
-      <Link to={previousRoute} className="hover:bg-slate-300 rounded-full p-2 w-fit">
-        <ArrowLeft size={18} />
-      </Link>
+      {(searchingEnrollment || approvingTheEnrollment) && <ProgressBar />}
+      <div className="flex gap-4 items-center">
+        <Link to={previousRoute} className="hover:bg-slate-300 rounded-full p-2 w-fit">
+          <ArrowLeft size={18} />
+        </Link>
+        {previousRoute !== '/admin/painel' && (
+          <button
+            type="button"
+            onClick={() => approveEnrollment(enrollmentFound?.enrollment?.id)}
+            className="flex items-center duration-150 justify-center py-3 px-5 rounded-3xl cursor-pointer bg-green-300 font-semibold hover:bg-green-400"
+          >
+            {approvingTheEnrollment ? (
+              <CircleNotch size={14} className="animate-rotate" />
+            ) : approvedEnrollment ? (
+              <Check size={14} weight="bold" />
+            ) : (
+              'Aprovar matrícula'
+            )}
+          </button>
+        )}
+      </div>
+
       <div className="flex flex-wrap gap-4 justify-between w-full">
         <h1 className="text-[20px] sm:text-[24px] font-semibold">
           Nome do aluno: <span className="font-normal">{enrollmentFound?.enrollment.students.fullName}</span>

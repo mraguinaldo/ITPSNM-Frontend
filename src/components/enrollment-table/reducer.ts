@@ -14,10 +14,28 @@ const reducer = (state: any, action: any) => {
         studentStatus: action.payload,
       }
     }
-    case actions.toggleLockModalState: {
+    case actions.changeModalStateToApproveEnrollment: {
       return {
         ...state,
-        modalStateForBlocking: action.payload,
+        modalStatusToConfirmEnrollment: action.payload,
+      }
+    }
+    case actions.changeCourse: {
+      return {
+        ...state,
+        courseId: action.payload,
+      }
+    }
+    case actions.changeLevel: {
+      return {
+        ...state,
+        levelId: action.payload,
+      }
+    }
+    case actions.changeEnrollmentId: {
+      return {
+        ...state,
+        enrollmentId: action.payload,
       }
     }
     default: {

@@ -2,6 +2,12 @@ import { actions } from './actions'
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
+    case actions.changeSelectedUser: {
+      return {
+        ...state,
+        selectedUser: action.payload,
+      }
+    }
     case actions.displaySignupModal: {
       return {
         ...state,
@@ -25,6 +31,9 @@ const reducer = (state: any, action: any) => {
         ...state,
         modalState: action.payload,
       }
+    }
+    case actions.changeModalStateToChangePassword: {
+      return { ...state, modalStateToChangePassword: action.payload }
     }
     default: {
       return {

@@ -49,7 +49,10 @@ const STUDENT_OPTIONS = [
 const initialValues = {
   selectedStudent: '',
   studentStatus: '',
-  modalStateForBlocking: false,
+  modalStatusToConfirmEnrollment: false,
+  courseId: undefined,
+  levelId: undefined,
+  enrollmentId: undefined,
 }
 
 export { tableHeader, STUDENT_OPTIONS, initialValues }
