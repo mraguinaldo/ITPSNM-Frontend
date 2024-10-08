@@ -1,8 +1,10 @@
+import { Pen } from 'phosphor-react'
+
 const tableHeader = [
-  {
-    id: 0,
-    content: 'Nome',
-  },
+  // {
+  //   id: 0,
+  //   content: 'Nome',
+  // },
   {
     id: 1,
     content: 'E-mail',
@@ -11,21 +13,21 @@ const tableHeader = [
     id: 2,
     content: 'Tipo de usúario',
   },
-  // {
-  //   id: 3,
-  //   content: 'Estado da conta',
-  // },
   {
-    id: 4,
+    id: 3,
     content: 'Tentativas de login',
   },
   {
-    id: 5,
+    id: 4,
     content: 'Acesso ao sistema',
   },
   {
-    id: 6,
+    id: 5,
     content: 'Senha',
+  },
+  {
+    id: 6,
+    content: 'Ações',
   },
 ]
 
@@ -40,6 +42,17 @@ const initialValues = {
   modalState: false,
   signupFormStatus: false,
   currentEmail: '',
+  selectedUser: '',
+  modalStateToChangePassword: false,
 }
 
-export { tableHeader, ROLES, initialValues }
+const USER_OPTIONS = [
+  {
+    id: 0,
+    option: 'Alterar senha',
+    Icon: Pen,
+    href: '',
+  },
+]
+
+export { tableHeader, ROLES, initialValues, USER_OPTIONS }

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 interface Course {
   id: number
@@ -50,6 +51,7 @@ interface IEnrollments {
 
 const UseCheckEnrollment = () => {
   const queryClient = useQueryClient()
+  const redirectTo = useNavigate()
   const token = Cookies.get('token')
 
   return useMutation<IEnrollments, Error, URLSearchParams>(
@@ -65,8 +67,10 @@ const UseCheckEnrollment = () => {
       onSuccess: (data) => {
         queryClient.setQueryData(['studentData'], data)
       },
-      onError: (error) => {
-        console.error('Erro:', error)
+      onError: (error: any) => {
+        if (error.response.data.message === 'Unauthorized: Invalid token') {
+          redirectTo('/login')
+        }
       },
     },
   )

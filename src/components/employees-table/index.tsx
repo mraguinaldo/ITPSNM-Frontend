@@ -7,17 +7,18 @@ import { FormToRegisterEmployee } from './form'
 import { HeadLine } from './headline'
 import { Property } from './property'
 import { reducer } from './reducer'
-import { ArrowLeft, Lock, MagnifyingGlass, Pen, Trash } from 'phosphor-react'
+import { ArrowLeft, MagnifyingGlass, Pen, Trash } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 import { UseformatDate } from '../../hooks/useFormatDate'
 import { DefaultModal } from '../modals/default'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { UsestoreData } from '../../hooks/useStoreData'
 
 const EmployeesTable = () => {
-  const { data: employees, isLoading }: any = UseGetEmployees(1)
+  const { data: employees, isLoading, error }: any = UseGetEmployees(1)
   const [state, dispatch] = useReducer(reducer, initialValues)
+  const redirectTo = useNavigate()
   const [employeesFound, setEmployeesFound] = useState<any>()
 
   const searchStudent = (currentTarget: string) => {
@@ -26,6 +27,10 @@ const EmployeesTable = () => {
     })
 
     setEmployeesFound(currentStudents)
+  }
+
+  if (error?.response?.data?.message === 'Unauthorized: Invalid token') {
+    redirectTo('/login')
   }
 
   if (isLoading) {
@@ -74,24 +79,24 @@ const EmployeesTable = () => {
             <tbody>
               {(employeesFound ? employeesFound : employees?.employees?.items || []).map((employee: any) => (
                 <tr
-                  key={employee.id}
+                  key={employee?.id}
                   className="hover:bg-[#ebebeb97] cursor-pointer"
                   onClick={() => {
-                    UsestoreData('chosenEmployee', employee.id)
+                    UsestoreData('chosenEmployee', employee?.id)
                     dispatch({ type: actions.toggleDefaultModalState, payload: true })
                   }}
                 >
-                  <Property property={employee.id} />
-                  <Property property={employee.fullName} />
-                  <Property property={employee.phone} />
-                  <Property property={employee.alternativePhone ? employee.alternativePhone : '_'} />
-                  <Property property={employee.residence} />
-                  <Property property={employee.gender === 'MALE' ? 'Masculino' : 'Feminino'} />
-                  <Property property={UseGettMaritalStatus(employee.maritalStatus, employee.gender)} />
-                  <Property property={employee.identityCardNumber} />
-                  <Property property={UseformatDate(employee.dateOfBirth)} />
-                  <Property property={UseformatDate(employee.emissionDate)} />
-                  <Property property={UseformatDate(employee.expirationDate)} />
+                  <Property property={employee?.id} />
+                  <Property property={employee?.fullName} />
+                  <Property property={employee?.phone} />
+                  <Property property={employee?.alternativePhone ? employee?.alternativePhone : '_'} />
+                  <Property property={employee?.residence} />
+                  <Property property={employee?.gender === 'MALE' ? 'Masculino' : 'Feminino'} />
+                  <Property property={UseGettMaritalStatus(employee?.maritalStatus, employee?.gender)} />
+                  <Property property={employee?.identityCardNumber} />
+                  <Property property={UseformatDate(employee?.dateOfBirth)} />
+                  <Property property={UseformatDate(employee?.emissionDate)} />
+                  <Property property={UseformatDate(employee?.expirationDate)} />
                 </tr>
               ))}
             </tbody>
@@ -119,14 +124,14 @@ const EmployeesTable = () => {
             <Trash size={18} color="#2d2d2d" />
             Eliminar funcionário
           </button>
-          <button
+          {/* <button
             type="button"
             className="bg-transparent flex gap-2 items-center px-4 py-2 w-full hover:bg-[#9d9d9d56] rounded-md"
             onClick={() => alert('Eliminar')}
           >
             <Lock size={18} color="#2d2d2d" />
             Alterar senha
-          </button>
+          </button> */}
         </div>
       </DefaultModal>
     </div>

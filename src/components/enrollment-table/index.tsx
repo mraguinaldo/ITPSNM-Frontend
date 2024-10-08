@@ -9,8 +9,6 @@ const EnrollmentsTable = () => {
   const [students, setStudents] = useState<any>()
   const enrollmentsPending: any = queryClient.getQueryData(['enrollments'])
   const enrollmentsApproved: any = queryClient.getQueryData(['enrollmentsAproved'])
-  console.log(enrollmentsApproved)
-  console.log(enrollmentsPending)
 
   useEffect(() => {
     if (enrollmenType === 'PENDING') {
@@ -29,6 +27,8 @@ const EnrollmentsTable = () => {
           fetchEnrollmentsApproved={() => setEnrollmenType('APPROVED')}
           fetchEnrollmentsPending={() => setEnrollmenType('PENDING')}
           enrollmentType={enrollmenType}
+          totalPendingEnrollments={enrollmentsPending?.items.length}
+          totalApprovedEnrollments={enrollmentsApproved?.items.length}
         />
       </div>
     </section>

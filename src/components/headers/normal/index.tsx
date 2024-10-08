@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const Header = () => {
   const [menuMobileStatus, setMenuMobileStatus] = useState<boolean>(false)
+  const [menuItemActive, setMenuItemActive] = useState<number>(0)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -24,9 +25,10 @@ const Header = () => {
                 key={id}
                 to={target}
                 target={content === 'Requisitos' ? '_blank' : '_self'}
-                className="flex text-white gap-2 duration-100 items-center font-normal hover:text-[#ffffffb1]"
+                className={`flex gap-2 items-center font-normal hover:text-[#fff] ${menuItemActive === id ? 'text-white' : 'text-[#d2d1d1]'}`}
+                onClick={() => setMenuItemActive(id)}
               >
-                {content} {Icon && <Icon size={24} className="hover:text-[#ABA7A7] duration-75" />}
+                {content} {Icon && <Icon size={24} className="hover:text-white duration-75" />}
               </Link>
             ))}
           </nav>
@@ -37,7 +39,7 @@ const Header = () => {
           </Link>
           <div>
             <Button
-              className="bg-[#F8C40D] text-black py-2 px-7 h-[42px] duration-100 hover:bg-[#f8c50dde]"
+              className="bg-[#F8C40D] text-black py-2 px-7 h-[42px] duration-100 hover:bg-[#f8c50dde] cursor-pointer"
               content="Entrar"
               type="button"
               onClick={() => navigate('/Login')}
@@ -67,6 +69,7 @@ const Header = () => {
                 key={id}
                 to={target}
                 className="flex gap-2 items-center uppercase justify-between font-normal text-[#AFAFAF]"
+                onClick={() => setMenuMobileStatus(false)}
               >
                 {content} <CaretRight size={24} color="#AFAFAF" />
               </Link>

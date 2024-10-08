@@ -49,7 +49,7 @@ const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
     <header className="w-full fixed z-[100] bg-[#000C13] border-b border-[#f0f0f0]">
       <div className="w-full max-w-[1296px] m-auto px-6 flex items-center justify-between h-[78px]">
         <DefaultModal closeModal={() => setModalStateToChangePassword(false)} display={modalStateToChangePassword}>
-          <PasswordUpdateForm email={student?.enrollment?.students?.User.email} />
+          <PasswordUpdateForm email={student?.enrollment?.students?.User?.email} />
         </DefaultModal>
         <Logo />
         <div className="w-full max-w-[240px] md:max-w-[400px] relative">

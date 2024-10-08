@@ -3,6 +3,7 @@ const actions = {
   toggleModalState: 'toggleModalState',
   displaySignupModal: 'displaySignupModal',
   toggleEmail: 'toggleEmail',
+  changeSelectedUser: 'changeSelectedUser',
 }
 
 export { actions }
