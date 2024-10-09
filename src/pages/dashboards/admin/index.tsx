@@ -3,8 +3,10 @@ import { MainContent } from './main-content'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import { UseGetEmployee } from '../../../hooks/useGetEmployee'
+import { useAxiosInterceptor } from '../../../services/api'
 
 const AdminDashboard = () => {
+  useAxiosInterceptor()
   const employeeId = Cookies.get('employeeNumber')
   const role = Cookies.get('role')
   const { mutate: useGetEmployee, data: employee } = UseGetEmployee()

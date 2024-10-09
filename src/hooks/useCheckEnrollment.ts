@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
-import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
 
 interface Course {
@@ -52,15 +51,10 @@ interface IEnrollments {
 const UseCheckEnrollment = () => {
   const queryClient = useQueryClient()
   const redirectTo = useNavigate()
-  const token = Cookies.get('token')
 
   return useMutation<IEnrollments, Error, URLSearchParams>(
     async (searchParams: URLSearchParams) => {
-      const response = await API.get(`/enrollments?${searchParams.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await API.get(`/enrollments?${searchParams.toString()}`)
       return response.data as IEnrollments
     },
     {

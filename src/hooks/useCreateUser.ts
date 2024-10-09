@@ -1,18 +1,12 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
-import Cookies from 'js-cookie'
 import { Toast } from '../components/toast'
 
 const UseCreateUser = () => {
-  const token = Cookies.get('token')
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
-      const response = await API.post('/signup', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await API.post('/signup', formData)
 
       return response.data
     },
