@@ -51,7 +51,7 @@ const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
   }, [handleScroll])
 
   return (
-    <header className="w-full fixed z-[100] bg-[#000C13] border-b border-[#f0f0f0]">
+    <header className="w-full fixed z-[400] bg-[#000C13] border-b border-[#f0f0f0]">
       <div className="w-full max-w-[1296px] m-auto px-6 flex items-center justify-between h-[78px]">
         <DefaultModal closeModal={() => setModalStateToChangePassword(false)} display={modalStateToChangePassword}>
           {modalStateToChangePassword && <PasswordUpdateForm email={student?.enrollment?.students?.User?.email} />}

@@ -5,9 +5,10 @@ export const schemaForm = yup.object().shape({
     .string()
     .required('O nome completo é obrigatório!!')
     .min(1, 'Nome inválido')
+    .trim()
     .test('name-validation', 'Nome inválido', (name) => {
       const regEx =
-        /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
+        /^[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?$/
       if (name.match(regEx)) return true
     }),
   identityCardNumber: yup
@@ -26,19 +27,11 @@ export const schemaForm = yup.object().shape({
   residence: yup
     .string()
     .required('A residência é obrigratório')
-    .min(5, 'A residência deve ter no mínimo 5 letras')
-    .test('residence-validation', 'Endereço inválido', (residence) => {
-      const regEx = /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
-      if (residence.match(regEx)) return true
-    }),
+    .min(2, 'A residência deve ter no mínimo 2 letras'),
   natural: yup
     .string()
     .required('A naturalidade é obrigratório')
-    .min(4, 'Deve ter no mínimo 4 letras')
-    .test('natural-validation', 'Naturalidade inválida', (natural) => {
-      const regEx = /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
-      if (natural.match(regEx)) return true
-    }),
+    .min(2, 'Deve ter no mínimo 2 letras'),
   phone: yup
     .string()
     .required('O número de telefone é obrigatório!!')
