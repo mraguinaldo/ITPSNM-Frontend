@@ -1,18 +1,12 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
 import { Toast } from '../components/toast'
-import Cookies from 'js-cookie'
 
 const UseEditEmployee = () => {
-  const token = Cookies.get('token')
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ formData, id }: { formData: any; id: any }) => {
-      const response = await API.put(`/employees/${id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await API.put(`/employees/${id}`, formData)
 
       return response.data
     },

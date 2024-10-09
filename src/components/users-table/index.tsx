@@ -14,7 +14,7 @@ import { actions } from './actions'
 import { UseCatchUser } from '../../hooks/useCatchUser'
 import { UseResetPassword } from '../../hooks/useResetPassword'
 import { Toast } from '../toast'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { StudentOptionsModal } from '../students-table/modals/student-options'
 import { PasswordUpdateForm } from '../reset-password'
@@ -23,12 +23,10 @@ import { DefaultModal } from '../modals/default'
 const UsersTable = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const redirectTo = useNavigate()
 
   const {
     data: users,
     isLoading: isLoadingUsers,
-    error,
     refetch,
   }: any = UseFetchUsers(state.currentRole.role, currentPage)
   const { mutate: blockStudent, isLoading: blockingTheStudent } = UseBlockStudent('users')
@@ -74,9 +72,7 @@ const UsersTable = () => {
     }
   }
 
-  if (error?.response?.data?.message === 'Unauthorized: Invalid token') {
-    redirectTo('/login')
-  }
+
 
   const handleStudentClick = (user: string) => {
     dispatch({ type: actions.changeSelectedUser, payload: state.selectedUser === user ? '' : user })

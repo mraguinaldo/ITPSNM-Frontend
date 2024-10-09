@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { UseFetchEnrollmentsApproved } from '../../hooks/useFetchEnrollmentsApproved'
 import { DataTableHeader } from './header'
 import { Students } from './table'
@@ -7,25 +6,18 @@ import { useEffect, useState } from 'react'
 const StudentsTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
 
-  const redirectTo = useNavigate()
   const {
     data: enrollmentsApproved,
-    error: errorWhenGettingApprovedEnrollments,
     isLoading,
     refetch,
   }: any = UseFetchEnrollmentsApproved(currentPage)
-  const messageError = 'Unauthorized: Invalid token'
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (currentPage) refetch()
   }, [currentPage])
 
-  useEffect(() => {
-    if (errorWhenGettingApprovedEnrollments?.response?.data?.message === messageError) {
-      redirectTo('/login')
-    }
-  }, [errorWhenGettingApprovedEnrollments, redirectTo])
+
 
   const totalStudents: any[] = enrollmentsApproved?.items?.filter((student: any) => student.students?.User)
 

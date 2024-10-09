@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { DataTableHeader } from './header'
 import { Students } from './table'
 import { useEffect, useState } from 'react'
@@ -10,18 +9,14 @@ const EnrollmentsTable = () => {
 
   const [enrollmentType, setEnrollmenType] = useState<string>('PENDING')
   const [students, setStudents] = useState<any>()
-  const redirectTo = useNavigate()
   const {
     data: enrollmentsPending,
-    error: errorWhenGettingPendingEnrollments,
     refetch: useFetchEnrollments,
   }: any = UseFetchEnrollments(currentPage)
 
-  const messageError = 'Unauthorized: Invalid token'
 
   const {
     data: enrollmentsApproved,
-    error: errorWhenGettingApprovedEnrollments,
     refetch: useFetchEnrollmentsApproved,
   }: any = UseFetchEnrollmentsApproved(currentPage)
 
@@ -36,14 +31,7 @@ const EnrollmentsTable = () => {
     }
   }, [currentPage])
 
-  useEffect(() => {
-    if (
-      errorWhenGettingApprovedEnrollments?.response?.data?.message === messageError ||
-      errorWhenGettingPendingEnrollments?.response?.data?.message === messageError
-    ) {
-      redirectTo('/login')
-    }
-  }, [errorWhenGettingApprovedEnrollments, redirectTo, errorWhenGettingPendingEnrollments])
+
 
   useEffect(() => {
     if (enrollmentType === 'PENDING') {

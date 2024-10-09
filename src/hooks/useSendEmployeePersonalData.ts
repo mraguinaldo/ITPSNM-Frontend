@@ -2,21 +2,15 @@ import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
 import { UsestoreData } from './useStoreData'
 import { Toast } from '../components/toast'
-import Cookies from 'js-cookie'
 
 const UseSendEmployeePersonalData = () => {
   const queryClient = useQueryClient()
   const errorMessage = 'Erro ao enviar o formulário'
-  const token = Cookies.get('token')
 
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
       UsestoreData('IdentityCard', formData)
-      const response = await API.post('/employees', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await API.post('/employees', formData)
 
       return response.data
     },

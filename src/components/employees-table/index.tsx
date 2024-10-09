@@ -12,14 +12,14 @@ import { InputSearch } from '../inputs/search'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 import { UseformatDate } from '../../hooks/useFormatDate'
 import { DefaultModal } from '../modals/default'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { UseGetEmployee } from '../../hooks/useGetEmployee'
 import { Toast } from '../toast'
 
 const EmployeesTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const { data: employees, isLoading, error, refetch }: any = UseGetEmployees(currentPage)
+  const { data: employees, isLoading, refetch }: any = UseGetEmployees(currentPage)
   const {
     data: employee,
     mutate: useGetEmployee,
@@ -28,7 +28,6 @@ const EmployeesTable = () => {
     isLoading: lookingForTheEmployee,
   }: any = UseGetEmployee()
   const [state, dispatch] = useReducer(reducer, initialValues)
-  const redirectTo = useNavigate()
   const [employeeId, setEmployeeId] = useState<any>()
 
   useEffect(() => {
@@ -52,9 +51,7 @@ const EmployeesTable = () => {
     }
   }, [employeeNotFound, employee])
 
-  if (error?.response?.data?.message === 'Unauthorized: Invalid token') {
-    redirectTo('/login')
-  }
+
 
   const renderRows = (employee: any) => (
     <tr
