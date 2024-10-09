@@ -29,7 +29,7 @@ const useAxiosInterceptor = () => {
       },
       (error) => {
         const message = error.response?.data?.message;
-        if (message === 'Unauthorized: Invalid token' || message === 'User is invalid.' || message === 'Account is blocked. Please contact support.') {
+        if (message === 'Unauthorized: Invalid token' || message === 'User is invalid.' || message === 'Account is blocked. Please contact support.' || message === 'Unauthorized: User is blocked or inactive') {
           redirectTo('/login');
         }
 

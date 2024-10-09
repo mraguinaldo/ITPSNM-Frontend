@@ -36,6 +36,8 @@ const UseResetPassword = () => {
           theme: 'light',
           toastType: 'warning',
         })
+      }else if(error.response.data.message === 'Unauthorized: User is blocked or inactive'){
+
       } else {
         Toast({ message: 'Erro ao atualizar a palavra-passe!', theme: 'colored', toastType: 'error' })
       }
