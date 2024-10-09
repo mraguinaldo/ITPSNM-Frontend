@@ -4,10 +4,12 @@ import { Button } from '../../button'
 import { MENU } from './data'
 import { Logo } from '../../logo'
 import { Link, useNavigate } from 'react-router-dom'
+import { UseGetData } from '../../../hooks/useGetData'
+import { UsestoreData } from '../../../hooks/useStoreData'
 
 const Header = () => {
   const [menuMobileStatus, setMenuMobileStatus] = useState<boolean>(false)
-  const [menuItemActive, setMenuItemActive] = useState<number>(0)
+  const menuItemActive = UseGetData('menuItemActive')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -19,14 +21,16 @@ const Header = () => {
       <div className="w-full max-w-[1296px] m-auto px-6 flex items-center justify-between h-[68px] lg:h-[96px]">
         <div className="flex gap-6 items-center">
           <Logo />
-          <nav className="hidden gap-8 items-center md:flex">
+          <nav className="hidden w-full gap-8 items-center md:flex">
             {MENU.map(({ id, content, target, Icon }) => (
               <Link
                 key={id}
                 to={target}
                 target={content === 'Requisitos' ? '_blank' : '_self'}
                 className={`flex gap-2 items-center font-normal hover:text-[#fff] ${menuItemActive === id ? 'text-white' : 'text-[#d2d1d1]'}`}
-                onClick={() => setMenuItemActive(id)}
+                onClick={() =>
+                  UsestoreData('menuItemActive', id)
+                }
               >
                 {content} {Icon && <Icon size={24} className="hover:text-white duration-75" />}
               </Link>
