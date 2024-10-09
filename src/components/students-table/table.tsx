@@ -23,7 +23,7 @@ const Students = ({ students }: { students: any }) => {
     isLoading: blockingTheStudent,
     isError: errorWhenBlockingStudent,
     isSuccess: blockedStudent,
-  } = UseBlockStudent('enrollments')
+  } = UseBlockStudent('enrollmentsAproved')
 
   const closeLockModal = () => {
     dispatch({ type: actions.toggleLockModalState, payload: false })

@@ -29,13 +29,13 @@ const Grades = () => {
   }, [error, user])
 
   return (
-    <section id="grade_report" className="pt-40 lg:px-6 bg-white lg:bg-transparent">
-      <div className="w-full max-w-[1296px] flex flex-col gap-9 m-auto p-6 lg:p-11 lg:rounded-[16px] bg-white items-center">
+    <section id="grade_report" className="pt-40 bg-white lg:bg-transparent">
+      <div className="w-full max-w-[1296px] flex flex-col gap-9 m-auto px-6 lg:p-11 lg:rounded-[16px] items-center">
         <Header user={user} />
         {showGrades ? (
           <TableContent notes={notes} error={error} isLoading={isLoading} />
         ) : (
-          <div className="flex items-center justify-center w-full max-w-[280px] h-[280px]">
+          <div className="flex items-center justify-center w-full sm:max-w-[280px] h-[280px]">
             <Button
               type="button"
               content="Mostrar notas"

@@ -1,9 +1,7 @@
 import { BrowserRouter, Route, Routes as Router } from 'react-router-dom'
 import { CheckEnrollment } from '../pages/check-enrollment'
-import { GradeViewArea } from '../pages/see-student-grade'
 import { Login } from '../pages/login'
 import { PrivateRoute } from './private-route'
-import { Dashboard } from '../pages/dashboard'
 import { StudentsTable } from '../components/students-table'
 import { EmployeesTable } from '../components/employees-table'
 import { EnrollmentsTable } from '../components/enrollment-table'
@@ -18,6 +16,11 @@ import { CongratulationsPage } from '../components/congratulations-page'
 import { PostNote } from '../components/post-note'
 import { FormToEditEmployee } from '../components/form-to-edit-employee'
 import { ShowStudentData } from '../components/show-student-data'
+import { AdminDashboard } from '../pages/dashboards/admin'
+import { StudentDashboard } from '../pages/dashboards/student'
+import { Grades } from '../components/grades'
+import { StudentSideBar } from '../pages/dashboards/student/sidebar'
+import { PasswordChangePage } from '../pages/password'
 
 function Routes() {
   return (
@@ -33,20 +36,26 @@ function Routes() {
         <Route path="/login" element={<Login />} />
         <Route path="/consultar-estado-da-matricula" element={<CheckEnrollment />} />
 
+
+
         <Route
-          path="/aluno/relatorio-de-notas"
+          path="/aluno/painel"
           element={
             <PrivateRoute allowedRoles={['STUDENT']} redirectTo="/login">
-              <GradeViewArea />
+              <StudentDashboard />
             </PrivateRoute>
           }
-        />
+        >
+          <Route index element={<StudentSideBar />} />
+          <Route path="relatorio-de-notas" element={<Grades />} />
+          <Route path="seguranca" element={<PasswordChangePage />} />
+        </Route>
 
         <Route
           path="/admin/painel"
           element={
             <PrivateRoute allowedRoles={['ADMIN', 'TEACHER']} redirectTo="/login">
-              <Dashboard />
+              <AdminDashboard />
             </PrivateRoute>
           }
         >

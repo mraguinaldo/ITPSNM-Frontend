@@ -1,10 +1,10 @@
 import { SideBar } from './sidebar'
 import { MainContent } from './main-content'
-import { UseGetEmployee } from '../../hooks/useGetEmployee'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
+import { UseGetEmployee } from '../../../hooks/useGetEmployee'
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const employeeId = Cookies.get('employeeNumber')
   const role = Cookies.get('role')
   const { mutate: useGetEmployee, data: employee } = UseGetEmployee()
@@ -17,7 +17,7 @@ const Dashboard = () => {
   if (!employee) {
     return (
       <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-dvh">
-        Buscando Informações...
+        ...
       </h1>
     )
   }
@@ -32,4 +32,4 @@ const Dashboard = () => {
   )
 }
 
-export { Dashboard }
+export { AdminDashboard }

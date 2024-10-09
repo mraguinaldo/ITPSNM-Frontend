@@ -13,7 +13,7 @@ const UseLogin = () => {
   const navigate = useNavigate()
 
   const roleRedirectMap: any = {
-    STUDENT: '/aluno/relatorio-de-notas',
+    STUDENT: '/aluno/painel',
     ADMIN: '/admin/painel',
     TEACHER: '/admin/painel',
   }

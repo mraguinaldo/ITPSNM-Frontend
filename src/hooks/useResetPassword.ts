@@ -36,10 +36,17 @@ const UseResetPassword = () => {
           theme: 'colored',
           toastType: 'error',
         })
+      }else if (error.response.data.message === 'User is invalid.') {
+        Toast({
+          message: 'Recarregue a página',
+          theme: 'light',
+          toastType: 'warning',
+        })
       } else {
         Toast({ message: 'Erro ao atualizar a palavra-passe!', theme: 'colored', toastType: 'error' })
       }
     },
   })
 }
+
 export { UseResetPassword }
