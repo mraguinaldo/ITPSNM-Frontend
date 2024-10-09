@@ -31,7 +31,6 @@ const initialValues = {
   resource: undefined,
   nee: undefined,
   ims: undefined,
-
   county: '',
 }
 

@@ -6,8 +6,7 @@ import { UseFetchEnrollments } from '../../hooks/useFetchEnrollments'
 import { UseFetchEnrollmentsApproved } from '../../hooks/useFetchEnrollmentsApproved'
 
 const EnrollmentsTable = () => {
-  const [currentPagePendingEnrollments, setCurrentPagePendingEnrollments] = useState<number>(1)
-  const [currentPageApprovedEnrollments, setCurrentPageApprovedEnrollments] = useState<number>(1)
+  const [currentPage, setCurrentPage] = useState<number>(1)
 
   const [enrollmentType, setEnrollmenType] = useState<string>('PENDING')
   const [students, setStudents] = useState<any>()
@@ -16,7 +15,7 @@ const EnrollmentsTable = () => {
     data: enrollmentsPending,
     error: errorWhenGettingPendingEnrollments,
     refetch: useFetchEnrollments,
-  }: any = UseFetchEnrollments(currentPagePendingEnrollments)
+  }: any = UseFetchEnrollments(currentPage)
 
   const messageError = 'Unauthorized: Invalid token'
 
@@ -24,18 +23,18 @@ const EnrollmentsTable = () => {
     data: enrollmentsApproved,
     error: errorWhenGettingApprovedEnrollments,
     refetch: useFetchEnrollmentsApproved,
-  }: any = UseFetchEnrollmentsApproved(currentPageApprovedEnrollments)
+  }: any = UseFetchEnrollmentsApproved(currentPage)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (currentPagePendingEnrollments && currentPageApprovedEnrollments) {
+    if (currentPage && currentPage) {
       if (enrollmentType === 'PENDING') {
         useFetchEnrollments()
       } else {
         useFetchEnrollmentsApproved()
       }
     }
-  }, [currentPageApprovedEnrollments, currentPagePendingEnrollments])
+  }, [currentPage])
 
   useEffect(() => {
     if (
@@ -91,12 +90,12 @@ const EnrollmentsTable = () => {
                 key={index}
                 onClick={() => {
                   if (enrollmentType === 'PENDING') {
-                    setCurrentPagePendingEnrollments(index + 1)
+                    setCurrentPage(index + 1)
                   } else {
-                    setCurrentPageApprovedEnrollments(index + 1)
+                    setCurrentPage(index + 1)
                   }
                 }}
-                className={`rounded-lg px-4 py-2 flex items-center justify-center ${currentPageApprovedEnrollments === index + 1 || currentPagePendingEnrollments === index + 1 ? 'bg-[#d8a429a9] font-semibold' : 'bg-[#b7b7b73b]'}`}
+                className={`rounded-lg px-4 py-2 flex items-center justify-center ${currentPage === index + 1 ? 'bg-[#d8a429a9] font-semibold' : 'bg-[#b7b7b73b]'}`}
               >
                 {index + 1}
               </button>

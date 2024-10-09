@@ -23,7 +23,7 @@ interface IHeader {
   user: any
 }
 interface IFinalAssessment {
-  average: number
+  average: string
 }
 
 export type { IFinalAssessment, IGrade, IHeadLine, IHeader, ISubject, ITableContent, ITypeAssessment }

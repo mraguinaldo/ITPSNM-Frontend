@@ -17,6 +17,7 @@ const UseCreateFormData = (data: any, enrollmentId: any, fieldPrefix: string) =>
   formData.subjectId = data.subjectId
   formData.level = data.level
   formData.ims = data.ims
+  formData.resource = data.resource
 
   return formData
 }

@@ -14,6 +14,8 @@ const TableContent = ({ isLoading, notes }: ITableContent) => {
       </h1>
     )
   }
+  const finalAssessment = notes?.filter((note: any) => note?.approved === 'FAILED')
+  const finalAssessmentIms = notes?.filter((note: any) => note?.ims < 10)
 
   return (
     <div className="flex flex-row pt-12 w-full overflow-x-scroll">
@@ -68,7 +70,17 @@ const TableContent = ({ isLoading, notes }: ITableContent) => {
         </table>
       </div>
 
-      <FinalAssessment average={notes ? notes[notes.length - 1].mfd : 0} />
+      <FinalAssessment
+        average={
+          finalAssessmentIms?.length === 1
+            ? 'Reprovado'
+            : finalAssessment?.length === 2
+              ? 'Apto/Deficiência'
+              : finalAssessment?.length < 2
+                ? 'Apto'
+                : 'Reprovado'
+        }
+      />
     </div>
   )
 }
