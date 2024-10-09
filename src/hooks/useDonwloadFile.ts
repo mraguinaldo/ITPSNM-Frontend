@@ -5,6 +5,8 @@ interface IUseDownloadFile {
 }
 
 const UseDownloadFile = async ({ elementId }: IUseDownloadFile) => {
+  console.log(elementId)
+
   const gradeReport = document.getElementById(elementId)
   const grades = document.getElementById('grades')
   if (gradeReport) {
