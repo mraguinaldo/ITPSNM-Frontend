@@ -46,7 +46,7 @@ const StudentGrades = () => {
   }
 
   return (
-    <div className="w-full pl-8 py-16 lg:pt-11 lg:pb-32 lg:pl-6 lg:rounded-[16px] bg-white flex gap-6 flex-col">
+    <div className="w-full pl-6 py-16 lg:pt-11 lg:pb-32 lg:rounded-[16px] bg-white flex gap-6 flex-col">
       <div className='flex items-start sm:items-center w-full flex-wrap gap-4 justify-center sm:pr-3 pr-8'>
         <div id="search__area" className="flex flex-col items-center relative w-full">
           <InputSearch
@@ -69,18 +69,18 @@ const StudentGrades = () => {
       </div>
 
       {lookingForStudent &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px]">
+        <h1 className="text-[24px] md:text-[32px] font-semibold w-full justify-center flex items-center h-[248px]">
           Buscando o estudante...
         </h1>
       }
       {studentNotFound &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px]">
+        <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px] w-full">
           Estudante não encontrado 😢
         </h1>
       }
 
-      {student && <div className="w-full flex flex-col gap-9 items-center pr-3 py-12 lg:py-4">
-        <Header user={student} />
+      {student && <div id='grade_report_admin' className="w-full flex flex-col gap-9 items-center px-3 py-12 lg:py-4 bg-white">
+        <Header user={student} elementId='grade_report_admin' />
         {showGrades ? (
           <TableContent notes={notes} error={error} isLoading={isLoading} />
         ) : (

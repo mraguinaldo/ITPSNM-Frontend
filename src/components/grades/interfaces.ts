@@ -21,6 +21,7 @@ type IHeadLine = {
 }
 interface IHeader {
   user: any
+  elementId: string
 }
 interface IFinalAssessment {
   average: string

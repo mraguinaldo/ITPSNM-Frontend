@@ -7,7 +7,7 @@ import { useContext, useState } from 'react'
 import type { IHeader } from './interfaces'
 import { ApplicationContexts } from '../contexts/applicationContexts'
 
-const Header = ({ user }: IHeader) => {
+const Header = ({ user, elementId }: IHeader) => {
   const [modalState, setModalState] = useState(false)
   const { selectedLevel, setSelectedLevel }: any = useContext(ApplicationContexts)
 
@@ -16,8 +16,11 @@ const Header = ({ user }: IHeader) => {
     setSelectedLevel(LEVELS[selectedLevelId])
   }
 
-  const donwloadFile = (elementId: string) => {
+
+  const donwloadFile = () => {
     UseDownloadFile({ elementId })
+    console.log(elementId)
+
   }
 
   const Li = (deitalType: string, content: string) => (
@@ -63,7 +66,7 @@ const Header = ({ user }: IHeader) => {
         <button
           type="button"
           className="text-[#1E1E1E] w-full justify-center sm:w-fit py-3 px-6 bg-[#F8C40D] flex gap-2 rounded-[50px] font-medium items-center cursor-pointer text-[14px] sm:text-[16px]"
-          onClick={() => donwloadFile('grade_report')}
+          onClick={donwloadFile}
         >
           Baixar relatório de notas
           <DownloadSimple size={16} color="#1E1E1E" />
