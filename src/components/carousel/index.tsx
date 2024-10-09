@@ -1,3 +1,4 @@
+import '../../styles.css'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, FreeMode, Pagination } from 'swiper/modules'
 import 'swiper/css/bundle'
