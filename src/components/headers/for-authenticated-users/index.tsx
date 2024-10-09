@@ -11,11 +11,14 @@ import { PasswordUpdateForm } from '../../reset-password'
 import { DefaultModal } from '../../modals/default'
 import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLastName'
 import { UseSignOut } from '../../../hooks/useSignout'
+import { useNavigate } from 'react-router-dom'
 
 const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
   const [modalState, setModalState] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
   const [modalStateToChangePassword, setModalStateToChangePassword] = useState<boolean>(false)
+
+  const redirectTo = useNavigate()
 
   const { signOut } = UseSignOut()
 
@@ -28,13 +31,15 @@ const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
     if (isLogout) {
       return setQuestionModalState(true)
     }
-    const openModalToChangePassword = content === 'Atualizar Senha'
+    const openModalToChangePassword = content === 'Senha'
 
     if (openModalToChangePassword) {
       setModalStateToChangePassword(true)
     }
 
-    console.log(href)
+    if (href) {
+      redirectTo(href)
+    }
   }
 
   useEffect(() => {

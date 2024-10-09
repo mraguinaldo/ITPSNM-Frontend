@@ -1,14 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { AuthenticatedUser } from '../../components/authenticated-user'
+import { AuthenticatedUser } from '../../../components/authenticated-user'
 import { NAVIGATION_LINKS } from './data'
 import { Check, List, X } from 'phosphor-react'
-import { QuestionModal } from '../../components/modals/question'
+import { QuestionModal } from '../../../components/modals/question'
 import { RenderButtons } from './render-button'
-import { UseSignOut } from '../../hooks/useSignout'
+import { UseSignOut } from '../../../hooks/useSignout'
 import { useEffect, useState } from 'react'
-import { UsestoreData } from '../../hooks/useStoreData'
-import { UseGetData } from '../../hooks/useGetData'
-import { UseExtractFirstAndLastName } from '../../hooks/useExtractFirstAndLastName'
+import { UsestoreData } from '../../../hooks/useStoreData'
+import { UseGetData } from '../../../hooks/useGetData'
+import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLastName'
 
 const SideBar = ({ employee, role }: { employee: any; role: any }) => {
   const activeLink = UseGetData('activeLink')
