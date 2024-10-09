@@ -36,14 +36,16 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
     if (student) {
       if (wasTheEnrollmentApproved) {
         setStudentFound(student)
-      } else if (!wasTheEnrollmentApproved) {
+      } else {
         Toast({ message: 'Estudante não encontrado', theme: 'colored', toastType: 'error' })
         setStudentFound(null)
-      } else {
-        setStudentFound(null)
       }
+    } else {
+      setStudentFound(null)
     }
-  }, [student, setStudentFound])
+
+  }, [student, setStudentFound, resetUserFound])
+
 
   useEffect(() => {
     if (error) {
