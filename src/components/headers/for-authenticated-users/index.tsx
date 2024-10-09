@@ -34,7 +34,7 @@ const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
     const openModalToChangePassword = content === 'Senha'
 
     if (openModalToChangePassword) {
-      setModalStateToChangePassword(true)
+      return setModalStateToChangePassword(true)
     }
 
     if (href) {
