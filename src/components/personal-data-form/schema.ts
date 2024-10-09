@@ -5,27 +5,30 @@ export const schemaForm = yup.object().shape({
     .string()
     .required('O nome completo é obrigatório!!')
     .min(1, 'Nome inválido')
+    .trim()
     .test('name-validation', 'Nome inválido', (name) => {
       const regEx =
-        /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
+        /^[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?$/
       if (name.match(regEx)) return true
     }),
   father: yup
     .string()
     .required('O nome do pai é obrigatório!!')
+    .trim()
     .min(1, 'Nome inválido')
     .test('name-validation', 'Nome inválido', (name) => {
       const regEx =
-        /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
+        /^[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?$/
       if (name.match(regEx)) return true
     }),
   mother: yup
     .string()
     .required('O nome da mãe é obrigatório!!')
     .min(1, 'Nome inválido')
+    .trim()
     .test('name-validation', 'Nome inválido', (name) => {
       const regEx =
-        /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
+        /^[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?[ ]+[A-ZÁ-Ú][a-zá-ú]{1,20}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,20})?$/
       if (name.match(regEx)) return true
     }),
   identityCardNumber: yup

@@ -10,11 +10,7 @@ export const schemaForm = yup.object().shape({
   residence: yup
     .string()
     .required('A residência é obrigratório')
-    .min(5, 'A residência deve ter no mínimo 5 letras')
-    .test('residence-validation', 'Endereço inválido', (residence) => {
-      const regEx = /^[A-ZÁ-Ú][a-zá-ú]{1,12}([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?([ ]+[A-ZÁ-Ú][a-zá-ú]{1,12})?$/
-      if (residence.match(regEx)) return true
-    }),
+    .min(2, 'A residência deve ter no mínimo 2 letras'),
   phone: yup
     .string()
     .required('O número de telefone é obrigatório!!')
