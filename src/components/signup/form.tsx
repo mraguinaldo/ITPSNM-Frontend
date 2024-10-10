@@ -29,7 +29,7 @@ const Form = () => {
     resolver: yupResolver(schemaForm),
     defaultValues: {
       email: '',
-      password: '12345678',
+      password: '123456',
       role: '',
       username: '',
       currentUserId: undefined,

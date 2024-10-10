@@ -5,6 +5,7 @@ const actions = {
   toggleEmail: 'toggleEmail',
   changeSelectedUser: 'changeSelectedUser',
   changeModalStateToChangePassword: 'changeModalStateToChangePassword',
+  toggleUserEmail: 'toggleUserEmail',
 }
 
 export { actions }

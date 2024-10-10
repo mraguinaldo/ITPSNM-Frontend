@@ -26,6 +26,12 @@ const reducer = (state: any, action: any) => {
         currentEmail: action.payload,
       }
     }
+    case actions.toggleUserEmail: {
+      return {
+        ...state,
+        userEmail: action.payload,
+      }
+    }
     case actions.toggleModalState: {
       return {
         ...state,

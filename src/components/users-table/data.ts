@@ -44,6 +44,7 @@ const initialValues = {
   currentEmail: '',
   selectedUser: '',
   modalStateToChangePassword: false,
+  userEmail: '',
 }
 
 const USER_OPTIONS = [

@@ -68,7 +68,7 @@ const UsersTable = () => {
 
   const fetchUser = (e: any) => {
     if (e.key === 'Enter') {
-      catchUser({ email: state.currentEmail })
+      catchUser({ email: state.userEmail })
     }
   }
 
@@ -165,7 +165,7 @@ const UsersTable = () => {
       </Student.Root>
     )
   return (
-    <section className="w-full pl-4 pt-16 lg:py-11 lg:rounded-[16px] bg-white sm:h-dvh flex flex-col gap-4">
+    <section className="w-full pl-4 pt-16 lg:py-11 lg:rounded-[16px] bg-white flex flex-col gap-4">
       {(isLoadingUser || blockingTheStudent || isResettingPassword) && <ProgressBar />}
 
       <div className="flex items-center justify-between flex-wrap gap-5 w-full pr-4">
@@ -188,18 +188,18 @@ const UsersTable = () => {
                     className="cursor-pointer p-1 hover:bg-slate-200 rounded-full flex items-center justify-center"
                     color="#000000"
                     size={24}
-                    onClick={() => catchUser({ email: state.currentEmail })}
+                    onClick={() => catchUser({ email: state.userEmail })}
                   />
                 }
-                value={state.currentEmail}
+                value={state.userEmail}
                 onKeyDown={(e: any) => fetchUser(e)}
-                onChange={(e: any) => dispatch({ type: actions.toggleEmail, payload: e.currentTarget.value })}
+                onChange={(e: any) => dispatch({ type: actions.toggleUserEmail, payload: e.currentTarget.value })}
               />
 
               {userFound && (
                 <button
                   type="button"
-                  onClick={() => resetUserFound()}
+                  onClick={() => { resetUserFound(), dispatch({ type: actions.toggleUserEmail, payload: '' }) }}
                   className="absolute top-12 text-[14px] text-[#898989] py-2 px-4 rounded-3xl hover:bg-[#d1d1d140]"
                 >
                   Exibir todos...
@@ -257,7 +257,7 @@ const UsersTable = () => {
       )}
 
       <div
-        className={`w-full overflow-x-scroll h-fit pb-10 scroll-transparent ${state.signupFormStatus ? 'hidden' : 'flex flex-col'}`}
+        className={`w-full overflow-x-scroll pb-10 scroll-transparent ${state.signupFormStatus ? 'hidden' : 'flex flex-col'}`}
       >
         <table className="w-full pt-20 scroll-transparent">
           <thead>
