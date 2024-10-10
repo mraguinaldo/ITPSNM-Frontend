@@ -13,7 +13,7 @@ interface IDataTableHeader {
 
 const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
   const { setStudentFound }: any = useContext(ApplicationContexts)
-  const { mutate: useCheckEnrollment, data: student, isLoading, reset: resetUserFound, error } = UseCheckEnrollment()
+  const { mutate: useCheckEnrollment, data: student, isLoading, reset: resetUserFound, error }: any = UseCheckEnrollment()
 
   const [enrollmentNumber, setEnrollmentNumber] = useState<any>()
   const [searchType, setSearchType] = useState<string>('enrollmentNumber')
@@ -34,7 +34,7 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
       student?.enrollment?.paymentState === 'APPROVED' && student?.enrollment?.docsState === 'APPROVED'
 
     if (student) {
-      if (wasTheEnrollmentApproved) {
+      if (wasTheEnrollmentApproved && student.enrollment.students?.User) {
         setStudentFound(student)
       } else {
         Toast({ message: 'Estudante não encontrado', theme: 'colored', toastType: 'error' })
@@ -93,13 +93,14 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
               onClick={searchStudent}
             />
           }
+          value={enrollmentNumber}
           onKeyDown={(e: any) => fetchUser(e)}
           onChange={(e: any) => setEnrollmentNumber(e.currentTarget.value)}
         />
         {student && (
           <button
             type="button"
-            onClick={() => resetUserFound()}
+            onClick={() => { resetUserFound(), setEnrollmentNumber('') }}
             className="absolute top-24 text-[14px] text-[#898989] py-2 px-4 rounded-3xl hover:bg-[#d1d1d140]"
           >
             Exibir todos...

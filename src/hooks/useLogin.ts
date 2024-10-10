@@ -24,11 +24,11 @@ const UseLogin = () => {
       return response.data
     },
     onSuccess: (data: any) => {
-      Cookies.set('token', data.token, { expires: 7 })
-      Cookies.set('role', data.role, { expires: 7 })
-      Cookies.set('userId', data.userId, { expires: 7 })
-      Cookies.set('enrollmentNumber', data.enrollmentNumber, { expires: 7 })
-      Cookies.set('employeeNumber', data.employeeNumber, { expires: 7 })
+      Cookies.set('token', data.token)
+      Cookies.set('role', data.role)
+      Cookies.set('userId', data.userId)
+      Cookies.set('enrollmentNumber', data.enrollmentNumber)
+      Cookies.set('employeeNumber', data.employeeNumber)
 
       const redirectPath = roleRedirectMap[data.role]
 

@@ -7,7 +7,6 @@ import { Toast } from '../components/toast'
 const UseSendStudentPersonalData = () => {
   const navigate = useNavigate()
   const nextForm = '/formulario-para-matricula'
-  const errorMessage = 'Erro ao enviar o formulário'
 
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
@@ -20,8 +19,11 @@ const UseSendStudentPersonalData = () => {
       navigate(nextForm)
     },
     onError: (error: any) => {
-      console.log(error)
-      Toast({ message: errorMessage, theme: 'dark', toastType: 'error' })
+      if (error.response.data.message === 'Phone already exists.') {
+        Toast({ message: 'O número de telefone já se encontra em uso.', theme: 'dark', toastType: 'error' })
+      } else if (error.response.data.message === 'Identity card number already exists.') {
+        Toast({ message: 'Já existe uma inscrição com esse número do BI', theme: 'dark', toastType: 'error' })
+      } 
     },
   })
 }

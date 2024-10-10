@@ -107,13 +107,17 @@ const EmployeesTable = () => {
                   onClick={searchEmployee}
                 />
               }
+              value={employeeId}
               onKeyDown={(e: any) => fetchUser(e)}
               onChange={(e: any) => setEmployeeId(e.currentTarget.value)}
             />
             {employee && (
               <button
                 type="button"
-                onClick={() => resetEmployeeFound()}
+                onClick={() => {
+                  resetEmployeeFound()
+                  setEmployeeId('')
+                }}
                 className="absolute top-14 text-[14px] text-[#898989] py-2 px-4 rounded-3xl hover:bg-[#d1d1d140]"
               >
                 Exibir todos...

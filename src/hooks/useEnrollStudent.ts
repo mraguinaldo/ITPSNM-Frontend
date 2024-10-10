@@ -8,7 +8,6 @@ const UseEnrollStudent = () => {
   const navigate = useNavigate()
   // const nextForm = '/formulario-de-documentos'
   const nextForm = '/pagina-de-felicitacao'
-  const errorMessage = 'Matrícula existente'
 
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
@@ -20,8 +19,12 @@ const UseEnrollStudent = () => {
     onSuccess: () => {
       navigate(nextForm)
     },
-    onError: () => {
-      Toast({ message: errorMessage, theme: 'dark', toastType: 'error' })
+    onError: (error: any) => {
+      if (error.response.data.message === 'Student not found.') {
+        Toast({ message: 'Inscrição não encontrada!', theme: 'dark', toastType: 'error' })
+      }else if(error.response.data.message === 'Enrollment already exists error.'){
+        Toast({ message: 'Já existe uma matrícula com esse número do BI', theme: 'dark', toastType: 'error' })
+      }
     },
   })
 }

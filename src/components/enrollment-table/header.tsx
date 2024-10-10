@@ -53,7 +53,7 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
         <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">Total de matrículas ({totalStudents})</h1>
       </div>
 
-      <div id="search__area" className="flex flex-col items-center relative gap-3 w-full lg:max-w-[316px]">
+      <div id="search__area" className="flex flex-col items-center relative gap-3 w-full lg:max-w-[316px] pb-8 md:p-0">
         <div className="flex gap-4 flex-wrap w-full justify-between">
           <button
             type="button"
@@ -83,13 +83,17 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
               onClick={searchStudent}
             />
           }
+          value={enrollmentNumber}
           onKeyDown={(e: any) => fetchUser(e)}
           onChange={(e: any) => setEnrollmentNumber(e.currentTarget.value)}
         />
         {student && (
           <button
             type="button"
-            onClick={() => resetUserFound()}
+            onClick={() => {
+              resetUserFound()
+              setEnrollmentNumber('')
+            }}
             className="absolute top-24 text-[14px] text-[#898989] py-2 px-4 rounded-3xl hover:bg-[#d1d1d140]"
           >
             Exibir todos...

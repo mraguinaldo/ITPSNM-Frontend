@@ -4,6 +4,7 @@ import { UseCheckEnrollment } from '../../../hooks/useCheckEnrollment'
 import { HeaderForAuthenticatedUsers } from '../../../components/headers/for-authenticated-users'
 import { Outlet } from 'react-router-dom'
 import { useAxiosInterceptor } from '../../../services/api'
+import { ProgressBar } from '../../../components/progress-bar'
 
 const StudentDashboard = () => {
   useAxiosInterceptor()
@@ -18,13 +19,8 @@ const StudentDashboard = () => {
     useCheckEnrollment(params)
   }, [])
 
-  if (!student) {
-    return (
-      <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-dvh">
-        ...
-      </h1>
-    )
-  }
+  if (!student) return <ProgressBar />
+
   return (
     <main>
       <HeaderForAuthenticatedUsers student={student} />
