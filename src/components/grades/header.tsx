@@ -53,7 +53,7 @@ const Header = ({ user, elementId }: IHeader) => {
           <OptionsModal
             className={`top-8 ${modalState ? 'pt-8 opacity-100' : 'pt-0 opacity-0'}`}
             modalState={modalState}
-            maximumHeight={true}
+            maximumHeight={false}
           >
             {LEVELS.map(({ id, content }) => (
               <SelectedArea key={id} area={content} onClick={() => changeGradeReport(id)} />
