@@ -222,6 +222,7 @@ const UsersTable = () => {
               <OptionsModal
                 className={`top-8 overflow-x-hidden ${state.modalState ? 'pt-8 opacity-100' : 'pt-0 opacity-0'}`}
                 modalState={state.modalState}
+                maximumHeight={false}
               >
                 {ROLES.map(({ id, role, content }) => (
                   <SelectedArea
@@ -251,7 +252,7 @@ const UsersTable = () => {
       {!state.signupFormStatus && (
         <div id="about__contacts" className="flex flex-col gap-3">
           <h1 className="text-[20px] lg:text-[24px] font-semibold leading-9">
-            Total De Usuários {state.currentRole.content} ( {users?.users?.items?.length} )
+            Usuários {state.currentRole.content} Carregados ( {users?.users?.items?.length} )
           </h1>
         </div>
       )}

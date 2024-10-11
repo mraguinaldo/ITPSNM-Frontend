@@ -19,6 +19,10 @@ const Grades = () => {
     fetchNotes({ userData })
   }
 
+  useEffect(() => {
+    if (!user) window.location.reload()
+  }, [user])
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     user && handleFetchNotes(user?.enrollment?.id, selectedLevel?.level)
