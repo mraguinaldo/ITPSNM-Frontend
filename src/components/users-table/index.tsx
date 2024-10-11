@@ -246,7 +246,7 @@ const UsersTable = () => {
         closeModal={() => dispatch({ type: actions.changeModalStateToChangePassword, payload: false })}
         display={state.modalStateToChangePassword}
       >
-        <PasswordUpdateForm email={state.currentEmail} />
+        {state.modalStateToChangePassword && <PasswordUpdateForm email={state.currentEmail} />}
       </DefaultModal>
 
       {!state.signupFormStatus && (
