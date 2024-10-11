@@ -43,6 +43,10 @@ const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
   }
 
   useEffect(() => {
+    if (!student) window.location.reload()
+  }, [student])
+
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll)
 
     return () => {

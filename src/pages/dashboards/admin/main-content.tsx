@@ -13,7 +13,7 @@ const MainContent = () => {
   return (
     <div
       id="main_content"
-      className="w-full lg:ml-[calc(344px+14px)] overflow-x-scroll over lg:pr-4 py-0 lg:py-11 mt-[78px] lg:mt-0"
+      className="w-full lg:ml-[calc(344px+14px)] overflow-x-hidden over lg:pr-4 py-0 lg:py-11 mt-[78px] lg:mt-0"
     >
       <Outlet />
     </div>

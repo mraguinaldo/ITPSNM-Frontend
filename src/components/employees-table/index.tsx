@@ -80,8 +80,8 @@ const EmployeesTable = () => {
     <div className="w-full pl-8 py-16 lg:p-11 lg:rounded-[16px] bg-white flex flex-col gap-8">
       {lookingForTheEmployee && <ProgressBar />}
 
-      <h1 className={`text-[24px] font-semibold leading-9 ${state.signupFormStatus ? 'hidden' : 'flex'}`}>
-        Total de funcionários ({employees?.employees?.totalItems})
+      <h1 className={`text-[24px] lg:text-[32px] font-semibold leading-9 ${state.signupFormStatus ? 'hidden' : 'flex'}`}>
+        Total de funcionários ({employees?.employees?.totalItems || 0})
       </h1>
 
       <div className="flex items-center justify-between flex-wrap gap-5 w-full pr-4">

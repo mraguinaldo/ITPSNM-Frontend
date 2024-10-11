@@ -50,7 +50,7 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
     <header className="flex items-start gap-8 flex-wrap lg:flex-row justify-between">
       {isLoading && <ProgressBar />}
       <div id="about__contacts" className="flex flex-col gap-3">
-        <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">Total de matrículas ({totalStudents})</h1>
+        <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">Total de matrículas ({totalStudents || 0})</h1>
       </div>
 
       <div id="search__area" className="flex flex-col items-center relative gap-3 w-full lg:max-w-[316px] pb-8 md:p-0">
