@@ -17,6 +17,7 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
     hiddenLabel,
     value,
     iconClick,
+    hiddenErrorMessage,
     ...rest
   } = props
 
@@ -76,11 +77,12 @@ const Input = forwardRef<HTMLInputElement, IInput>((props, ref) => {
         )}
       </div>
 
-      <span
+      {hiddenErrorMessage ? '' : <span
         className={`absolute bottom-[-22px] left-0 text-[12px] sm:text-[14px] font-medium text-[#FB7373] ${errorMessage ? 'opacity-100' : 'opacity-0'}`}
       >
         {errorMessage}
-      </span>
+      </span>}
+
     </div>
   )
 })

@@ -36,10 +36,14 @@ export const schemaForm = yup.object().shape({
     .required('O número do bilhete é obrigatório')
     .min(12, 'O número do bilhete deve ter no minimo 12 caracteres')
     .max(14, 'O número do bilhete deve ter no máximo 14 caracteres'),
-  height: yup
+    height: yup
     .number()
     .transform((value, originalValue) => {
-      return originalValue === '' ? undefined : value
+      if (typeof originalValue === 'string') {
+        const parsedValue = originalValue.replace(',', '.');
+        return parsedValue === '' ? undefined : parseFloat(parsedValue);
+      }
+      return value;
     })
     .required('A altura é obrigatória')
     .min(1, 'A altura deve ser maior ou igual a 1')

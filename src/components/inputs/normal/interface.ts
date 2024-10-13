@@ -15,6 +15,7 @@ interface IInput {
   chevronState?: boolean
   hiddenLabel?: boolean
   value?: string
+  hiddenErrorMessage?: boolean
 }
 
 export type { IInput }
