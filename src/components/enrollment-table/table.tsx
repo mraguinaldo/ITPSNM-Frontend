@@ -148,7 +148,7 @@ const Students = ({ students }: IStudents) => {
   )
 
   return (
-    <div id="students" className="py-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-10">
+    <div id="students" className="pt-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-20">
       <QuestionModal
         title={'Deseja aprovar a matrícula?'}
         paragraph={'Após a aprovação da matrícula, a pessoa associada à matrícula se tornará estudante da instituição.'}

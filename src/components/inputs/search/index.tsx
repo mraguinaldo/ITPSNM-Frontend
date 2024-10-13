@@ -9,7 +9,7 @@ const InputSearch = ({ placeholder, icon, onChange, className, onKeyDown, value 
         placeholder={placeholder}
         onChange={onChange}
         onKeyDown={onKeyDown}
-        value={value && value}
+        value={value || ''}
         className="w-full border-none bg-transparent outline-none placeholder:text-sm placeholder:font-normal placeholder:tracking-[1px] placeholder:text-[#363636]"
       />
     </div>

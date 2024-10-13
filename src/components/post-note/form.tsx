@@ -213,6 +213,7 @@ const Form = () => {
             inputType="number"
             placeholder="Digite a nota da P1..."
             {...register('p1')}
+            hiddenErrorMessage
           />
           <Input
             label="P2"
@@ -220,6 +221,7 @@ const Form = () => {
             inputType="number"
             placeholder="Digite a nota da P2..."
             {...register('p2')}
+            hiddenErrorMessage
           />
           <Input
             label="PT"
@@ -227,6 +229,7 @@ const Form = () => {
             inputType="number"
             placeholder="Digite a nota da PT..."
             {...register('pt')}
+            hiddenErrorMessage
           />
           <Input
             label="Recurso"
@@ -234,6 +237,7 @@ const Form = () => {
             inputType="number"
             placeholder="Digite a nota do recurso..."
             {...register('resource')}
+            hiddenErrorMessage
           />
           <Input
             label="NEE"
@@ -241,6 +245,7 @@ const Form = () => {
             inputType="number"
             placeholder="Digite a nota do exame..."
             {...register('nee')}
+            hiddenErrorMessage
           />
           <Input
             label="IMS"
@@ -248,6 +253,7 @@ const Form = () => {
             inputType="number"
             placeholder="Digite a nota da prova prática..."
             {...register('ims')}
+            hiddenErrorMessage
           />
         </div>
 
