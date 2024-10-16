@@ -33,7 +33,7 @@ const Grades = () => {
   }, [error, user])
 
   return (
-    <section id='grade_report' className="pt-40 bg-white lg:bg-transparent">
+    <section id='grade_report' className="mt-36 sm:mt-32 bg-white lg:bg-transparent">
       <div className="w-full max-w-[1296px] flex flex-col gap-9 m-auto px-6 lg:p-11 lg:rounded-[16px] items-center pb-4 bg-white">
         <Header user={user} elementId='grade_report' />
         {showGrades ? (
