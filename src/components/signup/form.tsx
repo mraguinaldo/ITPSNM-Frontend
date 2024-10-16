@@ -141,7 +141,7 @@ const Form = () => {
       </div>
 
       <div className="pt-3 w-full">
-        <Button type="submit" content="Criar usuário" />
+        <Button isLoading={creatingUser} type="submit" content="Criar usuário" />
       </div>
     </form>
   )

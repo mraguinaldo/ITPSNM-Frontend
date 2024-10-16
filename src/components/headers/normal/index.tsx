@@ -43,6 +43,7 @@ const Header = () => {
           </Link>
           <div>
             <Button
+              isLoading={false}
               className="bg-[#F8C40D] text-black py-2 px-7 h-[42px] duration-100 hover:bg-[#f8c50dde] cursor-pointer"
               content="Entrar"
               type="button"
@@ -80,7 +81,7 @@ const Header = () => {
             ))}
           </nav>
           <div className="flex flex-col gap-9">
-            <Button className="bg-white py-6 px-7" content="Entrar" type="button" onClick={() => navigate('/Login')} />
+            <Button isLoading={false} className="bg-white py-6 px-7" content="Entrar" type="button" onClick={() => navigate('/Login')} />
             <Link to="/" className="flex gap-2 items-center font-medium text-white">
               Ajuda <Question size={24} color="#fff" />
             </Link>

@@ -112,7 +112,7 @@ const Form = () => {
           ))}
         </div>
         <div className="pt-3 w-full">
-          <Button type="submit" content="Próximo" />
+          <Button isLoading={isLoading} type="submit" content="Próximo" />
         </div>
       </form>
     </>

@@ -6,6 +6,7 @@ interface IButton {
   Icon?: ReactNode
   type: 'button' | 'submit' | 'reset'
   onClick?: () => void
+  isLoading: boolean
 }
 
 export type { IButton }

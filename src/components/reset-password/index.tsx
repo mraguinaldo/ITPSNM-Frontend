@@ -75,7 +75,7 @@ const PasswordUpdateForm = ({ email }: { email: any }) => {
         </div>
 
         <div className="pt-3 w-full">
-          <Button type="submit" content="Atualizar" />
+          <Button isLoading={resettingThePassword} type="submit" content="Atualizar" />
         </div>
       </form>
     </section>

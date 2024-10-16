@@ -258,7 +258,7 @@ const Form = () => {
         </div>
 
         <div className="pt-3 w-full">
-          <Button type="submit" content="Lançar nota" />
+          <Button isLoading={LaunchingNote} type="submit" content="Lançar nota" />
         </div>
       </form>
     </section>

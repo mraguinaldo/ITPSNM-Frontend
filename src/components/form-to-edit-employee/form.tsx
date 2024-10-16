@@ -222,7 +222,7 @@ const Form = () => {
           />
         </div>
         <div className="pt-3 w-full">
-          <Button type="submit" content="Atualizar" />
+          <Button isLoading={false} type="submit" content="Atualizar" />
         </div>
       </form>
     </>

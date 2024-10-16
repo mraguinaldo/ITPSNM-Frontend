@@ -49,7 +49,7 @@ const ModalForBlocking = ({ modalStateForBlocking, onClick, identityCardNumber, 
             value={reasonForBlocking}
             onChange={(e) => setReasonForBlocking(e.currentTarget.value)}
           />
-          <Button type="submit" content="Bloquear" className="py-4 bg-[#000C13] text-white" />
+          <Button isLoading={false} type="submit" content="Bloquear" className="py-4 bg-[#000C13] text-white" />
         </form>
       </div>
     </div>

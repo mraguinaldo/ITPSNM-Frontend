@@ -31,6 +31,7 @@ const RegistrationNumberCopier = ({ content }: IRegistrationNumberCopier) => {
       />
       <div className="flex w-full items-center justify-center sm:max-w-[150px]">
         <Button
+          isLoading={false}
           type="button"
           content="Copiar"
           onClick={() => handleRegistrationNumberCopy()}

@@ -144,7 +144,7 @@ const Form = () => {
         onChange={(e) => handleFileChange('IDENTITY_CARD', actions.handleChangeIdentityCard, e)}
       />
       <div className="pt-3 w-full">
-        <Button type="submit" content="Próximo" />
+        <Button isLoading={false} type="submit" content="Próximo" />
       </div>
     </form>
   )
