@@ -41,6 +41,7 @@ const Grades = () => {
         ) : (
           <div className="flex items-center justify-center w-full sm:max-w-[280px] h-[280px]">
             <Button
+              isLoading={isLoading}
               type="button"
               content="Mostrar notas"
               onClick={() => {

@@ -70,7 +70,7 @@ const Students = ({ students }: { students: any }) => {
         </th>
 
         <th
-          className="text-left p-3 w-[172px]"
+          className={`text-left p-3 w-[172px] ${blockingTheStudent ? 'pointer-events-none' : 'pointer-events-auto'}`}
           onClick={() => handleBlockOptionClick(student.students.User.email, !student.students.User.isBlocked)}
         >
           <Student.State locked={student.students.User.isBlocked} />

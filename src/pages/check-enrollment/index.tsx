@@ -82,6 +82,7 @@ const CheckEnrollment = () => {
               />
               <div className="flex w-full items-center justify-center max-w-[150px]">
                 <Button
+                  isLoading={isLoading}
                   type="submit"
                   content="Consultar"
                   className="bg-[#000C13] text-white text-[12px] h-[52px] sm:text-[16px] py-4 leading-[130%] sm:max-w-[150px] sm:px-2"

@@ -109,7 +109,7 @@ const UsersTable = () => {
           />
         </td>
         <td
-          className="p-4 text-center flex justify-center items-center"
+          className={`p-4 text-center flex justify-center items-center ${blockingTheStudent ? 'pointer-events-none' : 'pointer-events-auto'}`}
           onClick={() => blockStudent({ formData: { email: user?.email, status: !user?.isBlocked } })}
         >
           <Student.State locked={user?.isBlocked} />
@@ -118,7 +118,7 @@ const UsersTable = () => {
           <Student.Course
             onClick={() => resetPassword({ formData: { email: user?.email } })}
             course={'Resetar'}
-            className="hover:bg-[#d1d1d140] duration-150 flex items-center justify-center border border-[#a7a7a755] text-black rounded-[38px] py-2 px-6"
+            className={`hover:bg-[#d1d1d140] duration-150 flex items-center justify-center border border-[#a7a7a755] text-black rounded-[38px] py-2 px-6 ${isResettingPassword ? 'pointer-events-none' : 'pointer-events-auto'}`}
           />
         </td>
         <th className="text-center p-3 w-[68px]">

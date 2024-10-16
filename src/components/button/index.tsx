@@ -1,10 +1,10 @@
 import type { IButton } from './interface'
 
-const Button = ({ className, onClick, content, Icon, type }: IButton) => {
+const Button = ({ className, onClick, content, Icon, type, isLoading }: IButton) => {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center justify-center duration-150 tracking-[0.6px] uppercase rounded-[6px] cursor-pointer text-[16px] font-bold bg- ${className ? className : 'bg-[#000C13] h-[78px] p-6 hover:bg-[#011622] text-white hover:text-[#ffffffb4]'}`}
+      className={`w-full flex items-center justify-center duration-150 tracking-[0.6px] uppercase rounded-[6px] cursor-pointer text-[16px] font-bold bg- ${className ? className : 'bg-[#000C13] h-[78px] p-6 hover:bg-[#011622] text-white hover:text-[#ffffffb4]'} ${isLoading ? 'pointer-events-none' : 'pointer-events-auto'}`}
       type={type}
     >
       {Icon && Icon}

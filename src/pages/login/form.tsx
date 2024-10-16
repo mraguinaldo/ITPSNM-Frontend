@@ -52,6 +52,7 @@ const Form = () => {
       />
       <div className="pt-3 w-full">
         <Button
+          isLoading={isLoading}
           type="submit"
           content={isLoading ? '' : 'Entrar'}
           Icon={isLoading && <CircleNotch size={18} className="animate-rotate" />}
