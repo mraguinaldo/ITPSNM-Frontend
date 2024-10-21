@@ -1,6 +1,6 @@
 import { Student } from '../student'
 import { initialValues, ROLES, tableHeader, USER_OPTIONS } from './data'
-import { ArrowLeft, CaretDown, DotsThree, MagnifyingGlass, X } from 'phosphor-react'
+import { ArrowLeft, CaretDown, Check, DotsThree, MagnifyingGlass, X } from 'phosphor-react'
 import { OptionsModal } from '../modals/options-modal'
 import { useEffect, useReducer, useState } from 'react'
 import { SelectedArea } from '../selected-area'
@@ -8,7 +8,7 @@ import { UseFetchUsers } from '../../hooks/useFetchUsers'
 import { ProgressBar } from '../progress-bar'
 import { Signup } from '../signup'
 import { InputSearch } from '../inputs/search'
-import { UseBlockStudent } from '../../hooks/useBlockStudent'
+import { UseBlockUser } from '../../hooks/useBlockUser'
 import { reducer } from './reducer'
 import { actions } from './actions'
 import { UseCatchUser } from '../../hooks/useCatchUser'
@@ -19,6 +19,7 @@ import { UsestoreData } from '../../hooks/useStoreData'
 import { StudentOptionsModal } from '../students-table/modals/student-options'
 import { PasswordUpdateForm } from '../reset-password'
 import { DefaultModal } from '../modals/default'
+import { QuestionModal } from '../modals/question'
 
 const UsersTable = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -29,7 +30,7 @@ const UsersTable = () => {
     isLoading: isLoadingUsers,
     refetch,
   }: any = UseFetchUsers(state.currentRole.role, currentPage)
-  const { mutate: blockStudent, isLoading: blockingTheStudent } = UseBlockStudent('users')
+  const { mutate: blockStudent, isLoading: blockingTheStudent, isSuccess } = UseBlockUser('users')
 
   const {
     mutate: catchUser,
@@ -56,6 +57,7 @@ const UsersTable = () => {
 
   useEffect(() => {
     if (passwordRestored) {
+      dispatch({ type: actions.toggleEmail, payload: '' })
       Toast({ message: 'Senha restaurada com sucesso', theme: 'light', toastType: 'success' })
     }
   }, [passwordRestored])
@@ -63,6 +65,14 @@ const UsersTable = () => {
   useEffect(() => {
     if (currentPage) refetch()
   }, [currentPage, refetch])
+
+  useEffect(() => {
+    if (userFound && isSuccess) {
+      resetUserFound();
+      Toast({ message: 'Estado alterado...', theme: 'colored', toastType: 'success' })
+    }
+  }, [isSuccess, resetUserFound, dispatch]);
+
 
   if (isLoadingUsers) return <ProgressBar />
 
@@ -72,8 +82,6 @@ const UsersTable = () => {
     }
   }
 
-
-
   const handleStudentClick = (user: string) => {
     dispatch({ type: actions.changeSelectedUser, payload: state.selectedUser === user ? '' : user })
   }
@@ -82,6 +90,7 @@ const UsersTable = () => {
     dispatch({ type: actions.toggleEmail, payload: email })
     dispatch({ type: actions.changeModalStateToChangePassword, payload: true })
   }
+
 
   const renderStudentRow = (user: any) =>
     user && (
@@ -110,7 +119,11 @@ const UsersTable = () => {
         </td>
         <td
           className={`p-4 text-center flex justify-center items-center ${blockingTheStudent ? 'pointer-events-none' : 'pointer-events-auto'}`}
-          onClick={() => blockStudent({ formData: { email: user?.email, status: !user?.isBlocked } })}
+          onClick={() => {
+            dispatch({ type: actions.toggleLockModalState, payload: true })
+            dispatch({ type: actions.toggleEmail, payload: user?.email })
+            dispatch({ type: actions.toggleUserState, payload: !user?.isBlocked })
+          }}
         >
           <Student.State locked={user?.isBlocked} />
         </td>
@@ -167,6 +180,20 @@ const UsersTable = () => {
   return (
     <section className="w-full pl-4 pt-16 lg:py-11 lg:rounded-[16px] bg-white flex flex-col gap-4">
       {(isLoadingUser || blockingTheStudent || isResettingPassword) && <ProgressBar />}
+
+      <QuestionModal
+        title={state.userState ? 'Deseja bloquear o usuário?' : 'Confirmar o desbloqueio do usuário'}
+        paragraph={state.userState ? 'O usuário deixará de ter acesso ao sistema.' : ''}
+        visible={state.modalStateForBlocking}
+        iconReject={<X color="#fff" size={24} />}
+        iconConfirm={<Check color="#fff" size={24} />}
+        reject={() => dispatch({ type: actions.toggleLockModalState, payload: false })}
+        confirm={() => {
+          blockStudent({ formData: { email: state.currentEmail, status: state.userState } })
+          dispatch({ type: actions.toggleLockModalState, payload: false })
+        }
+        }
+      />
 
       <div className="flex items-center justify-between flex-wrap gap-5 w-full pr-4">
         <button

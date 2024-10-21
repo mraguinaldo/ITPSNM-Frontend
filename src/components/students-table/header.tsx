@@ -12,7 +12,7 @@ interface IDataTableHeader {
 }
 
 const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
-  const { setStudentFound }: any = useContext(ApplicationContexts)
+  const { setStudentFound, studentFound }: any = useContext(ApplicationContexts)
   const { mutate: useCheckEnrollment, data: student, isLoading, reset: resetUserFound, error }: any = UseCheckEnrollment()
 
   const [enrollmentNumber, setEnrollmentNumber] = useState<any>()
@@ -52,7 +52,11 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
       Toast({ message: 'Estudante não encontrado', theme: 'colored', toastType: 'error' })
       setStudentFound(null)
     }
-  }, [error, setStudentFound])
+
+    if (!studentFound) {
+      resetUserFound()
+    }
+  }, [error, setStudentFound, studentFound])
 
   return (
     <header className="flex items-start gap-8 flex-wrap lg:flex-row justify-between">

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
 
-const UseBlockStudent = (key: string) => {
+const UseBlockUser = (key: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
@@ -15,4 +15,4 @@ const UseBlockStudent = (key: string) => {
   })
 }
 
-export { UseBlockStudent }
+export { UseBlockUser }

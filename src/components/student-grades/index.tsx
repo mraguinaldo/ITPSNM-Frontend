@@ -47,6 +47,9 @@ const StudentGrades = () => {
 
   return (
     <div className={`w-full pl-6 py-16 lg:pt-11 lg:pb-32 lg:rounded-[16px] bg-white flex gap-6 flex-col ${student ? 'h-fit' : 'h-dvh'}`}>
+      <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">
+        Pauta do estudante
+      </h1>
       <div className='flex items-start sm:items-center w-full flex-wrap gap-4 justify-center sm:pr-3 pr-8'>
         <div id="search__area" className="flex flex-col items-center relative w-full">
           <InputSearch
