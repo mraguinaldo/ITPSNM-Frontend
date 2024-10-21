@@ -21,6 +21,10 @@ import { StudentDashboard } from '../pages/dashboards/student'
 import { Grades } from '../components/grades'
 import { StudentSideBar } from '../pages/dashboards/student/sidebar'
 import { PasswordChangePage } from '../pages/password'
+import { TransactionsPage } from '../components/transactions'
+import { PaymentsPage } from '../components/payments'
+import { EnvoicesPage } from '../components/invoices'
+import { BankProofsPage } from '../components/bank-proofs-page'
 
 function Routes() {
   return (
@@ -69,6 +73,10 @@ function Routes() {
           <Route path="pautas-de-alunos" element={<StudentGrades />} />
           <Route path="tabela-de-cursos" element={<CoursesTable />} />
           <Route path="editar-funcionario" element={<FormToEditEmployee />} />
+          <Route path="transacoes" element={<TransactionsPage />} />
+          <Route path="pagamentos" element={<PaymentsPage />} />
+          <Route path="faturas" element={<EnvoicesPage />} />
+          <Route path="comprovativos" element={<BankProofsPage />} />
         </Route>
 
         <Route path="*" element={<Login />} />

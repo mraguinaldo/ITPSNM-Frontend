@@ -8,13 +8,14 @@ import { Link, useLocation } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { QuestionModal } from '../modals/question'
-import { UseBlockStudent } from '../../hooks/useBlockStudent'
+import { UseBlockUser } from '../../hooks/useBlockUser'
 import { ProgressBar } from '../progress-bar'
 import { reducer } from './reducer'
 import { actions } from './action'
+import { Toast } from '../toast'
 
 const Students = ({ students }: { students: any }) => {
-  const { studentFound }: any = useContext(ApplicationContexts)
+  const { studentFound, setStudentFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
   const location = useLocation()
 
@@ -23,7 +24,7 @@ const Students = ({ students }: { students: any }) => {
     isLoading: blockingTheStudent,
     isError: errorWhenBlockingStudent,
     isSuccess: blockedStudent,
-  } = UseBlockStudent('enrollmentsAproved')
+  } = UseBlockUser('enrollmentsAproved')
 
   const closeLockModal = () => {
     dispatch({ type: actions.toggleLockModalState, payload: false })
@@ -49,6 +50,11 @@ const Students = ({ students }: { students: any }) => {
   useEffect(() => {
     if (blockedStudent || errorWhenBlockingStudent) {
       dispatch({ type: actions.changeSelectedStudent, payload: '' })
+    }
+
+    if (studentFound && blockedStudent) {
+      setStudentFound(null)
+      Toast({ message: 'Estado alterado...', theme: 'colored', toastType: 'success' })
     }
   }, [blockedStudent, errorWhenBlockingStudent])
 

@@ -6,6 +6,8 @@ const actions = {
   changeSelectedUser: 'changeSelectedUser',
   changeModalStateToChangePassword: 'changeModalStateToChangePassword',
   toggleUserEmail: 'toggleUserEmail',
+  toggleLockModalState: 'toggleLockModalState',
+  toggleUserState: 'toggleUserState',
 }
 
 export { actions }

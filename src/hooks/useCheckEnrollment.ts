@@ -58,7 +58,7 @@ const UseCheckEnrollment = () => {
       return response.data as IEnrollments
     },
     {
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         queryClient.setQueryData(['studentData'], data)
       },
       onError: (error: any) => {

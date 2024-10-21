@@ -45,6 +45,8 @@ const initialValues = {
   selectedUser: '',
   modalStateToChangePassword: false,
   userEmail: '',
+  modalStateForBlocking: false,
+  userState: undefined
 }
 
 const USER_OPTIONS = [
