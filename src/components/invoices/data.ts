@@ -1,9 +1,3 @@
-const STATUS = [
-  { id: 0, status: 'PAID', content: 'Pago' },
-  { id: 1, status: 'PENDING', content: 'Pendente' },
-  { id: 2, status: 'RECUSED', content: 'Recusado' },
-]
-
 const initialValues = {
   chevronState: 100,
   modalState: 100,
@@ -19,4 +13,4 @@ const ITEMS = [
 ]
 
 
-export { initialValues, STATUS, ITEMS }
+export { initialValues, ITEMS }

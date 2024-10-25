@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { UseCheckEnrollment } from '../../../hooks/useCheckEnrollment'
-import { HeaderForAuthenticatedUsers } from '../../../components/headers/for-authenticated-users'
 import { Outlet } from 'react-router-dom'
 import { useAxiosInterceptor } from '../../../services/api'
 import { ProgressBar } from '../../../components/progress-bar'
+import { HeaderForAuthenticatedStudent } from '../../../components/headers/for-authenticated-student'
 
 const StudentDashboard = () => {
   useAxiosInterceptor()
@@ -23,7 +23,7 @@ const StudentDashboard = () => {
 
   return (
     <main>
-      <HeaderForAuthenticatedUsers student={student} />
+      <HeaderForAuthenticatedStudent student={student} />
       <Outlet />
     </main>
   )

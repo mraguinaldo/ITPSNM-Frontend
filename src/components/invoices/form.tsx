@@ -8,13 +8,19 @@ import { ProgressBar } from '../progress-bar'
 
 import Cookies from 'js-cookie'
 import { OptionsModal } from '../modals/options-modal'
-import { initialValues, STATUS } from './data'
+import { initialValues } from './data'
 import { reducer } from './reducer'
 import { actions } from './actions'
 import { SelectedArea } from '../selected-area'
 import { Trash } from 'phosphor-react'
 import { UseRegisterInvoice } from '../../hooks/userRegisterInvoice'
 import { UseformatDate } from '../../hooks/useFormatDate'
+
+const INVOICES_STATUS = [
+  { id: 0, invoiceStatus: 'PAID', content: 'Pago' },
+  { id: 1, invoiceStatus: 'PENDING', content: 'Pendente' },
+  { id: 2, invoiceStatus: 'RECUSED', content: 'Recusado' },
+]
 
 const Form = () => {
   const employeeId: any = Cookies.get('employeeNumber')
@@ -124,7 +130,7 @@ const Form = () => {
             {...register('status')}
           />
           <OptionsModal modalState={state.modalState === 3}>
-            {STATUS.map(({ id, content, status }) => (
+            {INVOICES_STATUS.map(({ id, content, invoiceStatus }) => (
               <SelectedArea
                 key={id}
                 area={content}
@@ -134,7 +140,7 @@ const Form = () => {
                     type: actions.toggleStatus,
                     payload: content,
                   })
-                  setValue('status', status, { shouldValidate: true })
+                  setValue('status', invoiceStatus, { shouldValidate: true })
                 }}
               />
             ))}
@@ -145,10 +151,10 @@ const Form = () => {
 
       <div className="flex flex-col gap-3">
         <p className="text-[16px] text-[#2F2F2F] uppercase font-semibold">Itens a serem pagos</p>
-        <div className='w-full flex flex-col gap-4'>
+        <div className='w-full flex flex-col gap-5'>
           {items.map((_, index) => (
-            <div key={index} className="flex gap-3 justify-between flex-col sm:flex-row sm:items-end w-full">
-              <div className='flex gap-3 flex-col sm:flex-row w-full'>
+            <div key={index} className="flex gap-6 sm:gap-3 justify-between flex-col sm:flex-row sm:items-end w-full">
+              <div className='flex gap-5 flex-col sm:flex-row w-full'>
                 <Input
                   label="Item"
                   inputType="text"

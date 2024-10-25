@@ -39,13 +39,15 @@ const BankProofsPage = () => {
               {transaction.transactionNumber}
             </span>
           </h2>
-          <CopySimple
-            size={18}
-            className='cursor-pointer'
-            onClick={() =>
-              UseCopier({ elementId: `${transaction?.id}NumeroDaTransacao` })
-            }
-          />
+          <div className='w-full max-w-[24px] h-[24px]'>
+            <CopySimple
+              size={18}
+              className='cursor-pointer'
+              onClick={() =>
+                UseCopier({ elementId: `${transaction?.id}NumeroDaTransacao` })
+              }
+            />
+          </div>
         </div>
 
         <h2>Id do pagamento: {transaction?.paymentId ? transaction?.paymentId : '- - -'}</h2>
