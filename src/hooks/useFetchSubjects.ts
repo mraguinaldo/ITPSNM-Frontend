@@ -10,7 +10,6 @@ const UseFetchSubjects = () => {
         return subjects
       }
     } catch (err) {
-      console.log('Erro ao buscar as disciplinas.', err)
     }
   }
 

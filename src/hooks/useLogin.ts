@@ -35,7 +35,6 @@ const UseLogin = () => {
       if (redirectPath) navigate(redirectPath)
     },
     onError: (error: any) => {
-      console.log(error)
       if (error.response.data.message === 'Account is blocked. Please contact support.') {
         Toast({
           message: 'Conta bloqueada! entre em contacto com o sector administrativo',

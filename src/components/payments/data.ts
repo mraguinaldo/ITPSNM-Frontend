@@ -9,6 +9,10 @@ const initialValues = {
   modalState: 100,
   role: undefined,
   showPassword: false,
+  paymentsState: false,
+  paymentId: undefined,
+  employeeId: undefined
 }
+
 
 export { initialValues, roles }

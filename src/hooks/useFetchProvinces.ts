@@ -10,7 +10,6 @@ const UseFetchProvinces = () => {
         return provinces
       }
     } catch (err) {
-      console.log('Erro ao buscar as províncias.', err)
     }
   }
 

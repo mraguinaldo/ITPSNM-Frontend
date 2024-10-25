@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schemaForm } from './schema'
 import { useEffect } from 'react'
-import { useQueryClient } from 'react-query'
 import { UseMakePayment } from '../../hooks/useMakePayment'
 import { ProgressBar } from '../progress-bar'
 
+import Cookies from 'js-cookie'
+
 const Form = () => {
-  const queryClient = useQueryClient()
-  const employee: any = queryClient.getQueryData(['employee'])
+  const employeeId: any = Cookies.get('employeeNumber')
 
   const { mutate: useMakePayment, isLoading: makingThePayment, isSuccess } = UseMakePayment()
 
@@ -43,23 +43,17 @@ const Form = () => {
   }, [isSuccess, reset])
 
   useEffect(() => {
-    if (employee) {
-      setValue('employeeId', employee?.employee.id, { shouldValidate: true })
+    if (employeeId) {
+      setValue('employeeId', employeeId, { shouldValidate: true })
     }
-  }, [employee])
+  }, [employeeId])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full'}>
       {makingThePayment && <ProgressBar />}
 
+
       <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
-        <Input
-          label="Número do funcionário"
-          errorMessage={errors.employeeId?.message}
-          inputType="number"
-          placeholder="Insira o nº do funcionário"
-          {...register('employeeId')}
-        />
         <Input
           label="Número do estudante"
           errorMessage={errors.enrollmentId?.message}
@@ -67,9 +61,6 @@ const Form = () => {
           placeholder="Insira o nº do estudante"
           {...register('enrollmentId')}
         />
-      </div>
-
-      <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
         <Input
           label="Número da fatura"
           errorMessage={errors.invoiceId?.message}
@@ -84,7 +75,6 @@ const Form = () => {
           placeholder="Insira o número da transação"
           {...register('transactionNumber')}
         />
-
       </div>
 
       <div className="pt-3 w-full">

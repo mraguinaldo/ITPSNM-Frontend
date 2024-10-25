@@ -23,8 +23,10 @@ import { StudentSideBar } from '../pages/dashboards/student/sidebar'
 import { PasswordChangePage } from '../pages/password'
 import { TransactionsPage } from '../components/transactions'
 import { PaymentsPage } from '../components/payments'
-import { EnvoicesPage } from '../components/invoices'
+import { InvoicesPage } from '../components/invoices'
 import { BankProofsPage } from '../components/bank-proofs-page'
+import { PaymentsMenu } from '../components/payments-menu'
+import { ShowStudentInvoices } from '../components/show-student-invoices'
 
 function Routes() {
   return (
@@ -74,9 +76,11 @@ function Routes() {
           <Route path="tabela-de-cursos" element={<CoursesTable />} />
           <Route path="editar-funcionario" element={<FormToEditEmployee />} />
           <Route path="transacoes" element={<TransactionsPage />} />
-          <Route path="pagamentos" element={<PaymentsPage />} />
-          <Route path="faturas" element={<EnvoicesPage />} />
+          <Route path="pagamentos" element={<PaymentsMenu />} />
+          <Route path="efectuar-pagamento" element={<PaymentsPage />} />
+          <Route path="faturas" element={<InvoicesPage />} />
           <Route path="comprovativos" element={<BankProofsPage />} />
+          <Route path="aluno-faturas" element={<ShowStudentInvoices />} />
         </Route>
 
         <Route path="*" element={<Login />} />

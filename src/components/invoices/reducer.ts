@@ -24,6 +24,18 @@ const reducer = (state: any, action: any) => {
         ...state,
         showPassword: payload,
       }
+    case actions.toggleStatus: {
+      return{
+        ...state,
+        status: payload
+      }
+    }
+    case actions.displayInvoices: {
+      return{
+        ...state,
+        invoicesState: payload
+      }
+    }
     case actions.reset:
       return {
         initialValues,

@@ -210,7 +210,7 @@ const Form = () => {
           <Input
             label="P1"
             errorMessage={errors.p1?.message}
-            inputType="number"
+            inputType="text"
             placeholder="Digite a nota da P1..."
             {...register('p1')}
             hiddenErrorMessage
@@ -218,7 +218,7 @@ const Form = () => {
           <Input
             label="P2"
             errorMessage={errors.p2?.message}
-            inputType="number"
+            inputType="text"
             placeholder="Digite a nota da P2..."
             {...register('p2')}
             hiddenErrorMessage
@@ -226,7 +226,7 @@ const Form = () => {
           <Input
             label="PT"
             errorMessage={errors.pt?.message}
-            inputType="number"
+            inputType="text"
             placeholder="Digite a nota da PT..."
             {...register('pt')}
             hiddenErrorMessage
@@ -234,7 +234,7 @@ const Form = () => {
           <Input
             label="Recurso"
             errorMessage={errors.resource?.message}
-            inputType="number"
+            inputType="text"
             placeholder="Digite a nota do recurso..."
             {...register('resource')}
             hiddenErrorMessage
@@ -242,7 +242,7 @@ const Form = () => {
           <Input
             label="NEE"
             errorMessage={errors.nee?.message}
-            inputType="number"
+            inputType="text"
             placeholder="Digite a nota do exame..."
             {...register('nee')}
             hiddenErrorMessage
@@ -250,7 +250,7 @@ const Form = () => {
           <Input
             label="IMS"
             errorMessage={errors.ims?.message}
-            inputType="number"
+            inputType="text"
             placeholder="Digite a nota da prova prática..."
             {...register('ims')}
             hiddenErrorMessage

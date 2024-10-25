@@ -7,14 +7,12 @@ import { useEffect } from 'react'
 
 import { ProgressBar } from '../progress-bar'
 import { UseSendTransaction } from '../../hooks/useSendTransaction'
-import { useQueryClient } from 'react-query'
-import { useNavigate } from 'react-router-dom'
-import { UsestoreData } from '../../hooks/useStoreData'
+import { Link } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { ArrowLeft } from 'phosphor-react'
 
 const Form = () => {
-  const queryClient = useQueryClient()
-  const employee: any = queryClient.getQueryData(['employee'])
-  const redirectTo = useNavigate()
+  const employeeId: any = Cookies.get('employeeNumber')
   const { mutate: useSendTransaction, isLoading: sendingTheTransaction, isSuccess: transactionSent }: any = UseSendTransaction()
 
   const {
@@ -57,29 +55,23 @@ const Form = () => {
   useEffect(() => {
     if (transactionSent) {
       reset()
-      redirectTo('/admin/painel/pagamentos')
-      UsestoreData('activeLink', 7)
     }
   }, [transactionSent, reset])
 
   useEffect(() => {
-    if (employee) {
-      setValue('employeeId', employee?.employee.id, { shouldValidate: true })
+    if (employeeId) {
+      setValue('employeeId', employeeId, { shouldValidate: true })
     }
-  }, [employee])
+  }, [employeeId])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full'}>
       {sendingTheTransaction && <ProgressBar />}
+      <Link to='/admin/painel/pagamentos' className="hover:bg-slate-300 rounded-full p-2 w-fit">
+        <ArrowLeft size={18} />
+      </Link>
 
       <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
-        <Input
-          label="Número do funcionário"
-          errorMessage={errors.employeeId?.message}
-          inputType="number"
-          placeholder="Insira o nº do funcionário"
-          {...register('employeeId')}
-        />
         <Input
           label="Número do estudante"
           errorMessage={errors.enrollmentId?.message}
@@ -87,9 +79,6 @@ const Form = () => {
           placeholder="Insira o nº do estudante"
           {...register('enrollmentId')}
         />
-      </div>
-
-      <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
         <Input
           label="Quantia"
           errorMessage={errors.amount?.message}
@@ -97,6 +86,9 @@ const Form = () => {
           placeholder="Insira a quantia"
           {...register('amount')}
         />
+      </div>
+
+      <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
         <Input
           label="Número da transação"
           errorMessage={errors.transactionNumber?.message}
@@ -114,7 +106,7 @@ const Form = () => {
       </div>
 
       <div className="pt-3 w-full">
-        <Button isLoading={sendingTheTransaction} type="submit" content="Enviar a transação" />
+        <Button isLoading={sendingTheTransaction} type="submit" content="Guardar" />
       </div>
     </form>
   )

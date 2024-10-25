@@ -10,7 +10,6 @@ const UseFetchCourses = () => {
         return courses
       }
     } catch (err) {
-      console.log('Erro ao buscar os cursos.', err)
     }
   }
 

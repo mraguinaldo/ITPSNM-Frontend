@@ -4,7 +4,7 @@ const UseformatDate = (dateString: string | Date) => {
     const year = date.getFullYear()
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
     const day = date.getDate().toString().padStart(2, '0')
-    const currentdateFormatted = `${day}-${month}-${year}`
+    const currentdateFormatted = `${month}/${day}/${year}`
 
     return currentdateFormatted
   }

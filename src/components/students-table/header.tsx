@@ -63,7 +63,7 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
       {isLoading && <ProgressBar />}
 
       <div id="about__contacts" className="flex flex-col gap-3">
-        <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">Alunos Carregados ({totalStudents})</h1>
+        <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">Alunos Carregados ( {totalStudents} )</h1>
         <p className="text-base font-normal leading-5 text-[#737373]">Encontre os alunos!</p>
       </div>
 

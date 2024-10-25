@@ -51,6 +51,12 @@ const STUDENT_OPTIONS = [
     Icon: UserRectangle,
     href: '/admin/painel/dados-da-matricula',
   },
+  {
+    id: 3,
+    option: 'Faturas',
+    Icon: UserRectangle,
+    href: '/admin/painel/aluno-faturas',
+  },
 ]
 
 const initialValues = {
