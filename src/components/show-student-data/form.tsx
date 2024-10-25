@@ -188,7 +188,7 @@ const Form = () => {
 
   return (
     <>
-      {(searchingEnrollment || approvingTheEnrollment) && <ProgressBar />}
+      {(searchingEnrollment) && <ProgressBar />}
       <div className="flex gap-4 items-center">
         <Link to={previousRoute} className="hover:bg-slate-300 rounded-full p-2 w-fit">
           <ArrowLeft size={18} />

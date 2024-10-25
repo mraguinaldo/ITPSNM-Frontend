@@ -27,6 +27,7 @@ import { InvoicesPage } from '../components/invoices'
 import { BankProofsPage } from '../components/bank-proofs-page'
 import { PaymentsMenu } from '../components/payments-menu'
 import { ShowStudentInvoices } from '../components/show-student-invoices'
+import { StudentPaymentsPage } from '../components/student-payments-page'
 
 function Routes() {
   return (
@@ -55,6 +56,7 @@ function Routes() {
           <Route index element={<StudentSideBar />} />
           <Route path="relatorio-de-notas" element={<Grades />} />
           <Route path="seguranca" element={<PasswordChangePage />} />
+          <Route path="faturas" element={<StudentPaymentsPage />} />
         </Route>
 
         <Route

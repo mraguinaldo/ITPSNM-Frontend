@@ -13,7 +13,7 @@ import { UseExtractFirstAndLastName } from '../../../hooks/useExtractFirstAndLas
 import { UseSignOut } from '../../../hooks/useSignout'
 import { useNavigate } from 'react-router-dom'
 
-const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
+const HeaderForAuthenticatedStudent = ({ student }: { student: any }) => {
   const [modalState, setModalState] = useState<boolean>(false)
   const [questionModalState, setQuestionModalState] = useState<boolean>(false)
   const [modalStateToChangePassword, setModalStateToChangePassword] = useState<boolean>(false)
@@ -96,4 +96,4 @@ const HeaderForAuthenticatedUsers = ({ student }: { student: any }) => {
   )
 }
 
-export { HeaderForAuthenticatedUsers }
+export { HeaderForAuthenticatedStudent }
