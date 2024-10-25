@@ -35,7 +35,7 @@ const Form = () => {
   const [, setSearchParams] = useSearchParams()
 
   const { data: courses } = UseFetchCourses()
-  const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading: searchingEnrollment } = UseCheckEnrollment()
+  const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading: searchingEnrollment }: any = UseCheckEnrollment()
   const {
     mutate: useApproveEnrollment,
     isLoading: approvingTheEnrollment,
@@ -103,7 +103,6 @@ const Form = () => {
   const onSubmit = (data: any) => {
     try {
       // sendStudentPersonalData({ formData: data })
-      console.log(data)
       UsestoreData('IdentityCard', data)
     } catch (error) {
       console.log(error)

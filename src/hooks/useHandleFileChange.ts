@@ -7,7 +7,6 @@ const UseHandleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       return file
     }
   } catch (error) {
-    console.log(error)
   }
 }
 

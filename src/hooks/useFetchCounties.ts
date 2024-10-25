@@ -10,7 +10,6 @@ const UseFetchCounties = () => {
         return counties
       }
     } catch (err) {
-      console.log('Erro ao buscar os municípios.', err)
     }
   }
 

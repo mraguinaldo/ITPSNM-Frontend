@@ -13,7 +13,7 @@ const RegistrationNumberCopier = ({ content }: IRegistrationNumberCopier) => {
       navigator.clipboard
         .writeText(copiedNumber)
         .then(() => {
-          Toast({ message: 'Número de inscrição copiado', theme: 'light' })
+          Toast({ message: 'Número de inscrição copiado', theme: 'light', toastType: 'success' })
         })
         .catch(() => {
           Toast({ message: 'Error ao copiar o número de inscrição', theme: 'dark', toastType: 'error' })

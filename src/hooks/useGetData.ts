@@ -6,7 +6,6 @@ const UseGetData = (keyName: string) => {
       const data = JSON.parse(storedData)
       return data
     } catch (error) {
-      console.error(error)
       return null
     }
   }

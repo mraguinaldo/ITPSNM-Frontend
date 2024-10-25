@@ -23,6 +23,8 @@ const UseMakePayment = () => {
         Toast({ message: 'Estudante não encontrado...', theme: 'colored', toastType: 'error' })
       }else if(error.response.data.message === 'Invoice not found.'){
         Toast({ message: 'Fatura não encontrada...', theme: 'colored', toastType: 'error' })
+      }else if(error.response.data.message === 'Insufficient funds.'){
+        Toast({ message: 'Saldo insuficiente', theme: 'colored', toastType: 'error' })
       }else{
         Toast({ message: 'Erro ao efectuar o pagamento...', theme: 'colored', toastType: 'error' })
       }

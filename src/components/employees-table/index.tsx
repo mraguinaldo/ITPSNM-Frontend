@@ -81,7 +81,7 @@ const EmployeesTable = () => {
       {lookingForTheEmployee && <ProgressBar />}
 
       <h1 className={`text-[24px] lg:text-[32px] font-semibold leading-9 ${state.signupFormStatus ? 'hidden' : 'flex'}`}>
-        Total de funcionários ({employees?.employees?.totalItems || 0})
+        Total de funcionários ( {employees?.employees?.totalItems || 0} )
       </h1>
 
       <div className="flex items-center justify-between flex-wrap gap-5 w-full pr-4">

@@ -24,6 +24,24 @@ const reducer = (state: any, action: any) => {
         ...state,
         showPassword: payload,
       }
+    case actions.displayPayments: {
+      return{
+        ...state,
+        paymentsState: payload
+      }
+    }
+    case actions.toggleEmployee: {
+      return{
+        ...state,
+        employeeId: payload
+      }
+    }
+    case actions.togglePaymentId: {
+      return{
+        ...state,
+        paymentId: payload
+      }
+    }
     case actions.reset:
       return {
         initialValues,

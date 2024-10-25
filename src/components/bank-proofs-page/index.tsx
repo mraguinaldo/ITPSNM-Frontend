@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { MagnifyingGlass } from 'phosphor-react'
+import { CopySimple, MagnifyingGlass } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { UseFetchStudentBankProof } from '../../hooks/useFetchStudentBankProof'
+import { UseCopier } from '../../hooks/useCopier'
 
 const BankProofsPage = () => {
   const { mutate: useFetchStudentBankProof, isLoading, data: transactions, error }: any = UseFetchStudentBankProof()
@@ -20,10 +21,9 @@ const BankProofsPage = () => {
   }
 
 
-
   const RenderTransactionCard = (transaction: any) => (
     <div key={transaction.id}>
-      <div className='flex flex-col gap-2 rounded-lg border-[2px] border-dashed border-[#dbdbdbca] p-4 w-full'>
+      <div className='flex flex-col gap-2 rounded-lg border-[2px] border-dashed border-[#dbdbdbca] p-4 w-full h-full'>
         <div className='flex justify-between items-center gap-4'>
           <h2 className='font-semibold uppercase'>Quantia: {transaction.amount}</h2>
           <div className={`flex items-center justify-center py-1 px-4 rounded-full w-fit ${transaction.used ? 'bg-[#e277775a]' : 'bg-[#7784e25a]'}`}>
@@ -32,7 +32,21 @@ const BankProofsPage = () => {
         </div>
         <h2>Estudante: {transaction.enrollmentId}</h2>
         <h2>Funcionário: {transaction.employeeId}</h2>
-        <h2>Número da transação: {transaction.transactionNumber}</h2>
+        <div className='flex items-center justify-between gap-2'>
+          <h2>
+            Número da transação:{" "}
+            <span id={`${transaction?.id}NumeroDaTransacao`}>
+              {transaction.transactionNumber}
+            </span>
+          </h2>
+          <CopySimple
+            size={18}
+            className='cursor-pointer'
+            onClick={() =>
+              UseCopier({ elementId: `${transaction?.id}NumeroDaTransacao` })
+            }
+          />
+        </div>
 
         <h2>Id do pagamento: {transaction?.paymentId ? transaction?.paymentId : '- - -'}</h2>
         <div className='flex justify-between w-full'>
@@ -48,6 +62,7 @@ const BankProofsPage = () => {
     </div>
   )
 
+  console.log(transactions)
 
   return (
     <div className={`w-full p-6 py-16 lg:pt-11 lg:pb-32 lg:rounded-[16px] bg-white flex gap-6 flex-col ${transactions ? 'h-fit' : 'h-dvh'}`}>

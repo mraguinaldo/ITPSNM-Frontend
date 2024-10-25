@@ -1,25 +1,48 @@
 import * as yup from 'yup'
 
 export const schemaForm = yup.object().shape({
-  email: yup
-    .string()
-    .required('O email é obrigatório!!')
-    .test('email-validation', 'Email inválido.', (email) => {
-      const emailRegex =
-        /^([A-Z|a-z|0-9](\.|_){0,1})+[A-Z|a-z|0-9]@([A-Z|a-z|0-9])+((\.){0,1}[A-Z|a-z|0-9]){2}\.[a-z]{2,3}$/
-      if (email?.match(emailRegex)) return true
-    }),
-  password: yup
-    .string()
-    .required('A palavra-passe é obrigatório!!')
-    .min(4, 'A palavra-passe deve ter no mínimo 6 letras'),
-  role: yup.string().required('O tipo de usuário é obrigatório'),
-  username: yup.string(),
-  currentUserId: yup
+  enrollmentId: yup
     .number()
     .transform((value, originalValue) => {
       return originalValue === '' ? undefined : value
     })
     .required('O identificador do usuário é obrigatório')
     .min(1),
+  employeeId: yup
+    .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value
+    })
+    .required('O identificador do funcionário é obrigatório')
+    .min(1),
+  invoiceId: yup
+    .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value
+    })
+    .min(1),
+  status: yup.string().required('O status é obrigatório'),
+
+  dueDate: yup.string()
+    .required('A data de validade é obrigatório')
+    .typeError('A data deve ser verdadeira'),
+  issueDate: yup.string()
+    .required('A data de emissão é obrigatório')
+    .typeError('A data deve ser verdadeira'),
+
+  items: yup.array().of(
+    yup.object().shape({
+      description: yup.string().required('A descrição é obrigatória'),
+      amount: yup
+        .number()
+        .required('O valor é obrigatório')
+        .transform((value, originalValue) => {
+          if (typeof originalValue === 'string') {
+            const parsedValue = originalValue.replace(',', '.');
+            return parsedValue === '' ? undefined : parseFloat(parsedValue);
+          }
+          return value;
+        })
+    })
+  )
 })
