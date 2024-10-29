@@ -1,4 +1,4 @@
-import { Book, CurrencyDollar, GraduationCap, Receipt, Scroll, ShieldCheck, Stack, Student, Users } from 'phosphor-react'
+import { Book, CurrencyDollar, GraduationCap, Scroll, ShieldCheck, Student, Users } from 'phosphor-react'
 import type { INavigationLinks } from './interface'
 
 const NAVIGATION_LINKS: INavigationLinks[] = [
@@ -43,19 +43,7 @@ const NAVIGATION_LINKS: INavigationLinks[] = [
     content: 'Pagamentos',
     Icon: CurrencyDollar,
     href: '/admin/painel/pagamentos',
-  },
-  {
-    id: 8,
-    content: 'Faturas',
-    Icon: Stack,
-    href: '/admin/painel/faturas',
-  },
-  {
-    id: 9,
-    content: 'Comprovativos',
-    Icon: Receipt,
-    href: '/admin/painel/comprovativos',
-  },
+  }
 ]
 
 export { NAVIGATION_LINKS }

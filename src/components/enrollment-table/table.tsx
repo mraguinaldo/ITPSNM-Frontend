@@ -11,6 +11,7 @@ import { QuestionModal } from '../modals/question'
 import { reducer } from './reducer'
 import { actions } from './action'
 import { UseApproveEnrollment } from '../../hooks/useApproveEnrollment'
+import Cookies from 'js-cookie'
 
 interface IStudents {
   students: any
@@ -25,6 +26,7 @@ const Students = ({ students }: IStudents) => {
     isSuccess: approvedEnrollment,
   } = UseApproveEnrollment()
   const location = useLocation()
+  const employeeNumber: any = Cookies.get('employeeNumber')
 
   const closeLockModal = () => {
     dispatch({ type: actions.changeModalStateToApproveEnrollment, payload: false })
@@ -46,6 +48,7 @@ const Students = ({ students }: IStudents) => {
       levelId: state.levelId,
       docsState: 'APPROVED',
       paymentState: 'APPROVED',
+      employeeId: Number(employeeNumber)
     }
 
     if (formData) {

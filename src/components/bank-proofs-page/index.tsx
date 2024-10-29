@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { CopySimple, MagnifyingGlass } from 'phosphor-react'
+import { ArrowLeft, CopySimple, MagnifyingGlass } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { UseFetchStudentBankProof } from '../../hooks/useFetchStudentBankProof'
 import { UseCopier } from '../../hooks/useCopier'
+import { Link } from 'react-router-dom'
 
 const BankProofsPage = () => {
   const { mutate: useFetchStudentBankProof, isLoading, data: transactions, error }: any = UseFetchStudentBankProof()
@@ -64,10 +65,15 @@ const BankProofsPage = () => {
     </div>
   )
 
-  console.log(transactions)
-
   return (
     <div className={`w-full p-6 py-16 lg:pt-11 lg:pb-32 lg:rounded-[16px] bg-white flex gap-6 flex-col ${transactions ? 'h-fit' : 'h-dvh'}`}>
+
+      <Link
+        to='/admin/painel/pagamentos'
+        className="hover:bg-slate-300 rounded-full p-2 w-fit"
+      >
+        <ArrowLeft size={18} />
+      </Link>
 
       <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">
         Comprovativos

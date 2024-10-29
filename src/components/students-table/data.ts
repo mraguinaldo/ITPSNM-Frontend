@@ -53,9 +53,9 @@ const STUDENT_OPTIONS = [
   },
   {
     id: 3,
-    option: 'Faturas',
+    option: 'Pagamentos',
     Icon: UserRectangle,
-    href: '/admin/painel/aluno-faturas',
+    href: '/admin/painel/aluno-pagamentos',
   },
 ]
 

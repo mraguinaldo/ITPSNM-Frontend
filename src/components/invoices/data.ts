@@ -3,7 +3,7 @@ const initialValues = {
   modalState: 100,
   role: undefined,
   showPassword: false,
-  status: 'Escolha o estado da fatura',
+  status: 'Selecionar o tipo de pagamento',
   invoicesState: false
 }
 

@@ -4,7 +4,7 @@ import type { IDefaultModal } from './interface'
 const DefaultModal = ({ children, display, closeModal }: IDefaultModal) => {
   return (
     <div
-      className={`fixed w-full z-50 left-0 h-screen flex justify-center items-center top-0 duration-300 px-6 ${display ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed w-full z-[2000] left-0 h-screen flex justify-center items-center top-0 duration-300 px-6 ${display ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
     >
       <div className="absolute inset-0 w-full h-screen bg-black opacity-85 z-10" onClick={closeModal}>
         {''}
