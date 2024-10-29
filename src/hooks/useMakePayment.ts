@@ -5,6 +5,7 @@ import { Toast } from '../components/toast'
 const UseMakePayment = () => {
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
+      console.log(formData)
       const response = await API.post('/payments', formData)
 
       return response.data

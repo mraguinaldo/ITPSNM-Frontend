@@ -38,7 +38,6 @@ const StudentGrades = () => {
     useCheckEnrollment(params)
   }
 
-
   const searchStudent = (e: any) => {
     if (e.key === 'Enter') {
       fetchStudent()

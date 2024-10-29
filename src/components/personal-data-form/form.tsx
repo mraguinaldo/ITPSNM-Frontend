@@ -14,14 +14,12 @@ import { actions } from './actions'
 import { UseSendStudentPersonalData } from '../../hooks/useSendStudentPersonalData'
 import { ProgressBar } from '../../components/progress-bar'
 import { UseFetchProvinces } from '../../hooks/useFetchProvinces'
-import { UseFetchCounties } from '../../hooks/useFetchCounties'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const { data: provinces } = UseFetchProvinces()
-  const { data: counties } = UseFetchCounties()
   const { mutate: sendStudentPersonalData, isLoading } = UseSendStudentPersonalData()
 
   const {
@@ -34,7 +32,7 @@ const Form = () => {
     resolver: yupResolver(schemaForm),
     defaultValues: {
       fullName: '',
-      countyId: undefined,
+      county: '',
       dateOfBirth: undefined,
       father: '',
       gender: '',
@@ -187,31 +185,11 @@ const Form = () => {
           <div className="relative w-full">
             <Input
               label="Município"
-              errorMessage={errors.countyId?.message}
+              errorMessage={errors.county?.message}
               inputType="text"
-              onClick={() => {
-                toggleModalState(1)
-              }}
-              chevronState={state.chevronState === 1}
-              placeholder={'Município'}
-              option
-              value={state.county}
-              {...register('countyId')}
+              placeholder="Município"
+              {...register('county')}
             />
-            <OptionsModal modalState={state.modalState === 1} maximumHeight={true}>
-              {typeof counties === 'object' &&
-                counties?.map((county: any) => (
-                  <SelectedArea
-                    key={county.id}
-                    area={county.name}
-                    onClick={() => {
-                      toggleModalState(1)
-                      dispatch({ type: actions.addCounty, payload: county.name })
-                      setValue('countyId', county.id, { shouldValidate: true })
-                    }}
-                  />
-                ))}
-            </OptionsModal>
           </div>
         </div>
         <div className="relative w-full">

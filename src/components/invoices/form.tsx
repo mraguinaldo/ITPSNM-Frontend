@@ -6,7 +6,6 @@ import { schemaForm } from './schema'
 import { useEffect, useReducer, useState } from 'react'
 import { ProgressBar } from '../progress-bar'
 
-import Cookies from 'js-cookie'
 import { OptionsModal } from '../modals/options-modal'
 import { initialValues } from './data'
 import { reducer } from './reducer'
@@ -15,17 +14,23 @@ import { SelectedArea } from '../selected-area'
 import { Trash } from 'phosphor-react'
 import { UseRegisterInvoice } from '../../hooks/userRegisterInvoice'
 import { UseformatDate } from '../../hooks/useFormatDate'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
-const INVOICES_STATUS = [
-  { id: 0, invoiceStatus: 'PAID', content: 'Pago' },
-  { id: 1, invoiceStatus: 'PENDING', content: 'Pendente' },
-  { id: 2, invoiceStatus: 'RECUSED', content: 'Recusado' },
+const PAYMENT_TYPES = [
+  { id: 0, paymentType: 'DECLARATION', content: 'Declaração' },
+  { id: 1, paymentType: 'CERTIFICATE', content: 'Certificado' },
+  { id: 2, paymentType: 'PASS', content: 'Passe de estudante' },
+  { id: 3, paymentType: 'UNIFORM', content: 'Uniforme' },
+  { id: 4, paymentType: 'TUITION', content: 'Mensalidade' },
+  { id: 5, paymentType: 'TUITION_PENALTY', content: 'Multa de propina' },
 ]
 
 const Form = () => {
   const employeeId: any = Cookies.get('employeeNumber')
   const [state, dispatch] = useReducer(reducer, initialValues)
   const [items, setItems] = useState([{ description: '', amount: '' }]);
+  const redirectTo = useNavigate()
 
   const { mutate: useRegisterInvoice, isLoading: registeringTheInvoice, isSuccess } = UseRegisterInvoice()
 
@@ -42,7 +47,7 @@ const Form = () => {
     defaultValues: {
       employeeId: undefined,
       enrollmentId: undefined,
-      status: '',
+      type: '',
       dueDate: undefined,
       issueDate: undefined,
       items: undefined,
@@ -59,6 +64,7 @@ const Form = () => {
     if (isSuccess) {
       reset()
       dispatch({ type: actions.reset })
+      redirectTo('/admin/painel/faturas')
     }
   }, [isSuccess, reset])
 
@@ -76,6 +82,10 @@ const Form = () => {
     setValue('dueDate', formattedDate, { shouldValidate: true });
     setValue('issueDate', formattedDate, { shouldValidate: true });
     setValue('invoiceId', 12, { shouldValidate: true });
+
+    const enrollmentNumber: any = Number(Cookies.get('enrollmentNumber'))
+
+    if (enrollmentNumber) setValue('enrollmentId', enrollmentNumber, { shouldValidate: true });
   }, []);
 
   const handleRemoveItem = (currentItem: any) => {
@@ -117,20 +127,20 @@ const Form = () => {
         />
         <div className="relative w-full">
           <Input
-            label="Estado da fatura"
-            errorMessage={errors.status?.message}
+            label="Tipo de pagamento"
+            errorMessage={errors.type?.message}
             inputType="text"
             onClick={() => {
               toggleModalState(3)
             }}
             chevronState={state.chevronState === 3}
-            placeholder={'Selecionar o estado da fatura'}
+            placeholder={'Selecionar o tipo de pagamento'}
             value={state.status}
             option
-            {...register('status')}
+            {...register('type')}
           />
           <OptionsModal modalState={state.modalState === 3}>
-            {INVOICES_STATUS.map(({ id, content, invoiceStatus }) => (
+            {PAYMENT_TYPES.map(({ id, content, paymentType }) => (
               <SelectedArea
                 key={id}
                 area={content}
@@ -140,14 +150,14 @@ const Form = () => {
                     type: actions.toggleStatus,
                     payload: content,
                   })
-                  setValue('status', invoiceStatus, { shouldValidate: true })
+                  setValue('type', paymentType, { shouldValidate: true })
                 }}
               />
             ))}
           </OptionsModal>
         </div>
-      </div>
 
+      </div>
 
       <div className="flex flex-col gap-3">
         <p className="text-[16px] text-[#2F2F2F] uppercase font-semibold">Itens a serem pagos</p>
@@ -169,6 +179,13 @@ const Form = () => {
                   errorMessage={errors.items?.[index]?.amount?.message}
                   {...register(`items.${index}.amount`)}
                 />
+                <Input
+                  label="Quantidade"
+                  errorMessage={errors.items?.[index]?.qty?.message}
+                  inputType="number"
+                  placeholder="Insira a quantidade"
+                  {...register(`items.${index}.qty`)}
+                />
               </div>
               <button
                 type="button"
@@ -189,7 +206,7 @@ const Form = () => {
       </div>
 
       <div className="pt-3 w-full">
-        <Button isLoading={registeringTheInvoice} type="submit" content="Cadastrar" />
+        <Button isLoading={registeringTheInvoice} type="submit" content="Efectuar pagamento" />
       </div>
     </form>
   )

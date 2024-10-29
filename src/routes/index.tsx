@@ -21,13 +21,14 @@ import { StudentDashboard } from '../pages/dashboards/student'
 import { Grades } from '../components/grades'
 import { StudentSideBar } from '../pages/dashboards/student/sidebar'
 import { PasswordChangePage } from '../pages/password'
-import { TransactionsPage } from '../components/transactions'
-import { PaymentsPage } from '../components/payments'
 import { InvoicesPage } from '../components/invoices'
 import { BankProofsPage } from '../components/bank-proofs-page'
 import { PaymentsMenu } from '../components/payments-menu'
 import { ShowStudentInvoices } from '../components/show-student-invoices'
 import { StudentPaymentsPage } from '../components/student-payments-page'
+import { PaymentReceiptsPage } from '../components/payment-receipts'
+import { PaymentsPage } from '../components/payments'
+import { InvoiceViewer } from '../components/invoice-viewer'
 
 function Routes() {
   return (
@@ -43,8 +44,6 @@ function Routes() {
         <Route path="/login" element={<Login />} />
         <Route path="/consultar-estado-da-matricula" element={<CheckEnrollment />} />
 
-
-
         <Route
           path="/aluno/painel"
           element={
@@ -56,7 +55,7 @@ function Routes() {
           <Route index element={<StudentSideBar />} />
           <Route path="relatorio-de-notas" element={<Grades />} />
           <Route path="seguranca" element={<PasswordChangePage />} />
-          <Route path="faturas" element={<StudentPaymentsPage />} />
+          <Route path="aluno-pagamentos" element={<StudentPaymentsPage />} />
         </Route>
 
         <Route
@@ -77,12 +76,13 @@ function Routes() {
           <Route path="pautas-de-alunos" element={<StudentGrades />} />
           <Route path="tabela-de-cursos" element={<CoursesTable />} />
           <Route path="editar-funcionario" element={<FormToEditEmployee />} />
-          <Route path="transacoes" element={<TransactionsPage />} />
+          <Route path="recibos" element={<PaymentReceiptsPage />} />
           <Route path="pagamentos" element={<PaymentsMenu />} />
-          <Route path="efectuar-pagamento" element={<PaymentsPage />} />
-          <Route path="faturas" element={<InvoicesPage />} />
+          <Route path="efectuar-pagamento" element={<InvoicesPage />} />
           <Route path="comprovativos" element={<BankProofsPage />} />
           <Route path="aluno-faturas" element={<ShowStudentInvoices />} />
+          <Route path="exibir-pagamentos" element={<PaymentsPage />} />
+          <Route path="faturas" element={<InvoiceViewer />} />
         </Route>
 
         <Route path="*" element={<Login />} />

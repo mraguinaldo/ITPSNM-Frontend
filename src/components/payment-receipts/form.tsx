@@ -7,18 +7,20 @@ import { useEffect } from 'react'
 
 import { ProgressBar } from '../progress-bar'
 import { UseSendTransaction } from '../../hooks/useSendTransaction'
-import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
-import { ArrowLeft } from 'phosphor-react'
+import { useNavigate } from 'react-router-dom'
+
 
 const Form = () => {
   const employeeId: any = Cookies.get('employeeNumber')
   const { mutate: useSendTransaction, isLoading: sendingTheTransaction, isSuccess: transactionSent }: any = UseSendTransaction()
+  const redirectTo = useNavigate()
 
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
     reset,
     formState: { errors },
   } = useForm({
@@ -54,7 +56,12 @@ const Form = () => {
 
   useEffect(() => {
     if (transactionSent) {
+      Cookies.set('receiptNumber', getValues('transactionNumber'))
+      Cookies.set('enrollmentNumber', getValues('enrollmentId').toString())
+
       reset()
+
+      redirectTo('/admin/painel/efectuar-pagamento')
     }
   }, [transactionSent, reset])
 
@@ -64,12 +71,10 @@ const Form = () => {
     }
   }, [employeeId])
 
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full'}>
       {sendingTheTransaction && <ProgressBar />}
-      <Link to='/admin/painel/pagamentos' className="hover:bg-slate-300 rounded-full p-2 w-fit">
-        <ArrowLeft size={18} />
-      </Link>
 
       <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
         <Input
@@ -90,14 +95,14 @@ const Form = () => {
 
       <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
         <Input
-          label="Número da transação"
+          label="Número do recibo"
           errorMessage={errors.transactionNumber?.message}
           inputType="text"
           placeholder="Insira o número da transação"
           {...register('transactionNumber')}
         />
         <Input
-          label="Data da transação"
+          label="Data do recibo"
           errorMessage={errors.date?.message}
           inputType="date"
           placeholder="Data da transação"

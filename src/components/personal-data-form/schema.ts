@@ -68,13 +68,9 @@ export const schemaForm = yup.object().shape({
     })
     .required('A província é obrigatório')
     .min(1),
-  countyId: yup
-    .number()
-    .transform((value, originalValue) => {
-      return originalValue === '' ? undefined : value
-    })
-    .required('O município é obrigatório')
-    .min(1),
+  county: yup
+    .string()
+    .required('O município é obrigatório'),
   dateOfBirth: yup.date().required('A data de nascimento é obrigatório').typeError('A data deve ser verdadeira'),
   emissionDate: yup.date().required('A data de emissão é obrigatório').typeError('A data deve ser verdadeira'),
   expirationDate: yup.date().required('A data de validade é obrigatório').typeError('A data deve ser verdadeira'),

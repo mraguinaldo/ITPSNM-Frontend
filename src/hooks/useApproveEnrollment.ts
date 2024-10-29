@@ -11,6 +11,11 @@ const UseApproveEnrollment = () => {
       return response.data
     },
     onSuccess: () => {
+      Toast({
+        message: 'Matrícula aprovada',
+        theme: 'colored',
+        toastType: 'success',
+      })
       queryClient.invalidateQueries(['enrollments'])
       queryClient.invalidateQueries(['enrollmentsAproved'])
     },

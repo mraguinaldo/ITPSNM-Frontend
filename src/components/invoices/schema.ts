@@ -21,7 +21,7 @@ export const schemaForm = yup.object().shape({
       return originalValue === '' ? undefined : value
     })
     .min(1),
-  status: yup.string().required('O status é obrigatório'),
+  type: yup.string().required('O tipo é obrigatório'),
 
   dueDate: yup.string()
     .required('A data de validade é obrigatório')
@@ -33,6 +33,12 @@ export const schemaForm = yup.object().shape({
   items: yup.array().of(
     yup.object().shape({
       description: yup.string().required('A descrição é obrigatória'),
+      qty: yup
+      .number()
+      .transform((value, originalValue) => {
+        return originalValue === '' ? undefined : value
+      })
+      .min(1).required('A quantidade é obrigatório'),
       amount: yup
         .number()
         .required('O valor é obrigatório')
