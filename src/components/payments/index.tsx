@@ -70,11 +70,12 @@ const PaymentsPage = () => {
         }} className="p-2 rounded-lg cursor-pointer hover:bg-slate-200 border border-[#eaecec] w-full font-semibold">
           Exibir fatura
         </button>
-        {payment?.status !== 'PAID' &&
+        {payment?.status !== 'PAID' && (payment?.invoiceId !== invoiceId) &&
           <Button
             type='button'
             content='Aprovar pagamento'
             onClick={() => {
+              setInvoiceId(payment?.invoiceId)
               useApprovePayment({ paymentId: payment?.id, employeeId: payment?.employeeId })
             }}
             isLoading={isLoading}
@@ -97,6 +98,7 @@ const PaymentsPage = () => {
         <Link
           to='/admin/painel/efectuar-pagamento'
           className="hover:bg-slate-300 rounded-full p-2 w-fit"
+          onClick={() => Cookies.set('enrollmentNumber', '')}
         >
           <ArrowLeft size={18} />
         </Link>
@@ -148,7 +150,10 @@ const PaymentsPage = () => {
 
       <DefaultModal
         display={showModal}
-        closeModal={() => setShowModal(false)}
+        closeModal={() => {
+          setShowModal(false)
+          setInvoiceId(10000)
+        }}
       >
         {showModal &&
           student && student?.enrollment?.Invoice?.map((invoice: any) => (

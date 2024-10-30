@@ -1,21 +1,25 @@
 import { Check, CheckCircle, Printer } from "phosphor-react"
 import { Field } from "../payments/field"
 import { useReactToPrint } from "react-to-print"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "../button"
 import { UseRenameClass } from "../../hooks/useRenameClass"
 import Cookies from "js-cookie"
 import { UseMakePayment } from "../../hooks/useMakePayment"
 import { ProgressBar } from "../progress-bar"
 import { useNavigate } from "react-router-dom"
+import { UsestoreData } from "../../hooks/useStoreData"
 
 
 const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any }) => {
   const { mutate: useMakePayment, isLoading: makingThePayment, isSuccess } = UseMakePayment()
   const employeeId = Number(Cookies.get('employeeNumber'))
-  const enrollmentId = Number(Cookies.get('enrollmentNumber'))
-  const transactionNumber = Cookies.get('receiptNumber')
+  const enrollmentNumber: any = Number(Cookies.get('enrollmentNumber'))
+  const receiptNumber: any = Cookies.get('receiptNumber')
   const redirectTo = useNavigate()
+
+  const [enrollmentId, setEnrollmentId] = useState<string>('')
+  const [transactionNumber, setTransactionNumber] = useState<string>('')
 
   const currentInvoice = useRef<HTMLDivElement>(null);
   const printInvoice: any = useReactToPrint({ contentRef: currentInvoice });
@@ -35,12 +39,24 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
   useEffect(() => {
     if (isSuccess) {
       Cookies.set('receiptNumber', '')
+      UsestoreData('currentRoute', '/admin/painel/exibir-pagamentos')
       redirectTo('/admin/painel/exibir-pagamentos')
     }
   }, [isSuccess])
 
+  useEffect(() => {
+    if (receiptNumber) {
+      setTransactionNumber(receiptNumber)
+    }
+    if (enrollmentNumber) {
+      setEnrollmentId(enrollmentNumber)
+    } else {
+      setEnrollmentId(student?.id)
+    }
+  }, [])
+
   return (
-    <div className="w-full flex gap-2 flex-col items-start h-full">
+    <div className="w-full flex gap-2 flex-col items-start overflow-y-scroll h-[580px] scroll-transparent">
       {makingThePayment && <ProgressBar />}
       <div ref={currentInvoice} key={invoice.id} id={`fatura${invoice?.id}`} className='flex flex-col gap-4 rounded-lg border border-[#dbdbdbca] p-4 w-full relative h-full'>
         <div className='flex flex-col gap-3'>
@@ -99,12 +115,26 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
         <button onClick={printInvoice} className="p-2 rounded-full cursor-pointer hover:bg-slate-200">
           <Printer size={22} color="#000" weight="duotone" />
         </button>
-        {invoice?.status !== 'PAID' && <Button
-          onClick={() => makePayment(invoice?.id)}
-          isLoading={false}
-          type="button"
-          content="Efectuar pagamento"
-        />}
+
+        {invoice?.status !== 'PAID' && <>
+          <div className="flex gap-2 flex-col w-full">
+            <label htmlFor="transaction_Number">Número do comprovativo</label>
+            <input
+              type="text"
+              id="transaction_Number"
+              placeholder="Insira o número do comprovativo"
+              className="w-full px-3 py-2 outline-none border border-[#dbdbdbca]"
+              value={transactionNumber}
+              onChange={(e) => setTransactionNumber(e.currentTarget.value)}
+            />
+          </div>
+          <Button
+            onClick={() => makePayment(invoice?.id)}
+            isLoading={false}
+            type="button"
+            content="Efectuar pagamento"
+          />
+        </>}
 
       </div>
     </div>
