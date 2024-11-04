@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { API } from '../services/api'
 import { useNavigate } from 'react-router-dom'
+import { Toast } from '../components/toast'
 
 interface Course {
   id: number
@@ -64,6 +65,12 @@ const UseCheckEnrollment = () => {
       onError: (error: any) => {
         if (error.response.data.message === 'Unauthorized: Invalid token') {
           redirectTo('/login')
+        }else if(error.response.data.message === "Enrollment not found."){
+          Toast({
+            message: 'Estudante não encontrado',
+            theme: 'colored',
+            toastType: 'error',
+          })
         }
       },
     },

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
-import { ArrowLeft, MagnifyingGlass } from 'phosphor-react'
+import { ArrowLeft, CheckCircle, MagnifyingGlass } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { InvoiceCardRenderer } from '../invoice-card-renderer'
 import { Link } from 'react-router-dom'
@@ -48,6 +48,15 @@ const InvoiceViewer = () => {
         Cookies.set('enrollmentNumber', enrollmentNumber)
       }}
     >
+      {invoice?.status === 'PAID' ?
+        <td className='flex items-center justify-center pt-2'>
+          <CheckCircle
+            size={24}
+            weight='duotone'
+            color='#5ddd0d'
+          />
+        </td> : <td className='flex items-center justify-center pt-2'>---</td>
+      }
       <Property property={invoice?.id} />
       <Property property={student?.enrollment?.students?.fullName} />
       <Property property={student?.enrollment?.id} />
@@ -63,7 +72,6 @@ const InvoiceViewer = () => {
       <Property property={`${invoice?.totalAmount} Kz`} />
     </tr>
   )
-
 
   return (
     <section

@@ -10,16 +10,18 @@ import { ProgressBar } from '../progress-bar'
 import { DefaultModal } from '../modals/default'
 import { InvoiceCardRenderer } from '../invoice-card-renderer'
 import Cookies from 'js-cookie'
+import { FormToAddValuesToTheTransaction } from '../form-to-add-values/form'
 
 const PaymentsPage = () => {
   const { mutate: useCheckEnrollment, data: student, isLoading:
     lookingForStudent, error: studentNotFound }: any = UseCheckEnrollment()
-  const { mutate: useApprovePayment, isLoading } = UseApprovePayment()
+  const { mutate: useApprovePayment, isLoading, isSuccess } = UseApprovePayment()
   const enrollmentId: any = Number(Cookies.get('enrollmentNumber'))
 
   const [enrollmentNumber, setEnrollmentNumber] = useState<string>('')
-  const [showModal, setShowModal] = useState<boolean>(false)
-  const [invoiceId, setInvoiceId] = useState<number>(1000)
+  const [showModal, setShowModal] = useState<number>(100)
+  const [invoiceId, setInvoiceId] = useState<number>(10000)
+  const [paymentId, setPaymentId] = useState<number>(10000)
 
   const fetchStudent = () => {
     const params = new URLSearchParams({
@@ -39,6 +41,13 @@ const PaymentsPage = () => {
       setEnrollmentNumber(enrollmentId)
     }
   }, [])
+
+  useEffect(() => {
+    if (isSuccess) {
+      Cookies.set('receiptNumber', '')
+      Cookies.set('enrollmentNumber', '')
+    }
+  }, [isSuccess])
 
   const RenderPaymentCard = (payment: any) => (
     <div key={payment.id} className='flex flex-col gap-4 rounded-lg border border-[#dbdbdbca] p-4 w-full relative'>
@@ -66,11 +75,11 @@ const PaymentsPage = () => {
       <div className="flex flex-col gap-2 items-end w-full">
         <button onClick={() => {
           setInvoiceId(payment?.invoiceId)
-          setShowModal(true)
+          setShowModal(1)
         }} className="p-2 rounded-lg cursor-pointer hover:bg-slate-200 border border-[#eaecec] w-full font-semibold">
           Exibir fatura
         </button>
-        {payment?.status !== 'PAID' && (payment?.invoiceId !== invoiceId) &&
+        {payment?.status !== 'PAID' && (payment?.invoiceId !== invoiceId) ?
           <Button
             type='button'
             content='Aprovar pagamento'
@@ -79,8 +88,13 @@ const PaymentsPage = () => {
               useApprovePayment({ paymentId: payment?.id, employeeId: payment?.employeeId })
             }}
             isLoading={isLoading}
-          />}
-
+          /> : <button onClick={() => {
+            setPaymentId(payment?.id)
+            setShowModal(2)
+          }} className="p-2 rounded-lg cursor-pointer hover:bg-green-100 border border-[#eaecec] w-full font-semibold bg-green-200">
+            Acrescentar Valores
+          </button>
+        }
       </div>
     </div>
   )
@@ -126,7 +140,7 @@ const PaymentsPage = () => {
           Buscando os pagamentos...
         </h1>
       }
-      {studentNotFound &&
+      {student && (studentNotFound || student?.enrollment?.Payment?.length === 0) &&
         <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px] w-full">
           Pagamentos não encontrado 😢
         </h1>
@@ -149,17 +163,17 @@ const PaymentsPage = () => {
       </div>
 
       <DefaultModal
-        display={showModal}
+        display={showModal !== 100}
         closeModal={() => {
-          setShowModal(false)
+          setShowModal(100)
           setInvoiceId(10000)
         }}
       >
-        {showModal &&
+        {showModal === 1 ?
           student && student?.enrollment?.Invoice?.map((invoice: any) => (
             invoice?.id === invoiceId &&
             <InvoiceCardRenderer key={invoice.id} invoice={invoice} student={student?.enrollment} />
-          ))
+          )) : showModal === 2 && <FormToAddValuesToTheTransaction enrollmentId={student?.enrollment?.id} paymentId={paymentId} />
         }
       </DefaultModal>
     </section>

@@ -7,7 +7,7 @@ import { useEffect, useReducer, useState } from 'react'
 import { ProgressBar } from '../progress-bar'
 
 import { OptionsModal } from '../modals/options-modal'
-import { initialValues } from './data'
+import { initialValues, LEVELS, MONTHS } from './data'
 import { reducer } from './reducer'
 import { actions } from './actions'
 import { SelectedArea } from '../selected-area'
@@ -16,13 +16,16 @@ import { UseRegisterInvoice } from '../../hooks/userRegisterInvoice'
 import { UseformatDate } from '../../hooks/useFormatDate'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { RadioButton } from '../radio-button'
+import { UseFetchItemsPrices } from '../../hooks/useFetchItemsPrices'
+import { Toast } from '../toast'
 
 const PAYMENT_TYPES = [
   { id: 0, paymentType: 'DECLARATION', content: 'Declaração' },
   { id: 1, paymentType: 'CERTIFICATE', content: 'Certificado' },
   { id: 2, paymentType: 'PASS', content: 'Passe de estudante' },
   { id: 3, paymentType: 'UNIFORM', content: 'Uniforme' },
-  { id: 4, paymentType: 'TUITION', content: 'Mensalidade' },
+  { id: 4, paymentType: 'TUITION', content: 'Propina' },
   { id: 5, paymentType: 'TUITION_PENALTY', content: 'Multa de propina' },
 ]
 
@@ -30,9 +33,14 @@ const Form = () => {
   const employeeId: any = Cookies.get('employeeNumber')
   const [state, dispatch] = useReducer(reducer, initialValues)
   const [items, setItems] = useState([{ description: '', amount: '' }]);
+
+  const [selectedMonths, setSelectedMonths] = useState<string[]>([])
+  const [monthIndex, setMonthIndex] = useState<any>()
   const redirectTo = useNavigate()
 
   const { mutate: useRegisterInvoice, isLoading: registeringTheInvoice, isSuccess } = UseRegisterInvoice()
+
+  const { data: itemsPrices }: any = UseFetchItemsPrices()
 
   const {
     register,
@@ -50,7 +58,7 @@ const Form = () => {
       type: '',
       dueDate: undefined,
       issueDate: undefined,
-      items: undefined,
+      items: [{ description: undefined, itemPriceId: undefined, qty: undefined, month: [] }],
       invoiceId: 0,
     },
   })
@@ -102,8 +110,40 @@ const Form = () => {
   };
 
   const addItem = () => {
-    setItems((prevItems) => [...prevItems, { description: '', amount: '' }]);
+    if (state?.paymentType === 'Propina') {
+      if (items.length === 0) {
+        setItems((prevItems) => [...prevItems, { description: '', amount: '' }]);
+      } else {
+        Toast({ message: 'Selecione os meses', theme: 'light', toastType: "warning" })
+      }
+    } else {
+      setItems((prevItems) => [...prevItems, { description: '', amount: '' }]);
+    }
   };
+
+  const toggleMonth = (currentMonth: string, index: any) => {
+    setSelectedMonths((prev) => {
+      const isSelected = prev.includes(currentMonth);
+      const updatedMonths = isSelected
+        ? prev.filter((month) => month !== currentMonth)
+        : [...prev, currentMonth];
+
+      setValue(`items.${index}.month`, updatedMonths, { shouldValidate: true });
+
+      return updatedMonths;
+    });
+  };
+
+  useEffect(() => {
+    setValue(`items.${monthIndex}.month`, selectedMonths, { shouldValidate: true });
+
+    if (state?.paymentType === 'Propina') {
+      setValue(`items.${monthIndex}.qty`, selectedMonths.length, { shouldValidate: true });
+    } else {
+      setValue(`items.${monthIndex}.qty`, 1, { shouldValidate: true });
+    }
+
+  }, [selectedMonths, state]);
 
   const onSubmit = (data: any) => {
     try {
@@ -131,23 +171,24 @@ const Form = () => {
             errorMessage={errors.type?.message}
             inputType="text"
             onClick={() => {
-              toggleModalState(3)
+              toggleModalState(400)
             }}
-            chevronState={state.chevronState === 3}
+            chevronState={state.chevronState === 400}
             placeholder={'Selecionar o tipo de pagamento'}
-            value={state.status}
+            value={state.paymentType}
             option
             {...register('type')}
           />
-          <OptionsModal modalState={state.modalState === 3}>
+          <OptionsModal modalState={state.modalState === 400}>
             {PAYMENT_TYPES.map(({ id, content, paymentType }) => (
               <SelectedArea
                 key={id}
                 area={content}
                 onClick={() => {
-                  toggleModalState(3)
+                  toggleModalState(400)
+                  setSelectedMonths([])
                   dispatch({
-                    type: actions.toggleStatus,
+                    type: actions.togglePaymentType,
                     payload: content,
                   })
                   setValue('type', paymentType, { shouldValidate: true })
@@ -156,44 +197,106 @@ const Form = () => {
             ))}
           </OptionsModal>
         </div>
-
+      </div>
+      <div className='flex gap-3 flex-col'>
+        <p className="text-[16px] font-medium text-[#2F2F2F]">Classe</p>
+        <div className="flex flex-wrap gap-3">
+          {LEVELS.map(({ id, level }) => (
+            <RadioButton
+              key={id}
+              value={id}
+              checked={state.level === id}
+              onClick={() => dispatch({ type: actions.toggleLevel, payload: id })}
+              label={level}
+              {...register('levelId')}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col gap-3">
         <p className="text-[16px] text-[#2F2F2F] uppercase font-semibold">Itens a serem pagos</p>
         <div className='w-full flex flex-col gap-5'>
           {items.map((_, index) => (
-            <div key={index} className="flex gap-6 sm:gap-3 justify-between flex-col sm:flex-row sm:items-end w-full">
+            <div key={index} className="flex gap-6 flex-col">
               <div className='flex gap-5 flex-col sm:flex-row w-full'>
-                <Input
-                  label="Item"
-                  inputType="text"
-                  placeholder="Insira o item"
-                  errorMessage={errors.items?.[index]?.description?.message}
-                  {...register(`items.${index}.description`)}
-                />
-                <Input
-                  label="Valor"
-                  inputType="text"
-                  placeholder="Insira o valor"
-                  errorMessage={errors.items?.[index]?.amount?.message}
-                  {...register(`items.${index}.amount`)}
-                />
-                <Input
-                  label="Quantidade"
-                  errorMessage={errors.items?.[index]?.qty?.message}
-                  inputType="number"
-                  placeholder="Insira a quantidade"
-                  {...register(`items.${index}.qty`)}
-                />
+                <div className="relative w-full">
+                  <Input
+                    label="Item"
+                    errorMessage={errors.items?.[index]?.description?.message}
+                    inputType="text"
+                    onClick={() => {
+                      toggleModalState(index)
+                    }}
+                    chevronState={state.chevronState === index}
+                    placeholder="Insira o item"
+                    option
+                    {...register(`items.${index}.description`)}
+                  />
+                  <OptionsModal modalState={state.modalState === index} maximumHeight={true}>
+                    {itemsPrices && itemsPrices?.map((item: any) => (
+                      <SelectedArea
+                        key={item?.id}
+                        area={item?.itemName}
+                        onClick={() => {
+                          toggleModalState(index)
+                          setValue(`items.${index}.itemPriceId`, item?.id, { shouldValidate: true })
+                          setValue(`items.${index}.description`, item?.itemName, { shouldValidate: true })
+                        }}
+                      />
+                    ))}
+                  </OptionsModal>
+                </div>
+                <div hidden>
+                  <Input
+                    label="Valor"
+                    inputType="text"
+                    placeholder="Insira o valor"
+                    errorMessage={errors.items?.[index]?.itemPriceId?.message}
+                    {...register(`items.${index}.itemPriceId`)}
+                  />
+                </div>
+
+                <div className={`w-full sm:w-fit ${state?.paymentType === 'Propina' ? 'pointer-events-none cursor-default' : 'pointer-events-auto cursor-text'}`}>
+                  <Input
+                    label="Quantidade"
+                    errorMessage={errors.items?.[index]?.qty?.message}
+                    inputType="number"
+                    placeholder="Insira a quantidade"
+                    hiddenErrorMessage
+                    {...register(`items.${index}.qty`)}
+                  />
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={() => handleRemoveItem(index)}
-                className="text-[12px] uppercase py-1 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc]"
-              >
-                <Trash size={18} />
-              </button>
+
+              <div className='flex w-full gap-4 items-end'>
+                {state?.paymentType === 'Propina' && <div className='flex w-full flex-col gap-2'>
+                  <h2>MESES</h2>
+                  <div className="grid grid-cols-2 xl:grid-cols-3 w-full">
+                    {MONTHS.map(({ id, name, content }) => (
+                      <div key={id} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedMonths.includes(name)}
+                          onChange={() => {
+                            setMonthIndex(index)
+                            toggleMonth(name, `items.${index}.month`);
+                          }}
+                          className="mr-2"
+                        />
+                        <span>{content}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveItem(index)}
+                  className="text-[12px] uppercase py-1 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc]"
+                >
+                  <Trash size={18} />
+                </button>
+              </div>
             </div>
           ))}
         </div>

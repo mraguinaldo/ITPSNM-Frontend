@@ -5,6 +5,7 @@ const actions = {
   changeLevel: 'changeLevel',
   changeCourse: 'changeCourse',
   changeEnrollmentId: 'changeEnrollmentId',
+  changeIdentityCardNumber: 'changeIdentityCardNumber',
 }
 
 export { actions }

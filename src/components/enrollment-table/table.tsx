@@ -48,7 +48,8 @@ const Students = ({ students }: IStudents) => {
       levelId: state.levelId,
       docsState: 'APPROVED',
       paymentState: 'APPROVED',
-      employeeId: Number(employeeNumber)
+      employeeId: Number(employeeNumber),
+      identityCardNumber: state?.identityCardNumber
     }
 
     if (formData) {
@@ -72,6 +73,10 @@ const Students = ({ students }: IStudents) => {
     dispatch({
       type: actions.changeCourse,
       payload: student?.courseId,
+    })
+    dispatch({
+      type: actions.changeIdentityCardNumber,
+      payload: student?.identityCardNumber,
     })
   }
 

@@ -22,33 +22,51 @@ export const schemaForm = yup.object().shape({
     })
     .min(1),
   type: yup.string().required('O tipo é obrigatório'),
-
   dueDate: yup.string()
     .required('A data de validade é obrigatório')
     .typeError('A data deve ser verdadeira'),
   issueDate: yup.string()
     .required('A data de emissão é obrigatório')
     .typeError('A data deve ser verdadeira'),
-
-  items: yup.array().of(
-    yup.object().shape({
-      description: yup.string().required('A descrição é obrigatória'),
-      qty: yup
-      .number()
-      .transform((value, originalValue) => {
-        return originalValue === '' ? undefined : value
-      })
-      .min(1).required('A quantidade é obrigatório'),
-      amount: yup
-        .number()
-        .required('O valor é obrigatório')
-        .transform((value, originalValue) => {
-          if (typeof originalValue === 'string') {
-            const parsedValue = originalValue.replace(',', '.');
-            return parsedValue === '' ? undefined : parseFloat(parsedValue);
-          }
-          return value;
-        })
+  levelId: yup
+    .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value
     })
-  )
+    .required('A classe é obrigatório'),
+  items: yup.array().of(
+      yup.object().shape({
+        description: yup.string().required('A descrição é obrigatória'),
+        qty: yup
+          .number()
+          .transform((value, originalValue) => (originalValue === '' ? undefined : value))
+          .min(0)
+          .required('A quantidade é obrigatória'),
+        itemPriceId: yup
+          .number()
+          .required('O valor é obrigatório')
+          .transform((value, originalValue) => {
+            if (typeof originalValue === 'string') {
+              const parsedValue = originalValue.replace(',', '.');
+              return parsedValue === '' ? undefined : parseFloat(parsedValue);
+            }
+            return value;
+          }),
+        month: yup
+          .array()
+          .of(
+            yup
+              .string()
+              .oneOf(
+                [
+                  "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", 
+                  "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+                ],
+                'Mês inválido'
+              )
+          )
+          .nullable() 
+          .notRequired() 
+      })
+    )
 })

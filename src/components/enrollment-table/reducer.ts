@@ -38,6 +38,12 @@ const reducer = (state: any, action: any) => {
         enrollmentId: action.payload,
       }
     }
+    case actions.changeIdentityCardNumber: {
+      return {
+        ...state,
+        identityCardNumber: action.payload,
+      }
+    }
     default: {
       return state
     }

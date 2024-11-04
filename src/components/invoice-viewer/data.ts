@@ -1,30 +1,34 @@
 const tableHeader = [
   {
     id: 0,
-    content: 'Nº da fatura',
+    content: '',
   },
   {
     id: 1,
-    content: 'Nome do estudante',
+    content: 'Nº da fatura',
   },
   {
     id: 2,
-    content: 'Número do estudante',
+    content: 'Nome do estudante',
   },
   {
     id: 3,
-    content: 'Funcionário',
+    content: 'Número do estudante',
   },
   {
     id: 4,
-    content: 'Tipo de pagamento',
+    content: 'Funcionário',
   },
   {
     id: 5,
-    content: 'Estado da fatura',
+    content: 'Tipo de pagamento',
   },
   {
     id: 6,
+    content: 'Estado da fatura',
+  },
+  {
+    id: 7,
     content: 'Quantia total',
   }
 ]

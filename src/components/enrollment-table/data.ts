@@ -53,6 +53,7 @@ const initialValues = {
   courseId: undefined,
   levelId: undefined,
   enrollmentId: undefined,
+  identityCardNumber: undefined
 }
 
 export { tableHeader, STUDENT_OPTIONS, initialValues }
