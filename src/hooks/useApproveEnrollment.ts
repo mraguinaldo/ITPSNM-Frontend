@@ -19,12 +19,17 @@ const UseApproveEnrollment = () => {
       queryClient.invalidateQueries(['enrollments'])
       queryClient.invalidateQueries(['enrollmentsAproved'])
     },
-    onError: () => {
-      Toast({
-        message: 'Erro ao aprovar a matrícula',
-        theme: 'colored',
-        toastType: 'error',
-      })
+    onError: (error: any) => {
+      if(error.response.data.message === 'The student has outstanding enrollment debts.'){
+        Toast({ message: 'O aluno tem dívidas de matrícula', theme: 'colored', toastType: 'error' })
+      }else{
+        Toast({
+          message: 'Erro ao aprovar a matrícula',
+          theme: 'colored',
+          toastType: 'error',
+        })
+      }
+      
     },
   })
 }

@@ -26,6 +26,7 @@ import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 import { reducer } from './reducer'
 import { actions } from './actions'
 import { UseApproveEnrollment } from '../../hooks/useApproveEnrollment'
+import Cookies from 'js-cookie'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -33,6 +34,7 @@ const Form = () => {
   const identityCardNumber = UseGetData('chosenStudent')
   const previousRoute = UseGetData('previousRoute')
   const [, setSearchParams] = useSearchParams()
+  const employeeNumber: any = Cookies.get('employeeNumber')
 
   const { data: courses } = UseFetchCourses()
   const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading: searchingEnrollment }: any = UseCheckEnrollment()
@@ -176,6 +178,8 @@ const Form = () => {
       levelId: enrollmentFound?.enrollment?.levelId,
       docsState: 'APPROVED',
       paymentState: 'APPROVED',
+      employeeId: Number(employeeNumber),
+      identityCardNumber: enrollmentFound?.enrollment?.identityCardNumber
     }
 
     if (formData) {

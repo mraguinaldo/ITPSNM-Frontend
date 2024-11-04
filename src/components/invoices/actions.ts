@@ -4,8 +4,9 @@ const actions = {
   toggleUserType: 'toggleUserType',
   changeInputType: 'changeInputType',
   reset: 'reset',
-  toggleStatus: 'toggleStatus',
+  togglePaymentType: 'togglePaymentType',
   displayInvoices: 'displayInvoices',
+  toggleLevel: 'toggleLevel'
 }
 
 export { actions }

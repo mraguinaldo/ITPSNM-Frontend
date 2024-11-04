@@ -5,7 +5,7 @@ const SelectedArea = ({ area, onClick, Icon, className }: IAreasActivity) => {
     <button
       onClick={onClick}
       type="button"
-      className={`${className}text-[16px] font-normal duration-300 hover:brightness-90 text-white flex flex-row gap-2`}
+      className={`${className}text-[16px] font-normal duration-300 hover:brightness-90 text-white flex flex-row gap-2 w-full text-start`}
     >
       {Icon && Icon}
       {area}

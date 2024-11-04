@@ -24,10 +24,10 @@ const reducer = (state: any, action: any) => {
         ...state,
         showPassword: payload,
       }
-    case actions.toggleStatus: {
+    case actions.togglePaymentType: {
       return{
         ...state,
-        status: payload
+        paymentType: payload
       }
     }
     case actions.displayInvoices: {
@@ -39,6 +39,11 @@ const reducer = (state: any, action: any) => {
     case actions.reset:
       return {
         initialValues,
+      }
+    case actions.toggleLevel:
+      return {
+        ...state,
+        level: payload,
       }
     default:
       return {
