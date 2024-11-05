@@ -36,6 +36,7 @@ const Form = () => {
 
   const [selectedMonths, setSelectedMonths] = useState<string[]>([])
   const [monthIndex, setMonthIndex] = useState<any>()
+  const [selectedMonth, setSelectedMonth] = useState<any>(null)
   const redirectTo = useNavigate()
 
   const { mutate: useRegisterInvoice, isLoading: registeringTheInvoice, isSuccess } = UseRegisterInvoice()
@@ -110,25 +111,15 @@ const Form = () => {
   };
 
   const addItem = () => {
-    if (state?.paymentType === 'Propina') {
-      if (items.length === 0) {
-        setItems((prevItems) => [...prevItems, { description: '', amount: '' }]);
-      } else {
-        Toast({ message: 'Selecione os meses', theme: 'light', toastType: "warning" })
-      }
-    } else {
-      setItems((prevItems) => [...prevItems, { description: '', amount: '' }]);
-    }
+    setItems((prevItems) => [...prevItems, { description: '', amount: '' }]);
   };
 
-  const toggleMonth = (currentMonth: string, index: any) => {
+  const toggleMonth = (currentMonth: string) => {
     setSelectedMonths((prev) => {
       const isSelected = prev.includes(currentMonth);
       const updatedMonths = isSelected
         ? prev.filter((month) => month !== currentMonth)
         : [...prev, currentMonth];
-
-      setValue(`items.${index}.month`, updatedMonths, { shouldValidate: true });
 
       return updatedMonths;
     });
@@ -240,8 +231,15 @@ const Form = () => {
                         area={item?.itemName}
                         onClick={() => {
                           toggleModalState(index)
-                          setValue(`items.${index}.itemPriceId`, item?.id, { shouldValidate: true })
-                          setValue(`items.${index}.description`, item?.itemName, { shouldValidate: true })
+                          if (selectedMonth === null && item?.itemName === 'Propina') {
+                            setSelectedMonth(index)
+                          }
+                          if (item?.itemName === 'Propina' && selectedMonth !== null) {
+                            Toast({ message: "Já existe um campo para propina", theme: "light", toastType: "warning" })
+                          } else {
+                            setValue(`items.${index}.itemPriceId`, item?.id, { shouldValidate: true })
+                            setValue(`items.${index}.description`, item?.itemName, { shouldValidate: true })
+                          }
                         }}
                       />
                     ))}
@@ -257,7 +255,7 @@ const Form = () => {
                   />
                 </div>
 
-                <div className={`w-full sm:w-fit ${state?.paymentType === 'Propina' ? 'pointer-events-none cursor-default' : 'pointer-events-auto cursor-text'}`}>
+                <div className={`w-full sm:w-fit ${selectedMonth === index ? 'pointer-events-none cursor-default' : 'pointer-events-auto cursor-text'}`}>
                   <Input
                     label="Quantidade"
                     errorMessage={errors.items?.[index]?.qty?.message}
@@ -270,7 +268,7 @@ const Form = () => {
               </div>
 
               <div className='flex w-full gap-4 items-end'>
-                {state?.paymentType === 'Propina' && <div className='flex w-full flex-col gap-2'>
+                {state?.paymentType === 'Propina' && selectedMonth === index && <div className='flex w-full flex-col gap-2'>
                   <h2>MESES</h2>
                   <div className="grid grid-cols-2 xl:grid-cols-3 w-full">
                     {MONTHS.map(({ id, name, content }) => (
@@ -280,7 +278,7 @@ const Form = () => {
                           checked={selectedMonths.includes(name)}
                           onChange={() => {
                             setMonthIndex(index)
-                            toggleMonth(name, `items.${index}.month`);
+                            toggleMonth(name);
                           }}
                           className="mr-2"
                         />
@@ -292,7 +290,7 @@ const Form = () => {
                 <button
                   type="button"
                   onClick={() => handleRemoveItem(index)}
-                  className="text-[12px] uppercase py-1 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc]"
+                  className="text-[12px] uppercase p-2 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc]"
                 >
                   <Trash size={18} />
                 </button>

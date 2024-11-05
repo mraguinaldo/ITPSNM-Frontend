@@ -16,13 +16,6 @@ export const schemaForm = yup.object().shape({
     })
     .required('O identificador do funcionário é obrigatório')
     .min(1),
-    paymentId: yup
-    .number()
-    .transform((value, originalValue) => {
-      return originalValue === '' ? undefined : value
-    })
-    .required('O número da fatura é obrigatório')
-    .min(1),
   amount: yup
     .number()
     .transform((value, originalValue) => {
