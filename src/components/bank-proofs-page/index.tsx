@@ -4,12 +4,15 @@ import { InputSearch } from '../inputs/search'
 import { UseFetchStudentBankProof } from '../../hooks/useFetchStudentBankProof'
 import { UseCopier } from '../../hooks/useCopier'
 import { Link } from 'react-router-dom'
+import { DefaultModal } from '../modals/default'
+import { FormToAddValuesToTheTransaction } from '../form-to-add-values/form'
 
 const BankProofsPage = () => {
   const { mutate: useFetchStudentBankProof, isLoading, data: transactions, error }: any = UseFetchStudentBankProof()
   const [enrollmentId, setEnrollmentId] = useState<string>('')
   const [searchType, setSearchType] = useState<string>('enrollmentId')
-
+  const [transactionNumber, setTransactionNumber] = useState<string>('')
+  const [showModal, setShowModal] = useState<boolean>(false)
 
   const handleFetchStudentBankProof = () => {
     useFetchStudentBankProof({ searchType, enrollmentId })
@@ -61,6 +64,12 @@ const BankProofsPage = () => {
           </h2>
         </div>
 
+        {!transaction.used && <button onClick={() => {
+          setTransactionNumber(transaction.transactionNumber)
+          setShowModal(true)
+        }} className="p-2 rounded-lg cursor-pointer hover:bg-green-100 border border-[#eaecec] w-full font-semibold bg-green-200">
+          Acrescentar Valores
+        </button>}
       </div>
     </div>
   )
@@ -130,6 +139,20 @@ const BankProofsPage = () => {
           transactions && !transactions?.transactions?.items ? RenderTransactionCard(transactions) : transactions?.transactions.items?.map(RenderTransactionCard)
         }
       </div>
+
+      <DefaultModal
+        display={showModal}
+        closeModal={() => {
+          setShowModal(false)
+        }}
+      >
+        {showModal &&
+          <FormToAddValuesToTheTransaction
+            enrollmentId={enrollmentId}
+            transactionNumber={transactionNumber}
+          />
+        }
+      </DefaultModal>
     </div >
   )
 }
