@@ -28,4 +28,11 @@ export const schemaForm = yup.object().shape({
     .required('Insira a quantia')
     .min(1),
   date: yup.date().required('A data é obrigatório').typeError('A data deve ser verdadeira'),
+  paymentId: yup
+    .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value
+    })
+    .required('O número do pagamento é obrigatório')
+    .min(1),
 })

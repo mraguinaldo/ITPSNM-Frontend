@@ -9,6 +9,8 @@ import { UseMakePayment } from "../../hooks/useMakePayment"
 import { ProgressBar } from "../progress-bar"
 import { useNavigate } from "react-router-dom"
 import { UsestoreData } from "../../hooks/useStoreData"
+import { UseTranslateMonth } from "../../hooks/use-translate-month"
+import { UseTranslateInvoiceTypes } from "../../hooks/use-translate-invoice-type"
 
 
 const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any }) => {
@@ -58,7 +60,7 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
   return (
     <div className="w-full flex gap-2 flex-col items-start overflow-y-scroll h-[580px] scroll-transparent">
       {makingThePayment && <ProgressBar />}
-      <div ref={currentInvoice} key={invoice.id} id={`fatura${invoice?.id}`} className='flex flex-col gap-4 rounded-lg border border-[#dbdbdbca] p-4 w-full relative h-full'>
+      <div ref={currentInvoice} key={invoice.id} id={`fatura${invoice?.id}`} className='flex flex-col gap-4 rounded-lg border border-[#dbdbdbca] p-4 w-full relative'>
         <div className='flex flex-col gap-3'>
           <Field field='Nome' value={student?.students?.fullName} />
 
@@ -78,27 +80,25 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
 
           <div className="flex justify-between flex-wrap gap-4">
             <Field field='Funcionário' value={invoice?.employee?.fullName} />
-            <Field field='Tipo de pagamento' value={invoice?.type === "DECLARATION" ? "Declaração" :
-              invoice?.type === "CERTIFICATE" ? "Certificado" :
-                invoice?.type === "PASS" ? "Passe de estudante" :
-                  invoice?.type === "UNIFORM" ? "Uniforme" :
-                    invoice?.type === "TUITION" ? "Mensalidade" :
-                      invoice?.type === "TUITION_PENALTY" ? "Multa de propina" :
-                        "---"} />
+            <Field field='Tipo de pagamento' value={UseTranslateInvoiceTypes(invoice?.type)} />
             <Field field='Estado da fatura' value={invoice?.status === 'PAID' ? 'Pago' : invoice?.status === 'PENDING' ? 'Pendente' : 'Recusado'} />
           </div>
 
           <div className='flex flex-col gap-2 px-1'>
-            <h2 className='uppercase font-semibold text-[14px]'>Itens pagos</h2>
+            <div className="flex justify-between items-center gap-2">
+              <h2 className='uppercase font-semibold text-[14px]'>Itens pagos</h2>
+              <h2 className='uppercase font-semibold text-[14px]'>Preços</h2>
+            </div>
             {invoice?.items?.map((item: any) => (
-              <div key={item?.id} className='flex gap-2'>
-                <Check size={14} className='mt-1' />
-                <div className="flex gap-2 flex-wrap justify-between">
-                  <h2>{item?.description}</h2>
-                  <p>{item?.amount} Kz</p>
+              <div key={item?.id} className="flex gap-2">
+                <Check size={14} className="mt-1" />
+                <div className="flex flex-wrap justify-between w-full">
+                  <div className="flex-1">{item?.description === 'Propina' ? UseTranslateMonth(item?.month) : item?.description}</div>
+                  <div className="flex-1 text-right">{item?.amount} Kz</div>
                 </div>
               </div>
             ))}
+
           </div>
 
           <h2 className='uppercase text-[14px] pt-8 border-b pb-6 w-full font-semibold'>
@@ -108,6 +108,13 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
           <h2 className='text-[14px] text-center w-full'>
             Data: {new Date(invoice.created_at).toLocaleDateString()}
           </h2>
+
+          {
+            invoice?.type === 'UNIFORM' &&
+            <h2 className='text-[12px] text-center w-full'>
+              Os uniformes possuem uma taxa de 14% a ser paga devido ao IVA.
+            </h2>
+          }
         </div>
       </div>
 

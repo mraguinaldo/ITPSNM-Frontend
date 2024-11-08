@@ -7,9 +7,9 @@ import { useEffect } from 'react'
 import { ProgressBar } from '../progress-bar'
 
 import Cookies from 'js-cookie'
-import { UseAddvaluesToTheTransaction } from '../../hooks/useSendTransaction copy'
+import { UseAddvaluesToTheTransaction } from '../../hooks/use-add-values-to-the-transaction'
 
-const FormToAddValuesToTheTransaction = ({ transactionNumber, enrollmentId }: { transactionNumber: any, enrollmentId: any }) => {
+const FormToAddValuesToTheTransaction = ({ enrollmentId, paymentId }: { enrollmentId: any, paymentId: any }) => {
   const employeeId: any = Cookies.get('employeeNumber')
 
   const { mutate: useAddvaluesToTheTransaction, isLoading: addingValues, isSuccess } = UseAddvaluesToTheTransaction()
@@ -48,14 +48,18 @@ const FormToAddValuesToTheTransaction = ({ transactionNumber, enrollmentId }: { 
     }
   }, [employeeId])
 
+
   useEffect(() => {
-    if (transactionNumber) {
-      setValue('transactionNumber', transactionNumber, { shouldValidate: true })
-    }
     if (enrollmentId) {
       setValue('enrollmentId', enrollmentId, { shouldValidate: true })
     }
-  }, [transactionNumber, enrollmentId])
+    if (employeeId) {
+      setValue('employeeId', employeeId, { shouldValidate: true })
+    }
+    if (paymentId) {
+      setValue('paymentId', paymentId, { shouldValidate: true })
+    }
+  }, [enrollmentId, employeeId, paymentId])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full px-4 py-3'}>
