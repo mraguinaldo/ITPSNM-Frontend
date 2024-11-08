@@ -10,6 +10,7 @@ import { ProgressBar } from '../progress-bar'
 import { DefaultModal } from '../modals/default'
 import { InvoiceCardRenderer } from '../invoice-card-renderer'
 import Cookies from 'js-cookie'
+import { FormToAddValuesToTheTransaction } from '../form-to-add-values/form'
 
 const PaymentsPage = () => {
   const { mutate: useCheckEnrollment, data: student, isLoading:
@@ -18,7 +19,8 @@ const PaymentsPage = () => {
   const enrollmentId: any = Number(Cookies.get('enrollmentNumber'))
 
   const [enrollmentNumber, setEnrollmentNumber] = useState<string>('')
-  const [showModal, setShowModal] = useState<boolean>(false)
+  const [paymentId, setPaymentId] = useState<number>()
+  const [showModal, setShowModal] = useState<number>(0)
   const [invoiceId, setInvoiceId] = useState<number>(10000)
 
   const fetchStudent = () => {
@@ -73,11 +75,19 @@ const PaymentsPage = () => {
       <div className="flex flex-col gap-2 items-end w-full">
         <button onClick={() => {
           setInvoiceId(payment?.invoiceId)
-          setShowModal(true)
+          setShowModal(1)
         }} className="p-2 rounded-lg cursor-pointer hover:bg-slate-200 border border-[#eaecec] w-full font-semibold">
           Exibir fatura
         </button>
-        {payment?.status !== 'PAID' && (payment?.invoiceId !== invoiceId) &&
+        {payment?.status !== 'PAID' &&
+          <button onClick={() => {
+            setShowModal(2)
+            setPaymentId(payment.id)
+          }} className="p-2 rounded-lg cursor-pointer hover:bg-green-100 border border-[#eaecec] w-full font-semibold bg-green-200">
+            Acrescentar Valores
+          </button>
+        }
+        {payment?.status !== 'PAID' &&
           <Button
             type='button'
             content='Aprovar pagamento'
@@ -155,17 +165,21 @@ const PaymentsPage = () => {
       </div>
 
       <DefaultModal
-        display={showModal}
+        display={showModal !== 0}
         closeModal={() => {
-          setShowModal(false)
+          setShowModal(0)
           setInvoiceId(10000)
         }}
       >
-        {showModal &&
+        {showModal === 1 ?
           student && student?.enrollment?.Invoice?.map((invoice: any) => (
             invoice?.id === invoiceId &&
             <InvoiceCardRenderer key={invoice.id} invoice={invoice} student={student?.enrollment} />
-          ))
+          )) : showModal === 2 &&
+          <FormToAddValuesToTheTransaction
+            enrollmentId={enrollmentId}
+            paymentId={paymentId}
+          />
         }
       </DefaultModal>
     </section>

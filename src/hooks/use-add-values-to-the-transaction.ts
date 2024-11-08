@@ -5,8 +5,7 @@ import { Toast } from '../components/toast'
 const UseAddvaluesToTheTransaction = () => {
   return useMutation({
     mutationFn: async ({ formData }: { formData: any }) => {
-      console.log(formData)
-      const response = await API.post(`/transactions?${formData?.transactionNumber}`, formData)
+      const response = await API.post(`/transactions`, formData)
 
       return response.data
     },

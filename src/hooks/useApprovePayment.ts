@@ -18,12 +18,20 @@ const UseApprovePayment = () => {
         toastType: 'success',
       })
     },
-    onError: () => {
-      Toast({
-        message: 'Erro ao aprovar o pagamento',
-        theme: 'colored',
-        toastType: 'error',
-      })
+    onError: (error: any) => {
+     
+       if(error.response.data.message === 'Insufficient funds.'){
+        Toast({ 
+          message: 'Saldo insuficiente', 
+          theme: 'colored', 
+          toastType: 'error' 
+        })}else{
+          Toast({
+            message: 'Erro ao aprovar o pagamento',
+            theme: 'colored',
+            toastType: 'error',
+          })
+        }
     },
   })
 }
