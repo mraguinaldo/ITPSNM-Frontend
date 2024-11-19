@@ -15,4 +15,23 @@ const initialValues = {
 }
 
 
-export { initialValues, roles }
+const PAYMENT_VIEW_OPTIONS = [
+  {
+    id: 0,
+    content: "Todos",
+    paymentType: 'ALL'
+  },
+  {
+    id: 1,
+    content: "PENDENTES",
+    paymentType: 'PENDING'
+  },
+  {
+    id: 2,
+    content: "APROVADOS",
+    paymentType: 'PAID'
+  },
+]
+
+
+export { initialValues, roles, PAYMENT_VIEW_OPTIONS }

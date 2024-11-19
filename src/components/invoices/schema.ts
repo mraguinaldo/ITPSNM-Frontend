@@ -33,7 +33,7 @@ export const schemaForm = yup.object().shape({
     .transform((value, originalValue) => {
       return originalValue === '' ? undefined : value
     })
-    .required('A classe é obrigatório'),
+    .required('A classe é obrigatória'),
   items: yup.array().of(
       yup.object().shape({
         description: yup.string().required('A descrição é obrigatória'),

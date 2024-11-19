@@ -45,6 +45,16 @@ const reducer = (state: any, action: any) => {
         ...state,
         level: payload,
       }
+      case actions.toggleMonthIndex:
+      return {
+        ...state,
+        monthIndex: payload,
+      }
+      case actions.selectField:
+      return {
+        ...state,
+        selectedField: payload,
+      }
     default:
       return {
         ...state,

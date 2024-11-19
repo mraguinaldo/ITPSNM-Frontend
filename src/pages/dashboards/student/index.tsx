@@ -3,8 +3,8 @@ import Cookies from 'js-cookie'
 import { UseCheckEnrollment } from '../../../hooks/useCheckEnrollment'
 import { Outlet } from 'react-router-dom'
 import { useAxiosInterceptor } from '../../../services/api'
-import { ProgressBar } from '../../../components/progress-bar'
 import { HeaderForAuthenticatedStudent } from '../../../components/headers/for-authenticated-student'
+import { ThreeDots } from '../../../components/three-dots'
 
 const StudentDashboard = () => {
   useAxiosInterceptor()
@@ -19,7 +19,7 @@ const StudentDashboard = () => {
     useCheckEnrollment(params)
   }, [])
 
-  if (!student) return <ProgressBar />
+  if (!student) return <ThreeDots />
 
   return (
     <main>

@@ -1,4 +1,4 @@
-import { Lock, Scroll, UserRectangle } from 'phosphor-react'
+import { CircleDashed, Lock, Scroll, UserRectangle } from 'phosphor-react'
 
 interface PropsTypeTableHeader {
   id: number
@@ -57,6 +57,12 @@ const STUDENT_OPTIONS = [
     Icon: UserRectangle,
     href: '/admin/painel/aluno-pagamentos',
   },
+  {
+    id: 4,
+    option: 'Confirmação',
+    Icon: CircleDashed,
+    href: '/admin/painel/aluno-pagamentos',
+  }
 ]
 
 const initialValues = {

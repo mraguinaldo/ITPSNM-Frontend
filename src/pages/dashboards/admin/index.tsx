@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import { UseGetEmployee } from '../../../hooks/useGetEmployee'
 import { useAxiosInterceptor } from '../../../services/api'
+import { ThreeDots } from '../../../components/three-dots'
 
 const AdminDashboard = () => {
   useAxiosInterceptor()
@@ -17,11 +18,7 @@ const AdminDashboard = () => {
   }, [])
 
   if (!employee) {
-    return (
-      <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-dvh">
-        ...
-      </h1>
-    )
+    return <ThreeDots />
   }
 
   return (

@@ -1,8 +1,8 @@
 import { Check, CircleNotch, DotsThree, X } from 'phosphor-react'
 import { Student } from '../student'
-import { initialValues, STUDENT_OPTIONS, tableHeader } from './data'
+import { initialValues, PERIODS, STUDENT_OPTIONS, tableHeader } from './data'
 import { ApplicationContexts } from '../contexts/applicationContexts'
-import { useContext, useEffect, useReducer } from 'react'
+import { useContext, useEffect, useReducer, useState } from 'react'
 import { StudentOptionsModal } from './modals/student-options'
 import { Link, useLocation } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
@@ -12,6 +12,9 @@ import { reducer } from './reducer'
 import { actions } from './action'
 import { UseApproveEnrollment } from '../../hooks/useApproveEnrollment'
 import Cookies from 'js-cookie'
+import { DefaultModal } from '../modals/default'
+import { Button } from '../button'
+import { Toast } from '../toast'
 
 interface IStudents {
   students: any
@@ -20,6 +23,7 @@ interface IStudents {
 const Students = ({ students }: IStudents) => {
   const { enrollmentFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
+  const [currentPeriod, setCurrentPeriod] = useState<string>('')
   const {
     mutate: useApproveEnrollment,
     isLoading: approvingTheEnrollment,
@@ -49,7 +53,8 @@ const Students = ({ students }: IStudents) => {
       docsState: 'APPROVED',
       paymentState: 'APPROVED',
       employeeId: Number(employeeNumber),
-      identityCardNumber: state?.identityCardNumber
+      identityCardNumber: state?.identityCardNumber,
+      period: currentPeriod
     }
 
     if (formData) {
@@ -59,7 +64,7 @@ const Students = ({ students }: IStudents) => {
 
   const openModalToApproveEnrollment = (student: any) => {
     dispatch({
-      type: actions.changeModalStateToApproveEnrollment,
+      type: actions.changeModalStatePeriod,
       payload: true,
     })
     dispatch({
@@ -80,9 +85,31 @@ const Students = ({ students }: IStudents) => {
     })
   }
 
+  const openModalToConfirmRegistration = () => {
+    if (currentPeriod === '') {
+      Toast({
+        message: 'Selecione o período',
+        theme: 'colored',
+        toastType: 'error'
+      })
+    } else {
+      dispatch({
+        type: actions.changeModalStateToApproveEnrollment,
+        payload: true,
+      })
+      dispatch({
+        type: actions.changeModalStatePeriod,
+        payload: false,
+      })
+    }
+  }
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (approvedEnrollment) handleStudentClick(state.selectedStudent)
+    if (approvedEnrollment) {
+      handleStudentClick(state.selectedStudent),
+        setCurrentPeriod('')
+    }
   }, [approvedEnrollment])
 
   const renderStudentRow = (student: any) => (
@@ -141,7 +168,7 @@ const Students = ({ students }: IStudents) => {
             <button
               type="button"
               key={id}
-              className="bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c]"
+              className={`only:bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c] ${option === 'Confirmar matrícula' && student?.docsState !== 'PENDING' ? 'hidden' : 'flex'}`}
               onClick={() => {
                 option === 'Confirmar matrícula' && openModalToApproveEnrollment(student)
               }}
@@ -157,6 +184,39 @@ const Students = ({ students }: IStudents) => {
 
   return (
     <div id="students" className="pt-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-20">
+      <DefaultModal
+        display={state?.modalStatusToConfirmPeriod}
+        closeModal={() =>
+          dispatch({
+            type: actions.changeModalStatePeriod,
+            payload: false,
+          })}
+      >
+        <div className='flex flex-col gap-4 p-4'>
+          <h2 className="text=[18px] md:text-[24px] font-medium">
+            Selecione o período
+          </h2>
+          <div className="flex gap-4 flex-wrap sm:flex-nowrap">
+            {PERIODS.map(({ id, content, period }) => (
+              <button
+                key={id}
+                type="button"
+                className={`text-[14px] uppercase border py-2 px-4 w-full rounded-md  border-[#dcdcdc] ${currentPeriod === period ? 'bg-[#bee7d4] hover:bg-[#bee7d4]' : 'border-[#dcdcdc00] hover:bg-[#dcdcdc52]'}`}
+                onClick={() => setCurrentPeriod(period)}
+              >
+                {content}
+              </button>
+            ))}
+          </div>
+          <Button
+            type='button'
+            isLoading={false}
+            content='Confirmar matrícula'
+            onClick={openModalToConfirmRegistration}
+          />
+        </div>
+
+      </DefaultModal>
       <QuestionModal
         title={'Deseja aprovar a matrícula?'}
         paragraph={'Após a aprovação da matrícula, a pessoa associada à matrícula se tornará estudante da instituição.'}

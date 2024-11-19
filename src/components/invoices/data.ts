@@ -5,7 +5,9 @@ const initialValues = {
   showPassword: false,
   paymentType: 'Selecionar o tipo de pagamento',
   invoicesState: false,
-  level: 1,
+  level: null,
+  monthIndex: null,
+  selectedField: null,
 }
 
 const ITEMS = [

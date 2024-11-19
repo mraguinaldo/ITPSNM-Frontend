@@ -15,7 +15,7 @@ const UseTranslateMonth = (monthInEnglish: string)=> {
     DECEMBER: "Dezembro"
   };
 
-  return monthsInPortuguese[monthInEnglish.toUpperCase()];
+  return monthsInPortuguese[monthInEnglish?.toUpperCase()];
 }
 
 export { UseTranslateMonth }

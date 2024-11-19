@@ -4,11 +4,13 @@ import { InputSearch } from '../inputs/search'
 import { UseFetchStudentBankProof } from '../../hooks/useFetchStudentBankProof'
 import { UseCopier } from '../../hooks/useCopier'
 import { Link } from 'react-router-dom'
+import { TRANSACTION_VIEW_OPTIONS } from './data'
 
 const BankProofsPage = () => {
   const { mutate: useFetchStudentBankProof, isLoading, data: transactions, error }: any = UseFetchStudentBankProof()
   const [enrollmentId, setEnrollmentId] = useState<string>('')
   const [searchType, setSearchType] = useState<string>('enrollmentId')
+  const [currentTransactionType, setCurrentTransactionType] = useState<string>('ALL')
 
   const handleFetchStudentBankProof = () => {
     useFetchStudentBankProof({ searchType, enrollmentId })
@@ -20,9 +22,12 @@ const BankProofsPage = () => {
     }
   }
 
+  let transactionsUsed = transactions?.transactions?.items.filter((transaction: any) => transaction?.used === true)
+
+  let transactionsValid = transactions?.transactions?.items.filter((transaction: any) => transaction?.used === false)
 
   const RenderTransactionCard = (transaction: any) => (
-    <div key={transaction.id}>
+    <div key={transaction.id} className={`${currentTransactionType === 'ALL' ? 'flex' : currentTransactionType === 'USED' && transaction?.used ? 'flex' : currentTransactionType === 'VALID' && !transaction?.used ? 'flex' : 'hidden'}`}>
       <div className='flex flex-col gap-2 rounded-lg border-[2px] border-dashed border-[#dbdbdbca] p-4 w-full h-full'>
         <div className='flex justify-between items-center gap-4'>
           <h2 className='font-semibold uppercase'>Quantia: {transaction.amount}</h2>
@@ -82,7 +87,7 @@ const BankProofsPage = () => {
           <button
             type="button"
             className={`text-[12px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${searchType === 'enrollmentId' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
-            onClick={() => setSearchType('enrollmentId')}
+            onClick={() => { setSearchType('enrollmentId'), setCurrentTransactionType('ALL') }}
           >
             Nº de inscrição
           </button>
@@ -90,7 +95,7 @@ const BankProofsPage = () => {
             type="button"
             className={`text-[12px] uppercase border py-2 px-4 rounded-3xl  hover:bg-[#dcdcdc52] 
               ${searchType !== 'enrollmentId' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
-            onClick={() => setSearchType('transactionNumber')}
+            onClick={() => { setSearchType('transactionNumber'), setCurrentTransactionType('ALL') }}
           >
             Nº da transação
           </button>
@@ -112,6 +117,22 @@ const BankProofsPage = () => {
           onChange={(e: any) => setEnrollmentId(e.target.value)}
         />
       </div>
+      {transactions && <div className="flex gap-4 flex-wrap">
+        {
+          TRANSACTION_VIEW_OPTIONS.map(({ id, content, transactionType }) => (
+            <button
+              key={id}
+              type="button"
+              className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${currentTransactionType === transactionType ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}
+              ${searchType === 'transactionNumber' ? 'hidden' : 'flex'}
+              `}
+              onClick={() => setCurrentTransactionType(transactionType)}
+            >
+              {content} ( {transactionType === 'ALL' ? transactions?.transactions?.items?.length : transactionType === 'USED' ? transactionsUsed?.length : transactionsValid?.length} )
+            </button>
+          ))
+        }
+      </div>}
 
       {isLoading &&
         <h1 className="text-[24px] md:text-[32px] font-semibold w-full justify-center flex items-center h-[248px]">

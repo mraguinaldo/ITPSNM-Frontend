@@ -50,10 +50,29 @@ const initialValues = {
   selectedStudent: '',
   studentStatus: '',
   modalStatusToConfirmEnrollment: false,
+  modalStatusToConfirmPeriod: false,
   courseId: undefined,
   levelId: undefined,
   enrollmentId: undefined,
   identityCardNumber: undefined
 }
 
-export { tableHeader, STUDENT_OPTIONS, initialValues }
+const PERIODS = [
+  {
+    id: 0,
+    content: "Manhã",
+    period: "MORNING"
+  } ,
+  {
+    id: 1,
+    content: "Tarde",
+    period: "AFTERNOON"
+  },
+  // {
+  //   id: 2,
+  //   content: "Noite",
+  //   period: "EVENING"
+  // }  
+]
+
+export { tableHeader, STUDENT_OPTIONS, initialValues, PERIODS }
