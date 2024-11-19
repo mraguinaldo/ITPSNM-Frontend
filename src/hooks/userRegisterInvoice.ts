@@ -9,8 +9,7 @@ const UseRegisterInvoice = () => {
 
       return response.data
     },
-    onSuccess: (data: any)=>{
-      console.log(data)
+    onSuccess: ()=>{
       Toast({ message: 'Fatura cadastrada com sucesso', theme: 'light', toastType: 'success' })
     },
     onError: (error: any)=> {

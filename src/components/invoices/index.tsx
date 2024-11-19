@@ -16,7 +16,7 @@ const InvoicesPage = () => {
       </Link>
       <div className='flex gap-3 flex-col sm:flex-row justify-between items-center'>
         <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">
-          Pagamentos
+          Gerar faturas
         </h1>
         <div className='flex justify-between items-center gap-4 pb-4'>
           <Link

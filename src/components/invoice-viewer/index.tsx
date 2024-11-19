@@ -7,8 +7,9 @@ import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { Property } from './property'
 import { HeadLine } from './headline'
-import { tableHeader } from './data'
+import { INVOICE_VIEW_OPTIONS, tableHeader } from './data'
 import { DefaultModal } from '../modals/default'
+import { UseTranslateInvoiceTypes } from '../../hooks/use-translate-invoice-type'
 
 const InvoiceViewer = () => {
   const { mutate: useCheckEnrollment, data: student, isLoading:
@@ -18,6 +19,10 @@ const InvoiceViewer = () => {
   const [enrollmentNumber, setEnrollmentNumber] = useState<string>('')
   const [showModal, setShowModal] = useState<boolean>(false)
   const [invoiceId, setInvoiceId] = useState<number>(1000)
+  const [currentInvoiceType, setCurrentInvoiceType] = useState<string>('PENDING')
+
+  let approvedInvoices = student?.enrollment?.Invoice.filter((invoice: any) => invoice?.status === "PAID")
+  let pendingInvoices = student?.enrollment?.Invoice?.filter((invoice: any) => invoice?.status === "PENDING")
 
   const fetchStudent = () => {
     const params = new URLSearchParams({
@@ -38,10 +43,11 @@ const InvoiceViewer = () => {
     }
   }, [])
 
+
   const renderRows = (invoice: any) => (
-    <tr
+    invoice.status === currentInvoiceType && <tr
       key={invoice?.id}
-      className="hover:bg-[#ebebeb97] cursor-pointer"
+      className='hover:bg-[#ebebeb97] cursor-pointer'
       onClick={() => {
         setInvoiceId(invoice?.id)
         setShowModal(true)
@@ -61,13 +67,7 @@ const InvoiceViewer = () => {
       <Property property={student?.enrollment?.students?.fullName} />
       <Property property={student?.enrollment?.id} />
       <Property property={invoice?.employee?.fullName} />
-      <Property property={invoice?.type === "DECLARATION" ? "Declaração" :
-        invoice?.type === "CERTIFICATE" ? "Certificado" :
-          invoice?.type === "PASS" ? "Passe de estudante" :
-            invoice?.type === "UNIFORM" ? "Uniforme" :
-              invoice?.type === "TUITION" ? "Mensalidade" :
-                invoice?.type === "TUITION_PENALTY" ? "Multa de propina" :
-                  "---"} />
+      <Property property={UseTranslateInvoiceTypes(invoice?.type)} />
       <Property property={invoice?.status === 'PAID' ? 'Pago' : invoice?.status === 'PENDING' ? 'Pendente' : 'Recusado'} />
       <Property property={`${invoice?.totalAmount} Kz`} />
     </tr>
@@ -125,6 +125,19 @@ const InvoiceViewer = () => {
               </span>
             </h1>
           </div>
+        }
+        {student && <div className="flex gap-4 flex-wrap">
+          {INVOICE_VIEW_OPTIONS.map(({ id, content, invoiceType }) => (
+            <button
+              key={id}
+              type="button"
+              className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${currentInvoiceType === invoiceType ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+              onClick={() => setCurrentInvoiceType(invoiceType)}
+            >
+              {content} ( {invoiceType === 'ALL' ? student?.enrollment?.Invoice?.length : invoiceType === 'PENDING' ? pendingInvoices?.length : approvedInvoices?.length} )
+            </button>
+          ))}
+        </div>
         }
         <div
           className='flex flex-row pt-3 w-full overflow-x-scroll scroll-transparent'

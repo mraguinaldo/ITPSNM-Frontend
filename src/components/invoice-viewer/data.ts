@@ -33,4 +33,17 @@ const tableHeader = [
   }
 ]
 
-export { tableHeader}
+const INVOICE_VIEW_OPTIONS = [
+  {
+    id: 1,
+    content: "PENDENTES",
+    invoiceType: 'PENDING'
+  },
+  {
+    id: 2,
+    content: "APROVADAS",
+    invoiceType: 'PAID'
+  },
+]
+
+export { tableHeader, INVOICE_VIEW_OPTIONS }

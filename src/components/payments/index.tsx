@@ -11,6 +11,7 @@ import { DefaultModal } from '../modals/default'
 import { InvoiceCardRenderer } from '../invoice-card-renderer'
 import Cookies from 'js-cookie'
 import { FormToAddValuesToTheTransaction } from '../form-to-add-values/form'
+import { PAYMENT_VIEW_OPTIONS } from './data'
 
 const PaymentsPage = () => {
   const { mutate: useCheckEnrollment, data: student, isLoading:
@@ -19,9 +20,14 @@ const PaymentsPage = () => {
   const enrollmentId: any = Number(Cookies.get('enrollmentNumber'))
 
   const [enrollmentNumber, setEnrollmentNumber] = useState<string>('')
+  const [currentPaymentType, setCurrentPaymentType] = useState<string>('ALL')
   const [paymentId, setPaymentId] = useState<number>()
   const [showModal, setShowModal] = useState<number>(0)
   const [invoiceId, setInvoiceId] = useState<number>(10000)
+
+
+  let approvedPayments = student?.enrollment?.Payment?.filter((payment: any) => payment?.status === "PAID")
+  let pendingPayments = student?.enrollment?.Payment?.filter((payment: any) => payment?.status === "PENDING")
 
   const fetchStudent = () => {
     const params = new URLSearchParams({
@@ -46,11 +52,12 @@ const PaymentsPage = () => {
     if (isSuccess) {
       Cookies.set('receiptNumber', '')
       Cookies.set('enrollmentNumber', '')
+      fetchStudent()
     }
   }, [isSuccess])
 
   const RenderPaymentCard = (payment: any) => (
-    <div key={payment.id} className='flex flex-col gap-4 rounded-lg border border-[#dbdbdbca] p-4 w-full relative'>
+    <div key={payment.id} className={`flex-col gap-4 rounded-lg border border-[#dbdbdbca] p-4 w-full relative ${currentPaymentType === 'ALL' ? 'flex' : currentPaymentType === payment?.status ? 'flex' : 'hidden'}`}>
       <div className='flex flex-col gap-3'>
         {payment?.status === 'PAID' &&
           <CheckCircle
@@ -157,6 +164,20 @@ const PaymentsPage = () => {
               {student?.enrollment?.students?.fullName}
             </span>
           </h1>}
+        {student && <div className="flex gap-4 flex-wrap">
+          {
+            PAYMENT_VIEW_OPTIONS.map(({ id, content, paymentType }) => (
+              <button
+                key={id}
+                type="button"
+                className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${currentPaymentType === paymentType ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+                onClick={() => setCurrentPaymentType(paymentType)}
+              >
+                {content} ( {paymentType === 'ALL' ? student?.enrollment?.Payment?.length : paymentType === 'PENDING' ? pendingPayments?.length : approvedPayments?.length} )
+              </button>
+            ))
+          }
+        </div>}
         <div className='grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'>
           {
             student && student?.enrollment?.Payment?.map(RenderPaymentCard)
@@ -177,7 +198,7 @@ const PaymentsPage = () => {
             <InvoiceCardRenderer key={invoice.id} invoice={invoice} student={student?.enrollment} />
           )) : showModal === 2 &&
           <FormToAddValuesToTheTransaction
-            enrollmentId={enrollmentId}
+            enrollmentId={enrollmentNumber}
             paymentId={paymentId}
           />
         }

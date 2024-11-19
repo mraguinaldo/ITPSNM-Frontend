@@ -6,7 +6,9 @@ const actions = {
   reset: 'reset',
   togglePaymentType: 'togglePaymentType',
   displayInvoices: 'displayInvoices',
-  toggleLevel: 'toggleLevel'
+  toggleLevel: 'toggleLevel',
+  toggleMonthIndex: 'toggleMonthIndex',
+  selectField: 'selectMonth'
 }
 
 export { actions }

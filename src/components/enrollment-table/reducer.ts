@@ -20,6 +20,12 @@ const reducer = (state: any, action: any) => {
         modalStatusToConfirmEnrollment: action.payload,
       }
     }
+    case actions.changeModalStatePeriod: {
+      return {
+        ...state,
+        modalStatusToConfirmPeriod: action.payload,
+      }
+    }
     case actions.changeCourse: {
       return {
         ...state,

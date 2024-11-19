@@ -15,13 +15,13 @@ const UseMakePayment = () => {
     onError:(error: any) => {
       if(error.response.data.message === 'Transaction was used.'){
         Toast({ 
-          message: 'A Transação já foi usada...', 
+          message: 'Este comprovativo já foi usado...', 
           theme: 'colored', 
           toastType: 'error' 
         })
       }else if(error.response.data.message === 'Transaction not found.'){
         Toast({ 
-          message: 'Transação não encontrada...', 
+          message: 'Comprovativo não encontrado...', 
           theme: 'colored', 
           toastType: 'error'
         })

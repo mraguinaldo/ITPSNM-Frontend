@@ -10,7 +10,6 @@ import { ProgressBar } from "../progress-bar"
 import { useNavigate } from "react-router-dom"
 import { UsestoreData } from "../../hooks/useStoreData"
 import { UseTranslateMonth } from "../../hooks/use-translate-month"
-import { UseTranslateInvoiceTypes } from "../../hooks/use-translate-invoice-type"
 
 
 const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any }) => {
@@ -20,12 +19,13 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
   const receiptNumber: any = Cookies.get('receiptNumber')
   const redirectTo = useNavigate()
 
+  console.log(invoice)
+
   const [enrollmentId, setEnrollmentId] = useState<string>('')
   const [transactionNumber, setTransactionNumber] = useState<string>('')
 
   const currentInvoice = useRef<HTMLDivElement>(null);
   const printInvoice: any = useReactToPrint({ contentRef: currentInvoice });
-
 
   const makePayment = (invoiceId: any) => {
     const formData = {
@@ -80,7 +80,6 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
 
           <div className="flex justify-between flex-wrap gap-4">
             <Field field='Funcionário' value={invoice?.employee?.fullName} />
-            <Field field='Tipo de pagamento' value={UseTranslateInvoiceTypes(invoice?.type)} />
             <Field field='Estado da fatura' value={invoice?.status === 'PAID' ? 'Pago' : invoice?.status === 'PENDING' ? 'Pendente' : 'Recusado'} />
           </div>
 
@@ -94,7 +93,7 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
                 <Check size={14} className="mt-1" />
                 <div className="flex flex-wrap justify-between w-full">
                   <div className="flex-1">{item?.description === 'Propina' ? UseTranslateMonth(item?.month) : item?.description}</div>
-                  <div className="flex-1 text-right">{item?.amount} Kz</div>
+                  <div className="flex-1 text-right">{item?.total_amount} Kz</div>
                 </div>
               </div>
             ))}

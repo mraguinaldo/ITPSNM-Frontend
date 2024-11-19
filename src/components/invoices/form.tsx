@@ -35,8 +35,6 @@ const Form = () => {
   const [items, setItems] = useState([{ description: '', amount: '' }]);
 
   const [selectedMonths, setSelectedMonths] = useState<string[]>([])
-  const [monthIndex, setMonthIndex] = useState<any>()
-  const [selectedMonth, setSelectedMonth] = useState<any>(null)
   const redirectTo = useNavigate()
 
   const { mutate: useRegisterInvoice, isLoading: registeringTheInvoice, isSuccess } = UseRegisterInvoice()
@@ -57,6 +55,7 @@ const Form = () => {
       employeeId: undefined,
       enrollmentId: undefined,
       type: '',
+      levelId: undefined,
       dueDate: undefined,
       issueDate: undefined,
       items: [{ description: undefined, itemPriceId: undefined, qty: undefined, month: [] }],
@@ -97,6 +96,12 @@ const Form = () => {
     if (enrollmentNumber) setValue('enrollmentId', enrollmentNumber, { shouldValidate: true });
   }, []);
 
+  const resetOptionsForMonths = () => {
+    dispatch({ type: actions.toggleMonthIndex, payload: null })
+    dispatch({ type: actions.selectField, payload: null })
+    setSelectedMonths([])
+  }
+
   const handleRemoveItem = (currentItem: any) => {
     const currentItems: any = getValues('items');
 
@@ -108,6 +113,8 @@ const Form = () => {
 
     setValue('items', updatedItems);
     setItems(updatedItems);
+
+    if (setSelectedMonths.length === 1) resetOptionsForMonths()
   };
 
   const addItem = () => {
@@ -126,12 +133,12 @@ const Form = () => {
   };
 
   useEffect(() => {
-    setValue(`items.${monthIndex}.month`, selectedMonths, { shouldValidate: true });
+    setValue(`items.${state?.monthIndex}.month`, selectedMonths, { shouldValidate: true });
 
     if (state?.paymentType === 'Propina') {
-      setValue(`items.${monthIndex}.qty`, selectedMonths.length, { shouldValidate: true });
+      setValue(`items.${state?.monthIndex}.qty`, selectedMonths.length, { shouldValidate: true });
     } else {
-      setValue(`items.${monthIndex}.qty`, 1, { shouldValidate: true });
+      setValue(`items.${state?.monthIndex}.qty`, 1, { shouldValidate: true });
     }
 
   }, [selectedMonths, state]);
@@ -189,7 +196,7 @@ const Form = () => {
           </OptionsModal>
         </div>
       </div>
-      <div className='flex gap-3 flex-col'>
+      <div className='flex gap-3 flex-col relative mb-3'>
         <p className="text-[16px] font-medium text-[#2F2F2F]">Classe</p>
         <div className="flex flex-wrap gap-3">
           {LEVELS.map(({ id, level }) => (
@@ -197,12 +204,13 @@ const Form = () => {
               key={id}
               value={id}
               checked={state.level === id}
-              onClick={() => dispatch({ type: actions.toggleLevel, payload: id })}
+              onClick={() => { dispatch({ type: actions.toggleLevel, payload: id }), setValue('levelId', id, { shouldValidate: true }) }}
               label={level}
               {...register('levelId')}
             />
           ))}
         </div>
+        <span className='text-[12px] sm:text-[14px] text-[#FB7373] absolute bottom-[-28px] font-medium'>{errors.levelId?.message}</span>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -231,10 +239,10 @@ const Form = () => {
                         area={item?.itemName}
                         onClick={() => {
                           toggleModalState(index)
-                          if (selectedMonth === null && item?.itemName === 'Propina') {
-                            setSelectedMonth(index)
+                          if (state?.selectedField === null && item?.itemName === 'Propina') {
+                            dispatch({ type: actions.selectField, payload: index })
                           }
-                          if (item?.itemName === 'Propina' && selectedMonth !== null) {
+                          if (item?.itemName === 'Propina' && state?.selectedField !== null) {
                             Toast({ message: "Já existe um campo para propina", theme: "light", toastType: "warning" })
                           } else {
                             setValue(`items.${index}.itemPriceId`, item?.id, { shouldValidate: true })
@@ -255,7 +263,7 @@ const Form = () => {
                   />
                 </div>
 
-                <div className={`w-full sm:w-fit ${selectedMonth === index ? 'pointer-events-none cursor-default' : 'pointer-events-auto cursor-text'}`}>
+                <div className={`w-full sm:w-fit ${state?.selectedMonth === index ? 'pointer-events-none cursor-default' : 'pointer-events-auto cursor-text'}`}>
                   <Input
                     label="Quantidade"
                     errorMessage={errors.items?.[index]?.qty?.message}
@@ -268,7 +276,7 @@ const Form = () => {
               </div>
 
               <div className='flex w-full gap-4 items-end'>
-                {state?.paymentType === 'Propina' && selectedMonth === index && <div className='flex w-full flex-col gap-2'>
+                {state?.selectedField === index && <div className='flex w-full flex-col gap-2'>
                   <h2>MESES</h2>
                   <div className="grid grid-cols-2 xl:grid-cols-3 w-full">
                     {MONTHS.map(({ id, name, content }) => (
@@ -277,7 +285,7 @@ const Form = () => {
                           type="checkbox"
                           checked={selectedMonths.includes(name)}
                           onChange={() => {
-                            setMonthIndex(index)
+                            dispatch({ type: actions.toggleMonthIndex, payload: index })
                             toggleMonth(name);
                           }}
                           className="mr-2"
@@ -307,7 +315,7 @@ const Form = () => {
       </div>
 
       <div className="pt-3 w-full">
-        <Button isLoading={registeringTheInvoice} type="submit" content="Efectuar pagamento" />
+        <Button isLoading={registeringTheInvoice} type="submit" content="Cadastrar fatura" />
       </div>
     </form>
   )
