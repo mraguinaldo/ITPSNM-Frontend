@@ -28,6 +28,12 @@ const UseCreateUser = () => {
           theme: 'colored',
           toastType: 'error',
         })
+      }else if (error.response.data.message === 'Employee not found.') {
+        Toast({
+          message: 'Funcionário não encontrado...',
+          theme: 'colored',
+          toastType: 'error',
+        })
       } else if (error.response.data.message === 'User Employee has in use.') {
         Toast({
           message: 'O número de inscrição já se encontra em uso!',

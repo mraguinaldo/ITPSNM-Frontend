@@ -13,7 +13,6 @@ import { actions } from './actions'
 
 import { ProgressBar } from '../../components/progress-bar'
 import { UseFetchProvinces } from '../../hooks/useFetchProvinces'
-import { UseFetchCounties } from '../../hooks/useFetchCounties'
 import { UseSendEmployeePersonalData } from '../../hooks/useSendEmployeePersonalData'
 import { Toast } from '../toast'
 import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
@@ -21,7 +20,6 @@ import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const { data: provinces } = UseFetchProvinces()
-  const { data: counties } = UseFetchCounties()
   const { mutate: sendEmployeePersonalData, isLoading, isSuccess } = UseSendEmployeePersonalData()
 
   const {
@@ -35,7 +33,7 @@ const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
     resolver: yupResolver(schemaForm),
     defaultValues: {
       fullName: '',
-      countyId: undefined,
+      county: '',
       dateOfBirth: undefined,
       gender: '',
       alternativePhone: undefined,
@@ -177,33 +175,15 @@ const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
             </OptionsModal>
           </div>
           <div className="relative w-full">
-            <Input
-              label="Município"
-              errorMessage={errors.countyId?.message}
-              inputType="text"
-              onClick={() => {
-                toggleModalState(1)
-              }}
-              chevronState={state.chevronState === 1}
-              placeholder={'Município'}
-              option
-              value={state.county}
-              {...register('countyId')}
-            />
-            <OptionsModal modalState={state.modalState === 1}>
-              {typeof counties === 'object' &&
-                counties?.map((county: any) => (
-                  <SelectedArea
-                    key={county.id}
-                    area={county.name}
-                    onClick={() => {
-                      toggleModalState(1)
-                      dispatch({ type: actions.addCounty, payload: county.name })
-                      setValue('countyId', county.id, { shouldValidate: true })
-                    }}
-                  />
-                ))}
-            </OptionsModal>
+            <div className="relative w-full">
+              <Input
+                label="Município"
+                errorMessage={errors.county?.message}
+                inputType="text"
+                placeholder="Município"
+                {...register('county')}
+              />
+            </div>
           </div>
         </div>
         <div className="relative w-full">

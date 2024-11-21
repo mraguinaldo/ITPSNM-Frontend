@@ -55,7 +55,7 @@ function Routes() {
           <Route index element={<StudentSideBar />} />
           <Route path="relatorio-de-notas" element={<Grades />} />
           <Route path="seguranca" element={<PasswordChangePage />} />
-          <Route path="aluno-pagamentos" element={<StudentPaymentsPage />} />
+          <Route path="aluno-faturas" element={<StudentPaymentsPage />} />
         </Route>
 
         <Route
