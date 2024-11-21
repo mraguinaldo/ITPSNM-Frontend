@@ -148,11 +148,11 @@ const Students = ({ students }: { students: any }) => {
                 key={id}
                 className="bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c]"
                 onClick={() => {
-                  option === 'Bloquear' &&
-                    handleBlockOptionClick(student.students.User.email, !student.students.User.isBlocked)
+                  option === 'Bloquear' && (
+                    handleBlockOptionClick(student.students.User.email, !student.students.User.isBlocked))
                   option === 'Confirmar estudante' &&
-                    dispatch({ type: actions.toggleEnrollmentNumber, payload: student?.id })
-                  dispatch({ type: actions.changeModalStateToChangeLevel, payload: true })
+                    (dispatch({ type: actions.toggleEnrollmentNumber, payload: student?.id }),
+                      dispatch({ type: actions.changeModalStateToChangeLevel, payload: true }))
                 }
                 }
               >
