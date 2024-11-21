@@ -53,22 +53,31 @@ const STUDENT_OPTIONS = [
   },
   {
     id: 3,
-    option: 'Pagamentos',
+    option: 'Faturas',
     Icon: UserRectangle,
-    href: '/admin/painel/aluno-pagamentos',
+    href: '/admin/painel/aluno-faturas',
   },
   {
     id: 4,
-    option: 'Confirmação',
+    option: 'Confirmar estudante',
     Icon: CircleDashed,
-    href: '/admin/painel/aluno-pagamentos',
   }
+]
+
+const LEVELS = [
+  { id: 1, level: '10ª Classe' },
+  { id: 2, level: '11ª Classe' },
+  { id: 3, level: '12ª Classe' },
+  { id: 4, level: '13ª Classe' },
 ]
 
 const initialValues = {
   selectedStudent: '',
   studentStatus: '',
   modalStateForBlocking: false,
+  modalStateToChangeLevel: false,
+  currentLevelId: 0,
+  enrollmentNumber: undefined
 }
 
-export { tableHeader, STUDENT_OPTIONS, initialValues }
+export { tableHeader, STUDENT_OPTIONS, initialValues, LEVELS }

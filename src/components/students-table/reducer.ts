@@ -19,6 +19,23 @@ const reducer = (state: any, action: any) => {
         ...state,
         modalStateForBlocking: action.payload,
       }
+    } case actions.changeModalStateToChangeLevel: {
+      return {
+        ...state,
+        modalStateToChangeLevel: action.payload,
+      }
+    }
+    case actions.toggleEnrollmentNumber: {
+      return {
+        ...state,
+        enrollmentNumber: action.payload,
+      }
+    }
+    case actions.changeLevelId: {
+      return {
+        ...state,
+        currentLevelId: action.payload,
+      }
     }
     default: {
       return state

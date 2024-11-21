@@ -12,7 +12,7 @@ const NAVIGATION_LINKS: INavigationLinks[] = [
     id: 2,
     content: 'Faturas',
     Icon: CurrencyDollar,
-    href: '/aluno/painel/faturas',
+    href: '/aluno/painel/aluno-faturas',
   },
   {
     id: 3,
