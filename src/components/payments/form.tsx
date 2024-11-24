@@ -12,7 +12,11 @@ import Cookies from 'js-cookie'
 const Form = () => {
   const employeeId: any = Cookies.get('employeeNumber')
 
-  const { mutate: useMakePayment, isLoading: makingThePayment, isSuccess } = UseMakePayment()
+  const {
+    isSuccess,
+    mutate: useMakePayment,
+    isLoading: makingThePayment
+  } = UseMakePayment()
 
   const {
     register,
@@ -43,15 +47,12 @@ const Form = () => {
   }, [isSuccess, reset])
 
   useEffect(() => {
-    if (employeeId) {
-      setValue('employeeId', employeeId, { shouldValidate: true })
-    }
+    if (employeeId) setValue('employeeId', employeeId, { shouldValidate: true })
   }, [employeeId])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={'flex gap-6 flex-col w-full'}>
       {makingThePayment && <ProgressBar />}
-
 
       <div className="flex flex-col gap-5 sm:gap-3 sm:flex-row">
         <Input

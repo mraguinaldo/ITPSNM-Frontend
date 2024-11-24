@@ -20,7 +20,11 @@ import { UseGettMaritalStatus } from '../../hooks/useGetMaritalStatus'
 const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const { data: provinces } = UseFetchProvinces()
-  const { mutate: sendEmployeePersonalData, isLoading, isSuccess } = UseSendEmployeePersonalData()
+  const {
+    isLoading,
+    isSuccess,
+    mutate: sendEmployeePersonalData,
+  } = UseSendEmployeePersonalData()
 
   const {
     register,
@@ -50,8 +54,14 @@ const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
   })
 
   const toggleModalState = (value: number) => {
-    dispatch({ type: actions.toggleModalState, payload: state.modalState !== value ? value : 100 })
-    dispatch({ type: actions.changeStateOfChevron, payload: state.modalState !== value ? value : 100 })
+    dispatch({
+      type: actions.toggleModalState,
+      payload: state.modalState !== value ? value : 100
+    })
+    dispatch({
+      type: actions.changeStateOfChevron,
+      payload: state.modalState !== value ? value : 100
+    })
   }
 
   const changeGender = (value: number, gender: string) => {
@@ -66,7 +76,11 @@ const FormToRegisterEmployee = ({ visible }: { visible: boolean }) => {
     if (isSuccess) {
       reset()
       dispatch({ type: actions.reset })
-      Toast({ message: 'Funcionário Cadastrado', theme: 'colored', toastType: 'success' })
+      Toast({
+        message: 'Funcionário Cadastrado',
+        theme: 'colored',
+        toastType: 'success'
+      })
     }
   }, [isSuccess, reset])
 

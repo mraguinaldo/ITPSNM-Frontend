@@ -18,4 +18,18 @@ interface IFinalAssessment {
   average: number
 }
 
-export type { IFinalAssessment, IProperty, IHeadLine, IHeader, ITableContent }
+interface IButtonOptionsForEmployee {
+  onClick: () => void,
+  content: string,
+  Icon: any
+}
+
+
+export type { 
+  IHeader, 
+  IProperty, 
+  IHeadLine, 
+  ITableContent, 
+  IFinalAssessment, 
+  IButtonOptionsForEmployee 
+}

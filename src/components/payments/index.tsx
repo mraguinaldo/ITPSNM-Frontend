@@ -1,51 +1,80 @@
 import { Link } from 'react-router-dom'
-import { ArrowLeft, CheckCircle, MagnifyingGlass } from 'phosphor-react'
+import { ArrowLeft, CheckCircle, DotsThree, MagnifyingGlass, X } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
-import { Button } from '../button'
 import { Field } from './field'
 import { UseApprovePayment } from '../../hooks/useApprovePayment'
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import { ProgressBar } from '../progress-bar'
 import { DefaultModal } from '../modals/default'
 import { InvoiceCardRenderer } from '../invoice-card-renderer'
 import Cookies from 'js-cookie'
 import { FormToAddValuesToTheTransaction } from '../form-to-add-values/form'
-import { PAYMENT_VIEW_OPTIONS } from './data'
+import { initialValues, PAYMENT_OPTIONS, PAYMENT_VIEW_OPTIONS } from './data'
+import { StudentOptionsModal } from '../students-table/modals/student-options'
+import { reducer } from './reducer'
+import { actions } from './actions'
+import { ButtonPaymentType } from './button-payment-type'
+import { TitleForProcessing } from '../title-for-processing'
 
 const PaymentsPage = () => {
-  const { mutate: useCheckEnrollment, data: student, isLoading:
-    lookingForStudent, error: studentNotFound }: any = UseCheckEnrollment()
+  const {
+    data: student,
+    error: studentNotFound,
+    mutate: useCheckEnrollment,
+    isLoading: lookingForStudent
+  }: any = UseCheckEnrollment()
+
   const { mutate: useApprovePayment, isLoading, isSuccess } = UseApprovePayment()
   const enrollmentId: any = Number(Cookies.get('enrollmentNumber'))
+  const [state, dispatch] = useReducer(reducer, initialValues)
 
-  const [enrollmentNumber, setEnrollmentNumber] = useState<string>('')
-  const [currentPaymentType, setCurrentPaymentType] = useState<string>('ALL')
-  const [paymentId, setPaymentId] = useState<number>()
-  const [showModal, setShowModal] = useState<number>(0)
-  const [invoiceId, setInvoiceId] = useState<number>(10000)
+  const seekPaymentsFromTheState = (state: "PAID" | "PENDING") => {
+    return student?.
+      enrollment?.
+      Payment?.
+      filter((
+        payment: any) => payment?.status === state
+      )
+  }
 
-
-  let approvedPayments = student?.enrollment?.Payment?.filter((payment: any) => payment?.status === "PAID")
-  let pendingPayments = student?.enrollment?.Payment?.filter((payment: any) => payment?.status === "PENDING")
+  let approvedPayments = seekPaymentsFromTheState('PAID')
+  let pendingPayments = seekPaymentsFromTheState('PENDING')
 
   const fetchStudent = () => {
     const params = new URLSearchParams({
-      [enrollmentNumber ? 'enrollmentNumber' : '']: enrollmentNumber || '',
+      [state?.enrollmentNumber ? 'enrollmentNumber' : '']: state?.enrollmentNumber || '',
     })
     useCheckEnrollment(params)
   }
 
-  const searchStudent = (e: any) => {
-    if (e.key === 'Enter') {
-      fetchStudent()
+  const searchStudent = (e: any) => e.key === 'Enter' && fetchStudent()
+
+  const openOptionsModal = (
+    option: string,
+    paymentId: number,
+    invoiceId: number,
+    employeeId: any) => {
+
+    switch (option) {
+      case 'Exibir fatura':
+        dispatch({ type: actions.toggleInvoice, payload: invoiceId });
+        dispatch({ type: actions.showStudentOptionsModal, payload: 1 });
+        break
+      case 'Acrescentar valores':
+        dispatch({ type: actions.showStudentOptionsModal, payload: 2 });
+        break
+      case 'Aprovar pagamento':
+        dispatch({ type: actions.toggleInvoice, payload: invoiceId });
+        useApprovePayment({ paymentId, employeeId });
+        break
     }
-  }
+
+    dispatch({ type: actions.choosePayment, payload: paymentId });
+  };
 
   useEffect(() => {
-    if (enrollmentId) {
-      setEnrollmentNumber(enrollmentId)
-    }
+    if (enrollmentId) dispatch({ type: actions.chooseStudent, payload: enrollmentId });
   }, [])
 
   useEffect(() => {
@@ -57,57 +86,86 @@ const PaymentsPage = () => {
   }, [isSuccess])
 
   const RenderPaymentCard = (payment: any) => (
-    <div key={payment.id} className={`flex-col gap-4 rounded-lg border border-[#dbdbdbca] p-4 w-full relative ${currentPaymentType === 'ALL' ? 'flex' : currentPaymentType === payment?.status ? 'flex' : 'hidden'}`}>
+    <div
+      key={payment.id}
+      className={`flex-col gap-4 border-y border-[#dbdbdbca] p-4 w-full duration-300 transition-all relative overflow-hidden
+      ${state?.currentPaymentType === 'ALL' ? 'flex' :
+          state?.currentPaymentType === payment?.status ? 'flex' : 'hidden'}
+        ${state?.paymentId === payment?.id ? 'max-h-[500px] bg-[#dbdbdb31]' : 'max-h-[58px] cursor-pointer hover:bg-[#dbdbdb5a] bg-transparent'}
+          `
+      }
+    >
       <div className='flex flex-col gap-3'>
+        <div className='absolute right-[16px] top-[14px] flex items-center justify-center h-[24px]'>
+          {state?.paymentId === payment?.id ?
+            <X
+              color="#161616"
+              size={18}
+              onClick={() =>
+                dispatch({ type: actions.choosePayment, payload: 0 })
+              }
+              className='cursor-pointer'
+            /> :
+            <DotsThree
+              color="#161616"
+              size={24}
+              onClick={() =>
+                dispatch({ type: actions.choosePayment, payload: payment?.id })
+              }
+              className='cursor-pointer'
+            />
+          }
+        </div>
+        <StudentOptionsModal isVisible={state?.paymentId === payment?.id}>
+          {PAYMENT_OPTIONS.map(({ Icon, id, option }) =>
+            <button
+              type="button"
+              key={id}
+              className={`bg-transparent text-[14px] gap-2 items-center text-[#1c1c1c] 
+                ${payment?.status !== 'PAID' ? 'flex' :
+                  payment?.status === 'PAID' && option === 'Exibir fatura' ? 'flex' : 'hidden'}`
+              }
+              onClick={() =>
+                openOptionsModal(
+                  option,
+                  payment.id,
+                  payment?.invoiceId,
+                  payment?.employeeId
+                )
+              }
+            >
+              <Icon size={14} color="#000" />
+              {option}
+            </button>
+          )}
+
+        </StudentOptionsModal>
         {payment?.status === 'PAID' &&
           <CheckCircle
             size={24}
             weight='duotone'
             color='#5ddd0d'
-            className='absolute right-[16px] top-[14px]'
+            className='absolute right-[46px] top-[14px]'
           />
         }
 
-        <Field field='Id do pagamento' value={payment?.id} />
-        <Field field='Funcionário' value={payment?.employeeId} />
-        <Field field='Número do comprovativo' value={payment?.transactionId} />
-        <Field field='Número da fatura' value={payment?.invoiceId} />
-        <Field field='Estado do pagamento' value={payment?.status === 'PAID' ? 'Pago' : payment?.status === 'PENDING' ? 'Pendente' : 'Recusado'} />
+        <div className='flex flex-col gap-3' onClick={() =>
+          dispatch({ type: actions.choosePayment, payload: payment?.id })
+        }>
+          <Field field='Id do pagamento' value={payment?.id} />
+          <Field field='Funcionário' value={payment?.employeeId} />
+          <Field field='Número do comprovativo' value={payment?.transactionId} />
+          <Field field='Número da fatura' value={payment?.invoiceId} />
+          <Field field='Estado do pagamento' value={payment?.status === 'PAID' ? 'Pago' : payment?.status === 'PENDING' ? 'Pendente' : 'Recusado'} />
 
-        <h2 className='uppercase text-[14px] border-b pb-2 w-full font-semibold'>
-          Quantia total: {payment?.totalAmount} Kz
-        </h2>
-      </div>
+          <h2 className='uppercase text-[14px] border-b pb-2 w-full font-semibold'>
+            Quantia total: {payment?.totalAmount} Kz
+          </h2>
+        </div>
 
-      <div className="flex flex-col gap-2 items-end w-full">
-        <button onClick={() => {
-          setInvoiceId(payment?.invoiceId)
-          setShowModal(1)
-        }} className="p-2 rounded-lg cursor-pointer hover:bg-slate-200 border border-[#eaecec] w-full font-semibold">
-          Exibir fatura
-        </button>
-        {payment?.status !== 'PAID' &&
-          <button onClick={() => {
-            setShowModal(2)
-            setPaymentId(payment.id)
-          }} className="p-2 rounded-lg cursor-pointer hover:bg-green-100 border border-[#eaecec] w-full font-semibold bg-green-200">
-            Acrescentar Valores
-          </button>
-        }
-        {payment?.status !== 'PAID' &&
-          <Button
-            type='button'
-            content='Aprovar pagamento'
-            onClick={() => {
-              setInvoiceId(payment?.invoiceId)
-              useApprovePayment({ paymentId: payment?.id, employeeId: payment?.employeeId })
-            }}
-            isLoading={isLoading}
-          />}
       </div>
-    </div>
+    </div >
   )
-
 
   return (
     <section
@@ -126,6 +184,7 @@ const PaymentsPage = () => {
           <ArrowLeft size={18} />
         </Link>
       </div>
+
       <div id="search__area" className="flex flex-col items-center relative w-full">
         <InputSearch
           placeholder={'Insira o número de inscrição do aluno...'}
@@ -139,67 +198,71 @@ const PaymentsPage = () => {
               onClick={fetchStudent}
             />
           }
-          value={enrollmentNumber}
+          value={state?.enrollmentNumber}
           onKeyDown={(e: any) => searchStudent(e)}
-          onChange={(e: any) => setEnrollmentNumber(e.target.value)}
+          onChange={(e: any) =>
+            dispatch({ type: actions.chooseStudent, payload: e.target.value })
+          }
         />
       </div>
+
       {lookingForStudent &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold w-full justify-center flex items-center h-[248px]">
-          Buscando os pagamentos...
-        </h1>
+        <TitleForProcessing title={'Buscando os pagamentos...'} />
       }
-      {student && (studentNotFound || student?.enrollment?.Payment?.length === 0) &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px] w-full">
-          Pagamentos não encontrado 😢
-        </h1>
-      }
-      <div className='flex flex-col gap-4'>
-        {student &&
-          <h1
-            className='text-[24px] font-semibold'>
+
+      {student &&
+        <div className='flex flex-col gap-4'>
+          <h1 className='text-[24px] font-semibold'>
             Aluno:{" "}
             <span
               className='font-normal'>
               {student?.enrollment?.students?.fullName}
             </span>
-          </h1>}
-        {student && <div className="flex gap-4 flex-wrap">
-          {
-            PAYMENT_VIEW_OPTIONS.map(({ id, content, paymentType }) => (
-              <button
+          </h1>
+
+          <div className="flex gap-4 flex-wrap">
+            {PAYMENT_VIEW_OPTIONS.map(({ id, content, paymentType }) => (
+              <ButtonPaymentType
                 key={id}
-                type="button"
-                className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${currentPaymentType === paymentType ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
-                onClick={() => setCurrentPaymentType(paymentType)}
-              >
-                {content} ( {paymentType === 'ALL' ? student?.enrollment?.Payment?.length : paymentType === 'PENDING' ? pendingPayments?.length : approvedPayments?.length} )
-              </button>
-            ))
-          }
-        </div>}
-        <div className='grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'>
-          {
-            student && student?.enrollment?.Payment?.map(RenderPaymentCard)
-          }
+                content={content}
+                currentPaymentType={state?.currentPaymentType}
+                paymentType={paymentType}
+                totalPayment={paymentType === 'ALL' ?
+                  student?.enrollment?.Payment?.length :
+                  paymentType === 'PENDING' ?
+                    pendingPayments?.length : approvedPayments?.length}
+                onClick={() =>
+                  dispatch({ type: actions.changePaymentType, payload: paymentType })
+                }
+              />
+            ))}
+          </div>
+
+          <div className='flex flex-col gap-3'>
+            {student?.enrollment?.Payment?.map(RenderPaymentCard)}
+          </div>
         </div>
-      </div>
+      }
+      {student &&
+        (studentNotFound || student?.enrollment?.Payment?.length === 0) &&
+        <TitleForProcessing title='Pagamentos não encontrados...' />
+      }
 
       <DefaultModal
-        display={showModal !== 0}
+        display={state?.showModal !== 0}
         closeModal={() => {
-          setShowModal(0)
-          setInvoiceId(10000)
+          dispatch({ type: actions.showStudentOptionsModal, payload: 0 })
+          dispatch({ type: actions.toggleInvoice, payload: 0 })
         }}
       >
-        {showModal === 1 ?
+        {state?.showModal === 1 ?
           student && student?.enrollment?.Invoice?.map((invoice: any) => (
-            invoice?.id === invoiceId &&
+            invoice?.id === state?.invoiceId &&
             <InvoiceCardRenderer key={invoice.id} invoice={invoice} student={student?.enrollment} />
-          )) : showModal === 2 &&
+          )) : state?.showModal === 2 &&
           <FormToAddValuesToTheTransaction
-            enrollmentId={enrollmentNumber}
-            paymentId={paymentId}
+            enrollmentId={state?.enrollmentNumber}
+            paymentId={state?.paymentId}
           />
         }
       </DefaultModal>

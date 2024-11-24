@@ -1,3 +1,5 @@
+import { Pen, Trash } from "phosphor-react"
+
 const tableHeader = [
   {
     id: 0,
@@ -86,4 +88,22 @@ const GENRES = [
   { id: 1, content: 'Feminino', gender: 'FEMALE' },
 ]
 
-export { tableHeader, GENRES, MARITAL_STATUS, dateFields, fields, initialValues }
+const OPTIONS_FOR_EMPLOYEES = [
+  {
+    id: 0, 
+    content: 'Editar funcionário',
+    href: '/admin/painel/editar-funcionario', 
+    Icon: Pen, 
+  },
+  {id: 1, href: '', Icon: Trash, content: 'Eliminar funcionário'},
+]
+
+export { 
+  GENRES, 
+  fields, 
+  dateFields, 
+  tableHeader, 
+  initialValues, 
+  MARITAL_STATUS, 
+  OPTIONS_FOR_EMPLOYEES 
+}

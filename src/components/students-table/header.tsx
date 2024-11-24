@@ -5,6 +5,7 @@ import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import { ApplicationContexts } from '../contexts/applicationContexts'
 import { ProgressBar } from '../progress-bar'
 import { Toast } from '../toast'
+import { ButtonForSearchOptions } from '../button-for-search-options'
 
 interface IDataTableHeader {
   totalStudents: number
@@ -13,7 +14,13 @@ interface IDataTableHeader {
 
 const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
   const { setStudentFound, studentFound }: any = useContext(ApplicationContexts)
-  const { mutate: useCheckEnrollment, data: student, isLoading, reset: resetUserFound, error }: any = UseCheckEnrollment()
+  const {
+    error,
+    isLoading,
+    mutate: useCheckEnrollment,
+    data: student,
+    reset: resetUserFound
+  }: any = UseCheckEnrollment()
 
   const [enrollmentNumber, setEnrollmentNumber] = useState<any>()
   const [searchType, setSearchType] = useState<string>('enrollmentNumber')
@@ -25,9 +32,7 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
     useCheckEnrollment(params)
   }
 
-  const fetchUser = (e: any) => {
-    if (e.key === 'Enter') searchStudent()
-  }
+  const fetchUser = (e: any) => e.key === 'Enter' && searchStudent()
 
   useEffect(() => {
     const wasTheEnrollmentApproved =
@@ -46,16 +51,17 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
 
   }, [student, setStudentFound, resetUserFound])
 
-
   useEffect(() => {
     if (error) {
-      Toast({ message: 'Estudante não encontrado', theme: 'colored', toastType: 'error' })
+      Toast({
+        message: 'Estudante não encontrado',
+        theme: 'colored',
+        toastType: 'error'
+      })
       setStudentFound(null)
     }
 
-    if (!studentFound) {
-      resetUserFound()
-    }
+    if (!studentFound) resetUserFound()
   }, [error, setStudentFound, studentFound])
 
   return (
@@ -63,27 +69,28 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
       {isLoading && <ProgressBar />}
 
       <div id="about__contacts" className="flex flex-col gap-3">
-        <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">Alunos Carregados ( {totalStudents} )</h1>
-        <p className="text-base font-normal leading-5 text-[#737373]">Encontre os alunos!</p>
+        <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">
+          Alunos Carregados ( {totalStudents} )
+        </h1>
+        <p className="text-base font-normal leading-5 text-[#737373]">
+          Encontre os alunos!
+        </p>
       </div>
 
-      <div id="search__area" className="flex flex-col items-center relative gap-3 w-full lg:max-w-[316px]">
+      <div id="search__area"
+        className="flex flex-col items-center relative gap-3 w-full lg:max-w-[316px]"
+      >
         <div className="flex gap-4 flex-wrap w-full justify-between">
-          <button
-            type="button"
-            className={`text-[12px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${searchType === 'enrollmentNumber' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+          <ButtonForSearchOptions
+            content='Nº de inscrição'
+            option={searchType === 'enrollmentNumber'}
             onClick={() => setSearchType('enrollmentNumber')}
-          >
-            Nº de inscrição
-          </button>
-          <button
-            type="button"
-            className={`text-[12px] uppercase border py-2 px-4 rounded-3xl  hover:bg-[#dcdcdc52] 
-              ${searchType !== 'enrollmentNumber' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+          />
+          <ButtonForSearchOptions
+            content='Nº do BI'
+            option={searchType !== 'enrollmentNumber'}
             onClick={() => setSearchType('identityCardNumber')}
-          >
-            Nº do BI
-          </button>
+          />
         </div>
         <InputSearch
           placeholder={'Pesquisar estudante...'}
