@@ -19,18 +19,14 @@ const Grades = () => {
     fetchNotes({ userData })
   }
 
-  useEffect(() => {
-    if (!user) window.location.reload()
-  }, [user])
+  useEffect(() => { if (!user) window.location.reload() }, [user])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     user && handleFetchNotes(user?.enrollment?.id, selectedLevel?.level)
   }, [selectedLevel, user])
 
-  useEffect(() => {
-    if (error || !user) setShowGrades(false)
-  }, [error, user])
+  useEffect(() => { if (error || !user) setShowGrades(false) }, [error, user])
 
   return (
     <section id='grade_report' className="mt-36 sm:mt-32 pb-36 bg-white lg:bg-transparent">

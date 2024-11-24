@@ -20,6 +20,9 @@ import { StudentOptionsModal } from '../students-table/modals/student-options'
 import { PasswordUpdateForm } from '../reset-password'
 import { DefaultModal } from '../modals/default'
 import { QuestionModal } from '../modals/question'
+import { ButtonForPagination } from '../button-for-pagination'
+import { HeaderContent } from './header-content'
+import { UseTranslateUser } from '../../hooks/use-translate-user'
 
 const UsersTable = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -44,14 +47,16 @@ const UsersTable = () => {
   const { mutate: resetPassword, isLoading: isResettingPassword, isSuccess: passwordRestored }: any = UseResetPassword()
 
   useEffect(() => {
-    if (userSeen) {
-      dispatch({ type: actions.toggleEmail, payload: '' })
-    }
+    if (userSeen) dispatch({ type: actions.toggleEmail, payload: '' })
   }, [userSeen])
 
   useEffect(() => {
     if (userNotFound) {
-      Toast({ message: 'Usuário não encontrado', theme: 'colored', toastType: 'error' })
+      Toast({
+        message: 'Usuário não encontrado',
+        theme: 'colored',
+        toastType: 'error'
+      })
     }
   }, [userNotFound])
 
@@ -62,9 +67,7 @@ const UsersTable = () => {
     }
   }, [passwordRestored])
 
-  useEffect(() => {
-    if (currentPage) refetch()
-  }, [currentPage, refetch])
+  useEffect(() => { if (currentPage) refetch() }, [currentPage, refetch])
 
   useEffect(() => {
     if (userFound && isSuccess) {
@@ -74,13 +77,8 @@ const UsersTable = () => {
   }, [isSuccess, resetUserFound, dispatch]);
 
 
-  if (isLoadingUsers) return <ProgressBar />
 
-  const fetchUser = (e: any) => {
-    if (e.key === 'Enter') {
-      catchUser({ email: state.userEmail })
-    }
-  }
+  const fetchUser = (e: any) => e.key === 'Enter' && catchUser({ email: state.userEmail })
 
   const handleStudentClick = (user: string) => {
     dispatch({ type: actions.changeSelectedUser, payload: state.selectedUser === user ? '' : user })
@@ -91,6 +89,7 @@ const UsersTable = () => {
     dispatch({ type: actions.changeModalStateToChangePassword, payload: true })
   }
 
+  if (isLoadingUsers) return <ProgressBar />
 
   const renderStudentRow = (user: any) =>
     user && (
@@ -99,17 +98,7 @@ const UsersTable = () => {
           <Student.Course course={user?.email} />
         </td>
         <td className="p-4 text-center">
-          <Student.Course
-            course={
-              user?.role === 'STUDENT'
-                ? 'Estudante'
-                : user?.role === 'EMPLOYEE'
-                  ? 'Funcionário'
-                  : user?.role === 'TEACHER'
-                    ? 'Professor'
-                    : 'Administrador'
-            }
-          />
+          <Student.Course course={UseTranslateUser(user?.role)} />
         </td>
         <td className="p-4 text-center">
           <Student.Course
@@ -270,10 +259,15 @@ const UsersTable = () => {
       <Signup visible={state.signupFormStatus} />
 
       <DefaultModal
-        closeModal={() => dispatch({ type: actions.changeModalStateToChangePassword, payload: false })}
+        closeModal={() =>
+          dispatch({
+            type: actions.changeModalStateToChangePassword,
+            payload: false
+          })}
         display={state.modalStateToChangePassword}
       >
-        {state.modalStateToChangePassword && <PasswordUpdateForm email={state.currentEmail} />}
+        {state.modalStateToChangePassword &&
+          <PasswordUpdateForm email={state.currentEmail} />}
       </DefaultModal>
 
       {!state.signupFormStatus && (
@@ -291,13 +285,12 @@ const UsersTable = () => {
           <thead>
             <tr className="border-b border-[#E8E8E8]">
               {tableHeader.map(({ id, content }) => (
-                <th
-                  colSpan={1}
-                  className={`w-auto p-3 font-medium text-[14px] uppercase text-[#363636] whitespace-nowrap overflow-x-hidden ${content === 'Nome' || content === 'E-mail' ? 'text-left' : 'text-center'}`}
+                <HeaderContent
                   key={id}
-                >
-                  {content}
-                </th>
+                  colSpan={1}
+                  content={content}
+                  itemLeft={content === 'Nome' || content === 'E-mail'}
+                />
               ))}
             </tr>
           </thead>
@@ -315,15 +308,12 @@ const UsersTable = () => {
       {!state.signupFormStatus && (
         <div className="flex gap-2 flex-wrap w-full">
           {Array.from({ length: users?.users?.totalPages }, (_, index: number) => (
-            <button
-              type="button"
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            <ButtonForPagination
               key={index}
+              content={index + 1}
+              isActive={currentPage === index + 1}
               onClick={() => setCurrentPage(index + 1)}
-              className={`rounded-lg px-4 py-2 flex items-center justify-center ${currentPage === index + 1 ? 'bg-[#d8a429a9] font-semibold' : 'bg-[#b7b7b73b]'}`}
-            >
-              {index + 1}
-            </button>
+            />
           ))}
         </div>
       )}

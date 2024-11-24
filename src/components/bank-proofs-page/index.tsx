@@ -110,7 +110,7 @@ const BankProofsPage = () => {
           />
 
           <ButtonForSearchOptions
-            content={'Nº da transação'}
+            content={'Nº do comprovativo'}
             option={state?.searchType !== 'enrollmentId'}
             onClick={() => {
               dispatch({ type: actions.changeSearchType, payload: 'transactionNumber' }),

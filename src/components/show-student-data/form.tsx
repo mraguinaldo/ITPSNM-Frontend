@@ -27,6 +27,10 @@ import { reducer } from './reducer'
 import { actions } from './actions'
 import { UseApproveEnrollment } from '../../hooks/useApproveEnrollment'
 import Cookies from 'js-cookie'
+import { PERIODS } from '../enrollment-table/data'
+import { ButtonToChooseThePeriod } from '../enrollment-table/button-to-choose-the-period'
+import { DefaultModal } from '../modals/default'
+import { Toast } from '../toast'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -36,8 +40,14 @@ const Form = () => {
   const [, setSearchParams] = useSearchParams()
   const employeeNumber: any = Cookies.get('employeeNumber')
 
+  const [currentPeriod, setCurrentPeriod] = useState<string>('')
+
   const { data: courses } = UseFetchCourses()
-  const { mutate: useCheckEnrollment, data: enrollmentFound, isLoading: searchingEnrollment }: any = UseCheckEnrollment()
+  const {
+    data: enrollmentFound,
+    mutate: useCheckEnrollment,
+    isLoading: searchingEnrollment
+  }: any = UseCheckEnrollment()
   const {
     mutate: useApproveEnrollment,
     isLoading: approvingTheEnrollment,
@@ -74,8 +84,14 @@ const Form = () => {
   })
 
   const toggleModalState = (value: number) => {
-    dispatch({ type: actions.toggleModalState, payload: state.modalState !== value ? value : 100 })
-    dispatch({ type: actions.changeStateOfChevron, payload: state.modalState !== value ? value : 100 })
+    dispatch({
+      type: actions.toggleModalState,
+      payload: state.modalState !== value ? value : 100
+    })
+    dispatch({
+      type: actions.changeStateOfChevron,
+      payload: state.modalState !== value ? value : 100
+    })
   }
 
   const changeGender = (value: number, gender: string) => {
@@ -88,9 +104,7 @@ const Form = () => {
 
   const changeStudentPhoto = () => {
     const fileInput = document.getElementById('Foto') as HTMLInputElement
-    if (fileInput) {
-      fileInput.click()
-    }
+    if (fileInput) fileInput.click()
   }
 
   const handleFileChange = async (field: FileField, actionType: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,11 +193,28 @@ const Form = () => {
       docsState: 'APPROVED',
       paymentState: 'APPROVED',
       employeeId: Number(employeeNumber),
-      identityCardNumber: enrollmentFound?.enrollment?.identityCardNumber
+      identityCardNumber: enrollmentFound?.enrollment?.identityCardNumber,
+      period: currentPeriod
     }
 
     if (formData) {
       useApproveEnrollment({ formData, enrollmentId })
+    }
+  }
+
+  const openModalToConfirmEnrollment = () => {
+    if (currentPeriod === '') {
+      Toast({
+        message: 'Selecione o período',
+        theme: 'colored',
+        toastType: 'error'
+      })
+    } else {
+      approveEnrollment(enrollmentFound?.enrollment?.id)
+      dispatch({
+        type: actions.changeModalStatePeriod,
+        payload: false,
+      })
     }
   }
 
@@ -200,7 +231,11 @@ const Form = () => {
         {shouldShowApproveButton && (
           <button
             type="button"
-            onClick={() => approveEnrollment(enrollmentFound?.enrollment?.id)}
+            onClick={() =>
+              dispatch({
+                type: actions.changeModalStatePeriod,
+                payload: true,
+              })}
             className="flex items-center duration-150 justify-center py-3 px-5 rounded-3xl cursor-pointer bg-green-300 font-semibold hover:bg-green-400"
           >
             {approvingTheEnrollment ? (
@@ -212,7 +247,40 @@ const Form = () => {
             )}
           </button>
         )}
-      </div>
+      </div >
+
+      <DefaultModal
+        display={state?.modalStatusToConfirmPeriod}
+        closeModal={() =>
+          dispatch({
+            type: actions.changeModalStatePeriod,
+            payload: false,
+          })}
+      >
+        <div className='flex flex-col gap-4 p-4'>
+          <h2 className="text=[18px] md:text-[24px] font-medium">
+            Selecione o período
+          </h2>
+          <div className="flex gap-4 flex-wrap sm:flex-nowrap">
+            {PERIODS.map(({ id, content, period }) => (
+              <ButtonToChooseThePeriod
+                key={id}
+                content={content}
+                onClick={() => {
+                  setCurrentPeriod(period)
+                }}
+                option={currentPeriod === period}
+              />))}
+          </div>
+          <Button
+            type='button'
+            isLoading={false}
+            content='Confirmar matrícula'
+            onClick={openModalToConfirmEnrollment}
+          />
+        </div>
+
+      </DefaultModal>
 
       <div className="flex flex-wrap gap-4 justify-between w-full">
         <h1 className="text-[20px] sm:text-[24px] font-semibold">

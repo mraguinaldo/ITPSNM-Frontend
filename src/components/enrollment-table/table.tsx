@@ -4,7 +4,7 @@ import { initialValues, PERIODS, STUDENT_OPTIONS, tableHeader } from './data'
 import { ApplicationContexts } from '../contexts/applicationContexts'
 import { useContext, useEffect, useReducer, useState } from 'react'
 import { StudentOptionsModal } from './modals/student-options'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { QuestionModal } from '../modals/question'
@@ -17,6 +17,7 @@ import { Button } from '../button'
 import { Toast } from '../toast'
 import { ButtonToChooseThePeriod } from './button-to-choose-the-period'
 import { HeaderContent } from './header-content'
+import { StudentOptionsButton } from './student-options-button'
 
 interface IStudents {
   students: any
@@ -31,7 +32,10 @@ const Students = ({ students }: IStudents) => {
     isLoading: approvingTheEnrollment,
     isSuccess: approvedEnrollment,
   } = UseApproveEnrollment()
+
   const location = useLocation()
+  const navigate = useNavigate()
+
   const employeeNumber: any = Cookies.get('employeeNumber')
 
   const closeLockModal = () => {
@@ -112,6 +116,22 @@ const Students = ({ students }: IStudents) => {
     }
   }
 
+
+  const openOptionsModal = (
+    href: any,
+    option: string,
+    identityCardNumber: any,
+    student: any) => {
+
+    if (href) {
+      UsestoreData('chosenStudent', identityCardNumber)
+      UsestoreData('previousRoute', location.pathname)
+      navigate(href)
+    } else if (option === 'Confirmar matrícula') {
+      openModalToApproveEnrollment(student)
+    }
+  }
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (approvedEnrollment) {
@@ -162,31 +182,21 @@ const Students = ({ students }: IStudents) => {
         isVisible={state.selectedStudent === student?.identityCardNumber}
       >
         {STUDENT_OPTIONS.map(({ Icon, id, option, href }) =>
-          href ? (
-            <Link
-              to={href}
-              key={id}
-              onClick={() => {
-                UsestoreData('chosenStudent', student?.identityCardNumber)
-                UsestoreData('previousRoute', location.pathname)
-              }}
-              className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
-            >
-              <Icon size={14} color="#000" /> {option}
-            </Link>
-          ) : (
-            <button
-              type="button"
-              key={id}
-              className={`only:bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c] ${option === 'Confirmar matrícula' && student?.docsState !== 'PENDING' ? 'hidden' : 'flex'}`}
-              onClick={() => {
-                option === 'Confirmar matrícula' && openModalToApproveEnrollment(student)
-              }}
-            >
-              <Icon size={14} color="#000" />
-              {option}
-            </button>
-          ),
+          <StudentOptionsButton
+            key={id}
+            option={option}
+            Icon={Icon}
+            isVisible={
+              option === 'Confirmar matrícula' && student?.docsState !== 'PENDING'
+            }
+            onClick={() =>
+              openOptionsModal(
+                href,
+                option,
+                student?.identityCardNumber,
+                student
+              )}
+          />
         )}
       </StudentOptionsModal>
     </Student.Root>

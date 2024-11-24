@@ -12,9 +12,7 @@ const StudentPaymentsPage = () => {
   const queryClient = useQueryClient()
   const student: any = queryClient.getQueryData(['studentData'])
 
-  useEffect(() => {
-    if (!student) window.location.reload()
-  }, [student])
+  useEffect(() => { if (!student) window.location.reload() }, [student])
 
   const [showModal, setShowModal] = useState<boolean>(false)
   const [invoiceId, setInvoiceId] = useState<number>(1000)
@@ -48,7 +46,7 @@ const StudentPaymentsPage = () => {
 
   return (
     <section
-      className={`w-full pl-8 py-20  lg:px-11 lg:py-36  lg:rounded-[16px] bg-white flex flex-col gap-8 pr-6 ${student ? 'h-fit' : 'h-dvh'}`}
+      className={`w-full max-w-[1296px] m-auto px-6 py-20 lg:px-11 lg:py-36  lg:rounded-[16px] bg-white flex flex-col gap-8 ${student ? 'h-fit' : 'h-dvh'}`}
     >
       <div className='flex flex-col gap-4'>
         <div
@@ -59,7 +57,8 @@ const StudentPaymentsPage = () => {
               <thead>
                 <tr className="bg-[#000C13] text-left whitespace-nowrap ">
                   {tableHeader.map(({ content, id }) => (
-                    content !== 'Funcionário' && <HeadLine key={id} colSpan={1} content={content} visible />
+                    content !== 'Funcionário' &&
+                    <HeadLine key={id} colSpan={1} content={content} visible />
                   ))}
                 </tr>
               </thead>

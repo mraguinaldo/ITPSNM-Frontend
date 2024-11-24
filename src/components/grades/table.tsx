@@ -5,15 +5,11 @@ import { Table } from './data'
 import { Subject } from './subject'
 import type { ITableContent } from './interfaces'
 import { Grade } from './grade'
+import { TitleForProcessing } from '../title-for-processing'
 
 const TableContent = ({ isLoading, notes }: ITableContent) => {
-  if (isLoading) {
-    return (
-      <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px]">
-        Buscando Notas...
-      </h1>
-    )
-  }
+  if (isLoading) return <TitleForProcessing title='Buscando Notas...' />
+
   const finalAssessment = notes?.filter((note: any) => note?.approved === 'FAILED')
   const finalAssessmentIms = notes?.filter((note: any) => note?.ims < 10)
 
