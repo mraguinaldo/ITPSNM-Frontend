@@ -13,7 +13,12 @@ import { useNavigate } from 'react-router-dom'
 
 const Form = () => {
   const employeeId: any = Cookies.get('employeeNumber')
-  const { mutate: useSendTransaction, isLoading: sendingTheTransaction, isSuccess: transactionSent }: any = UseSendTransaction()
+  const {
+    mutate: useSendTransaction,
+    isSuccess: transactionSent,
+    isLoading: sendingTheTransaction,
+  }: any = UseSendTransaction()
+
   const redirectTo = useNavigate()
 
   const {
@@ -66,9 +71,7 @@ const Form = () => {
   }, [transactionSent, reset])
 
   useEffect(() => {
-    if (employeeId) {
-      setValue('employeeId', employeeId, { shouldValidate: true })
-    }
+    if (employeeId) setValue('employeeId', employeeId, { shouldValidate: true })
   }, [employeeId])
 
 

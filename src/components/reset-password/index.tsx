@@ -14,7 +14,11 @@ import { Toast } from '../toast'
 
 const PasswordUpdateForm = ({ email }: { email: any }) => {
   const [state, dispatch] = useReducer(reducer, initialValues)
-  const { mutate: useResetPassword, isLoading: resettingThePassword, isSuccess } = UseResetPassword()
+  const {
+    isSuccess,
+    mutate: useResetPassword,
+    isLoading: resettingThePassword
+  } = UseResetPassword()
 
   const {
     register,

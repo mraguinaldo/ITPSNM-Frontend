@@ -5,8 +5,6 @@ import { ProgressBar } from '../progress-bar'
 const CoursesTable = () => {
   const { data: courses, isLoading }: any = UseFetchCourses()
 
-
-
   return (
     <div className="w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white">
       {isLoading && <ProgressBar />}

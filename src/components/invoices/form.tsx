@@ -37,7 +37,11 @@ const Form = () => {
   const [selectedMonths, setSelectedMonths] = useState<string[]>([])
   const redirectTo = useNavigate()
 
-  const { mutate: useRegisterInvoice, isLoading: registeringTheInvoice, isSuccess } = UseRegisterInvoice()
+  const {
+    isSuccess,
+    mutate: useRegisterInvoice,
+    isLoading: registeringTheInvoice,
+  } = UseRegisterInvoice()
 
   const { data: itemsPrices }: any = UseFetchItemsPrices()
 
@@ -58,14 +62,27 @@ const Form = () => {
       levelId: undefined,
       dueDate: undefined,
       issueDate: undefined,
-      items: [{ description: undefined, itemPriceId: undefined, qty: undefined, month: [] }],
+      items: [
+        {
+          description: undefined,
+          itemPriceId: undefined,
+          qty: undefined,
+          month: []
+        }
+      ],
       invoiceId: 0,
     },
   })
 
   const toggleModalState = (value: number) => {
-    dispatch({ type: actions.toggleModalState, payload: state.modalState !== value ? value : 100 })
-    dispatch({ type: actions.changeStateOfChevron, payload: state.modalState !== value ? value : 100 })
+    dispatch({
+      type: actions.toggleModalState,
+      payload: state.modalState !== value ? value : 100
+    })
+    dispatch({
+      type: actions.changeStateOfChevron,
+      payload: state.modalState !== value ? value : 100
+    })
   }
 
   useEffect(() => {
@@ -77,9 +94,7 @@ const Form = () => {
   }, [isSuccess, reset])
 
   useEffect(() => {
-    if (employeeId) {
-      setValue('employeeId', employeeId, { shouldValidate: true })
-    }
+    if (employeeId) setValue('employeeId', employeeId, { shouldValidate: true })
   }, [employeeId])
 
   useEffect(() => {
@@ -136,7 +151,12 @@ const Form = () => {
     setValue(`items.${state?.monthIndex}.month`, selectedMonths, { shouldValidate: true });
 
     if (state?.paymentType === 'Propina') {
-      setValue(`items.${state?.monthIndex}.qty`, selectedMonths.length, { shouldValidate: true });
+      setValue(
+        `items.${state?.monthIndex}.qty`,
+        selectedMonths.length,
+        {
+          shouldValidate: true
+        });
     } else {
       setValue(`items.${state?.monthIndex}.qty`, 1, { shouldValidate: true });
     }
@@ -240,10 +260,17 @@ const Form = () => {
                         onClick={() => {
                           toggleModalState(index)
                           if (state?.selectedField === null && item?.itemName === 'Propina') {
-                            dispatch({ type: actions.selectField, payload: index })
+                            dispatch({
+                              type: actions.selectField,
+                              payload: index
+                            })
                           }
                           if (item?.itemName === 'Propina' && state?.selectedField !== null) {
-                            Toast({ message: "Já existe um campo para propina", theme: "light", toastType: "warning" })
+                            Toast({
+                              message: "Já existe um campo para propina",
+                              theme: "light",
+                              toastType: "warning"
+                            })
                           } else {
                             setValue(`items.${index}.itemPriceId`, item?.id, { shouldValidate: true })
                             setValue(`items.${index}.description`, item?.itemName, { shouldValidate: true })
@@ -307,7 +334,6 @@ const Form = () => {
           ))}
         </div>
         <div className='flex justify-between gap-2 pt-6'>
-
           <button type='button' onClick={addItem} className='text-[12px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc]'>
             Adicionar item
           </button>

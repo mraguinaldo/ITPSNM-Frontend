@@ -67,6 +67,12 @@ const reducer = (state: any, action: any) => {
         editStudent: payload,
       }
     }
+    case actions.changeModalStatePeriod: {
+      return{
+        ...state,
+        modalStatusToConfirmPeriod: payload
+      }
+    }
     default:
       return {
         ...state,

@@ -16,7 +16,6 @@ const Header = ({ user, elementId }: IHeader) => {
     setSelectedLevel(LEVELS[selectedLevelId])
   }
 
-
   const donwloadFile = () => {
     UseDownloadFile({ elementId })
   }
@@ -56,7 +55,11 @@ const Header = ({ user, elementId }: IHeader) => {
             maximumHeight={false}
           >
             {LEVELS.map(({ id, content }) => (
-              <SelectedArea key={id} area={content} onClick={() => changeGradeReport(id)} />
+              <SelectedArea
+                key={id}
+                area={content}
+                onClick={() => changeGradeReport(id)}
+              />
             ))}
           </OptionsModal>
         </div>

@@ -7,11 +7,17 @@ import { ApplicationContexts } from '../contexts/applicationContexts'
 import { Button } from '../button'
 import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import { Header } from '../grades/header'
+import { TitleForProcessing } from '../title-for-processing'
 
 const StudentGrades = () => {
   const { mutate: fetchNotes, data: notes, isLoading, error } = UseFetchNotes()
-  const { mutate: useCheckEnrollment, data: student, isLoading:
-    lookingForStudent, error: studentNotFound }: any = UseCheckEnrollment()
+  const {
+    data: student,
+    error: studentNotFound,
+    mutate: useCheckEnrollment,
+    isLoading: lookingForStudent,
+  }: any = UseCheckEnrollment()
+
   const [enrollmentNumber, setEnrollmentNumber] = useState<string>('')
 
   const { selectedLevel }: any = useContext(ApplicationContexts)
@@ -38,11 +44,8 @@ const StudentGrades = () => {
     useCheckEnrollment(params)
   }
 
-  const searchStudent = (e: any) => {
-    if (e.key === 'Enter') {
-      fetchStudent()
-    }
-  }
+  const searchStudent = (e: any) => e.key === 'Enter' && fetchStudent()
+
 
   return (
     <div className={`w-full pl-6 py-16 lg:pt-11 lg:pb-32 lg:rounded-[16px] bg-white flex gap-6 flex-col ${student ? 'h-fit' : 'h-dvh'}`}>
@@ -70,35 +73,28 @@ const StudentGrades = () => {
         </div>
       </div>
 
-      {lookingForStudent &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold w-full justify-center flex items-center h-[248px]">
-          Buscando o estudante...
-        </h1>
-      }
-      {studentNotFound &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px] w-full">
-          Estudante não encontrado 😢
-        </h1>
-      }
+      {lookingForStudent && <TitleForProcessing title='Buscando o estudante...' />}
+      {studentNotFound && <TitleForProcessing title='Estudante não encontrado 😢' />}
 
-      {student && <div id='grade_report_admin' className="w-full flex flex-col gap-9 items-center px-3 py-12 lg:py-4 bg-white">
-        <Header user={student} elementId='grade_report_admin' />
-        {showGrades ? (
-          <TableContent notes={notes} error={error} isLoading={isLoading} />
-        ) : (
-          <div className="flex items-center justify-center w-full max-w-[280px] h-[280px]">
-            <Button
-              isLoading={isLoading}
-              type="button"
-              content="Mostrar notas"
-              onClick={() => {
-                handleFetchNotes(student?.enrollment?.id, selectedLevel?.level)
-                setShowGrades(true)
-              }}
-            />
-          </div>
-        )}
-      </div>}
+      {student &&
+        <div id='grade_report_admin' className="w-full flex flex-col gap-9 items-center px-3 py-12 lg:py-4 bg-white">
+          <Header user={student} elementId='grade_report_admin' />
+          {showGrades ? (
+            <TableContent notes={notes} error={error} isLoading={isLoading} />
+          ) : (
+            <div className="flex items-center justify-center w-full max-w-[280px] h-[280px]">
+              <Button
+                isLoading={isLoading}
+                type="button"
+                content="Mostrar notas"
+                onClick={() => {
+                  handleFetchNotes(student?.enrollment?.id, selectedLevel?.level)
+                  setShowGrades(true)
+                }}
+              />
+            </div>
+          )}
+        </div>}
     </div>
   )
 }

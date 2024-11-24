@@ -9,10 +9,21 @@ import { ProgressBar } from '../progress-bar'
 import Cookies from 'js-cookie'
 import { UseAddvaluesToTheTransaction } from '../../hooks/use-add-values-to-the-transaction'
 
-const FormToAddValuesToTheTransaction = ({ enrollmentId, paymentId }: { enrollmentId: any, paymentId: any }) => {
+const FormToAddValuesToTheTransaction = (
+  { enrollmentId,
+    paymentId }:
+    {
+      enrollmentId: any,
+      paymentId: any
+    }) => {
+
   const employeeId: any = Cookies.get('employeeNumber')
 
-  const { mutate: useAddvaluesToTheTransaction, isLoading: addingValues, isSuccess } = UseAddvaluesToTheTransaction()
+  const {
+    isSuccess,
+    isLoading: addingValues,
+    mutate: useAddvaluesToTheTransaction
+  } = UseAddvaluesToTheTransaction()
 
   const {
     register,
@@ -38,27 +49,18 @@ const FormToAddValuesToTheTransaction = ({ enrollmentId, paymentId }: { enrollme
     }
   }
 
-  useEffect(() => {
-    if (isSuccess) reset()
-  }, [isSuccess, reset])
+  useEffect(() => { if (isSuccess) reset() }, [isSuccess, reset])
 
   useEffect(() => {
-    if (employeeId) {
-      setValue('employeeId', employeeId, { shouldValidate: true })
-    }
+    if (employeeId) setValue('employeeId', employeeId, { shouldValidate: true })
   }, [employeeId])
 
 
   useEffect(() => {
-    if (enrollmentId) {
-      setValue('enrollmentId', enrollmentId, { shouldValidate: true })
-    }
-    if (employeeId) {
-      setValue('employeeId', employeeId, { shouldValidate: true })
-    }
-    if (paymentId) {
-      setValue('paymentId', paymentId, { shouldValidate: true })
-    }
+    if (enrollmentId) setValue('enrollmentId', enrollmentId, { shouldValidate: true })
+    if (employeeId) setValue('employeeId', employeeId, { shouldValidate: true })
+    if (paymentId) setValue('paymentId', paymentId, { shouldValidate: true })
+
   }, [enrollmentId, employeeId, paymentId])
 
   return (
