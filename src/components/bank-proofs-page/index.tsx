@@ -1,71 +1,87 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import { ArrowLeft, CopySimple, MagnifyingGlass } from 'phosphor-react'
 import { InputSearch } from '../inputs/search'
 import { UseFetchStudentBankProof } from '../../hooks/useFetchStudentBankProof'
 import { UseCopier } from '../../hooks/useCopier'
 import { Link } from 'react-router-dom'
-import { TRANSACTION_VIEW_OPTIONS } from './data'
+import { initialValues, TableHeaders, TRANSACTION_VIEW_OPTIONS } from './data'
+import { ButtonForSearchOptions } from '../button-for-search-options'
+import { reducer } from './reducer'
+import { actions } from './actions'
+import { TitleForProcessing } from '../title-for-processing'
+import { HeaderContent } from './header-content'
+import { TableRow } from './table-row'
 
 const BankProofsPage = () => {
-  const { mutate: useFetchStudentBankProof, isLoading, data: transactions, error }: any = UseFetchStudentBankProof()
-  const [enrollmentId, setEnrollmentId] = useState<string>('')
-  const [searchType, setSearchType] = useState<string>('enrollmentId')
-  const [currentTransactionType, setCurrentTransactionType] = useState<string>('ALL')
+  const [state, dispatch] = useReducer(reducer, initialValues)
+  const {
+    error,
+    isLoading,
+    data: transactions,
+    mutate: useFetchStudentBankProof
+  }: any = UseFetchStudentBankProof()
 
   const handleFetchStudentBankProof = () => {
-    useFetchStudentBankProof({ searchType, enrollmentId })
+    useFetchStudentBankProof({
+      searchType: state?.searchType,
+      enrollmentId: state?.enrollmentId
+    })
   }
 
-  const searchStudent = (e: any) => {
-    if (e.key === 'Enter') {
-      handleFetchStudentBankProof()
-    }
+  const searchStudent = (e: any) => e.key === 'Enter' && handleFetchStudentBankProof()
+
+  const getTransactionByState = (state: boolean) => {
+    return transactions?.
+      transactions?.
+      items?.
+      filter((transaction: any) =>
+        transaction?.used === state
+      )
   }
 
-  let transactionsUsed = transactions?.transactions?.items.filter((transaction: any) => transaction?.used === true)
+  let transactionsUsed = getTransactionByState(true)
+  let transactionsValid = getTransactionByState(false)
 
-  let transactionsValid = transactions?.transactions?.items.filter((transaction: any) => transaction?.used === false)
+  const RenderTransactionRow = (transaction: any) => (
+    <tr
+      key={transaction.id}
+      className={`${state?.currentTransactionType === 'ALL' ? '' :
+        state?.currentTransactionType === 'USED' && transaction?.used ? '' :
+          state?.currentTransactionType === 'VALID' && !transaction?.used ? '' : 'hidden'}`}
+    >
+      <td className="border-y border-gray-300 px-4 py-2 text-center">
+        <div
+          className={`py-1 px-4 rounded-full text-black ${transaction.used ? 'bg-[#da606024]' : 'bg-[#7784e25a]'}`}
+        >
+          {transaction.used ? 'Usado' : 'Válido'}
+        </div>
+      </td>
+      <TableRow content={`${transaction.amount}Kz`} />
+      <TableRow content={transaction.enrollmentId} />
+      <TableRow content={transaction.employeeId} />
 
-  const RenderTransactionCard = (transaction: any) => (
-    <div key={transaction.id} className={`${currentTransactionType === 'ALL' ? 'flex' : currentTransactionType === 'USED' && transaction?.used ? 'flex' : currentTransactionType === 'VALID' && !transaction?.used ? 'flex' : 'hidden'}`}>
-      <div className='flex flex-col gap-2 rounded-lg border-[2px] border-dashed border-[#dbdbdbca] p-4 w-full h-full'>
-        <div className='flex justify-between items-center gap-4'>
-          <h2 className='font-semibold uppercase'>Quantia: {transaction.amount}</h2>
-          <div className={`flex items-center justify-center py-1 px-4 rounded-full w-fit ${transaction.used ? 'bg-[#e277775a]' : 'bg-[#7784e25a]'}`}>
-            <span className='text-[14px]'>{transaction.used ? "Usado" : "Válido"}</span>
-          </div>
+      <td className="border-y border-gray-300 px-4 py-2">
+        <div className="flex items-center gap-2 justify-between">
+          <span id={`${transaction.id}NumeroDaTransacao`}>
+            {transaction.transactionNumber}
+          </span>
+          <CopySimple
+            size={18}
+            className="cursor-pointer"
+            onClick={() =>
+              UseCopier({
+                elementId: `${transaction.id}NumeroDaTransacao`,
+                message: 'Número do comprovativo copiado',
+              })
+            }
+          />
         </div>
-        <h2>Estudante: {transaction.enrollmentId}</h2>
-        <h2>Funcionário: {transaction.employeeId}</h2>
-        <div className='flex items-center justify-between gap-2'>
-          <h2>
-            Número da transação:{" "}
-            <span id={`${transaction?.id}NumeroDaTransacao`}>
-              {transaction.transactionNumber}
-            </span>
-          </h2>
-          <div className='w-full max-w-[24px] h-[24px]'>
-            <CopySimple
-              size={18}
-              className='cursor-pointer'
-              onClick={() =>
-                UseCopier({ elementId: `${transaction?.id}NumeroDaTransacao` })
-              }
-            />
-          </div>
-        </div>
+      </td>
 
-        <h2>Id do pagamento: {transaction?.paymentId ? transaction?.paymentId : '- - -'}</h2>
-        <div className='flex justify-between w-full'>
-          <h2 className='text-[14px]'>
-            Data: {new Date(transaction.date).toLocaleDateString()}
-          </h2>
-          <h2 className='text-[14px]'>
-            Hora: {new Date(transaction.date).toLocaleTimeString()}
-          </h2>
-        </div>
-      </div>
-    </div>
+      <TableRow content={`${transaction.paymentId ? transaction.paymentId : '- - -'}`} />
+      <TableRow content={new Date(transaction.date).toLocaleDateString()} />
+      <TableRow content={new Date(transaction.date).toLocaleTimeString()} />
+    </tr>
   )
 
   return (
@@ -84,24 +100,26 @@ const BankProofsPage = () => {
 
       <div id="search__area" className="flex flex-col gap-4 items-center relative w-full">
         <div className="flex gap-4 flex-wrap w-full justify-between">
-          <button
-            type="button"
-            className={`text-[12px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${searchType === 'enrollmentId' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
-            onClick={() => { setSearchType('enrollmentId'), setCurrentTransactionType('ALL') }}
-          >
-            Nº de inscrição
-          </button>
-          <button
-            type="button"
-            className={`text-[12px] uppercase border py-2 px-4 rounded-3xl  hover:bg-[#dcdcdc52] 
-              ${searchType !== 'enrollmentId' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
-            onClick={() => { setSearchType('transactionNumber'), setCurrentTransactionType('ALL') }}
-          >
-            Nº da transação
-          </button>
+          <ButtonForSearchOptions
+            content={'Nº de inscrição'}
+            option={state?.searchType === 'enrollmentId'}
+            onClick={() => {
+              dispatch({ type: actions.changeSearchType, payload: 'enrollmentId' }),
+                dispatch({ type: actions.changeCurrentTransactionType, payload: 'ALL' })
+            }}
+          />
+
+          <ButtonForSearchOptions
+            content={'Nº da transação'}
+            option={state?.searchType !== 'enrollmentId'}
+            onClick={() => {
+              dispatch({ type: actions.changeSearchType, payload: 'transactionNumber' }),
+                dispatch({ type: actions.changeCurrentTransactionType, payload: 'ALL' })
+            }}
+          />
         </div>
         <InputSearch
-          placeholder={searchType === "enrollmentId" ? 'Insira o número de inscrição do aluno...' : 'Insira o número da transação...'}
+          placeholder={state?.searchType === "enrollmentId" ? 'Insira o número de inscrição do aluno...' : 'Insira o número da transação...'}
           className="flex-row-reverse"
           icon={
             <MagnifyingGlass
@@ -112,43 +130,58 @@ const BankProofsPage = () => {
               onClick={handleFetchStudentBankProof}
             />
           }
-          value={enrollmentId}
+          value={state?.enrollmentId}
           onKeyDown={(e: any) => searchStudent(e)}
-          onChange={(e: any) => setEnrollmentId(e.target.value)}
+          onChange={(e: any) =>
+            dispatch({ type: actions.toggleEnrollmentId, payload: e.target.value })}
         />
       </div>
       {transactions && <div className="flex gap-4 flex-wrap">
-        {
-          TRANSACTION_VIEW_OPTIONS.map(({ id, content, transactionType }) => (
-            <button
-              key={id}
-              type="button"
-              className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${currentTransactionType === transactionType ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}
-              ${searchType === 'transactionNumber' ? 'hidden' : 'flex'}
-              `}
-              onClick={() => setCurrentTransactionType(transactionType)}
-            >
-              {content} ( {transactionType === 'ALL' ? transactions?.transactions?.items?.length : transactionType === 'USED' ? transactionsUsed?.length : transactionsValid?.length} )
-            </button>
-          ))
-        }
+        {TRANSACTION_VIEW_OPTIONS.map(({ id, content, transactionType }) => (
+          <ButtonForSearchOptions
+            key={id}
+            option={state?.currentTransactionType === transactionType}
+            searchType={state?.searchType === 'transactionNumber'}
+            onClick={() =>
+              dispatch({
+                type: actions.changeCurrentTransactionType,
+                payload: transactionType
+              })
+            }
+            content={`${content}
+                ( ${transactionType === 'ALL' ? transactions?.transactions?.items?.length : transactionType === 'USED' ? transactionsUsed?.length : transactionsValid?.length} )`
+            }
+          />
+        ))}
       </div>}
 
+      <div className='overflow-x-scroll'>
+        <table className="table-auto w-full border-collapse border-y border-gray-300">
+          <thead>
+            <tr className="bg-gray-100">
+              {TableHeaders.map(({ id, label }) => (
+                <HeaderContent label={label} key={id} />
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              transactions && !transactions?.transactions?.items ? RenderTransactionRow(transactions) : transactions?.transactions.items?.map(RenderTransactionRow)
+            }
+          </tbody>
+        </table>
+      </div>
+
       {isLoading &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold w-full justify-center flex items-center h-[248px]">
-          Buscando {searchType === 'enrollmentId' ? 'comprovativos...' : 'comprovativo...'}
-        </h1>
+        <TitleForProcessing
+          title={`Buscando ${state?.searchType === 'enrollmentId' ? 'comprovativos...' : 'comprovativo...'}`}
+        />
       }
       {error &&
-        <h1 className="text-[24px] md:text-[32px] font-semibold justify-center flex items-center h-[248px] w-full">
-          Comprovativos não encontrados 😢
-        </h1>
+        <TitleForProcessing
+          title='Comprovativos não encontrados 😢'
+        />
       }
-      <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'>
-        {
-          transactions && !transactions?.transactions?.items ? RenderTransactionCard(transactions) : transactions?.transactions.items?.map(RenderTransactionCard)
-        }
-      </div>
     </div >
   )
 }

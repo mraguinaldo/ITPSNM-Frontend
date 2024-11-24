@@ -4,7 +4,7 @@ import { initialValues, LEVELS, STUDENT_OPTIONS, tableHeader } from './data'
 import { ApplicationContexts } from '../contexts/applicationContexts'
 import { useContext, useEffect, useReducer, useState } from 'react'
 import { StudentOptionsModal } from './modals/student-options'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
 import { UsestoreData } from '../../hooks/useStoreData'
 import { QuestionModal } from '../modals/question'
@@ -16,13 +16,23 @@ import { Toast } from '../toast'
 import { Button } from '../button'
 import { DefaultModal } from '../modals/default'
 import { UseConfirmStudent } from '../../hooks/useConfirmStudent'
+import { ButtonToChangeLevel } from './buttons/button-to-change-level'
+import { ConfirmationDetailsViewer } from './confirmation-details-viewer'
+import { StudentOptionsButton } from './buttons/student-options-button'
+import { StudentOptionsLink } from './buttons/student-options-link'
+import { HeaderContent } from './header-content'
 
 const Students = ({ students }: { students: any }) => {
   const { studentFound, setStudentFound }: any = useContext(ApplicationContexts)
-  const { isLoading, isSuccess, mutate: useConfirmeStudent, data }: any = UseConfirmStudent()
   const [showData, setShowData] = useState<boolean>(false)
   const [state, dispatch] = useReducer(reducer, initialValues)
   const location = useLocation()
+  const {
+    isLoading,
+    isSuccess,
+    mutate: useConfirmeStudent,
+    data
+  }: any = UseConfirmStudent()
 
   const {
     mutate: useBlockStudent,
@@ -45,7 +55,10 @@ const Students = ({ students }: { students: any }) => {
   }
 
   const handleStudentClick = (studentId: string) => {
-    dispatch({ type: actions.changeSelectedStudent, payload: state.selectedStudent === studentId ? '' : studentId })
+    dispatch({
+      type: actions.changeSelectedStudent,
+      payload: state.selectedStudent === studentId ? '' : studentId
+    })
   }
 
   const confirmStudent = () => {
@@ -71,16 +84,40 @@ const Students = ({ students }: { students: any }) => {
     setShowData(true)
   }
 
+  const openOptionsModal = (
+    option: string,
+    email: string,
+    isBlocked: boolean,
+    studentId: any
+  ) => {
+    switch (option) {
+      case 'Bloquear':
+        handleBlockOptionClick(email, isBlocked)
+        break
+      case 'Confirmar estudante':
+        dispatch({
+          type: actions.toggleEnrollmentNumber,
+          payload: studentId
+        }),
+          dispatch({
+            type: actions.changeModalStateToChangeLevel,
+            payload: true
+          })
+        break
+    }
+  }
+
   useEffect(() => {
-    if (blockingTheStudent) dispatch({ type: actions.toggleLockModalState, payload: false })
+    if (blockingTheStudent) {
+      dispatch({
+        type: actions.toggleLockModalState,
+        payload: false
+      })
+    }
   }, [blockingTheStudent])
 
 
-  useEffect(() => {
-    if (isSuccess) {
-      resetStudentInformation()
-    }
-  }, [isSuccess])
+  useEffect(() => { isSuccess && resetStudentInformation() }, [isSuccess])
 
   useEffect(() => {
     if (blockedStudent || errorWhenBlockingStudent) {
@@ -89,7 +126,11 @@ const Students = ({ students }: { students: any }) => {
 
     if (studentFound && blockedStudent) {
       setStudentFound(null)
-      Toast({ message: 'Estado alterado...', theme: 'colored', toastType: 'success' })
+      Toast({
+        message: 'Estado alterado...',
+        theme: 'colored',
+        toastType: 'success'
+      })
     }
   }, [blockedStudent, errorWhenBlockingStudent])
 
@@ -111,8 +152,15 @@ const Students = ({ students }: { students: any }) => {
         </th>
 
         <th
-          className={`text-left p-3 w-[172px] ${blockingTheStudent ? 'pointer-events-none' : 'pointer-events-auto'}`}
-          onClick={() => handleBlockOptionClick(student.students.User.email, !student.students.User.isBlocked)}
+          className={`
+            text-left p-3 w-[172px] 
+            ${blockingTheStudent ? 'pointer-events-none' : 'pointer-events-auto'}`
+          }
+          onClick={() =>
+            handleBlockOptionClick(
+              student.students.User.email,
+              !student.students.User.isBlocked
+            )}
         >
           <Student.State locked={student.students.User.isBlocked} />
         </th>
@@ -128,37 +176,36 @@ const Students = ({ students }: { students: any }) => {
             onClick={() => handleStudentClick(student.identityCardNumber)}
           />
         </th>
-        <StudentOptionsModal isVisible={state.selectedStudent === student.identityCardNumber}>
+        <StudentOptionsModal
+          isVisible={state.selectedStudent === student.identityCardNumber}
+        >
           {STUDENT_OPTIONS.map(({ Icon, id, option, href }) =>
             href ? (
-              <Link
-                to={href}
+              <StudentOptionsLink
                 key={id}
+                option={option}
+                Icon={Icon}
+                href={href}
                 onClick={() => {
                   UsestoreData('chosenStudent', student.identityCardNumber)
                   UsestoreData('previousRoute', location.pathname)
                 }}
-                className="text-[14px] flex gap-2 items-center text-[#1c1c1c]"
-              >
-                <Icon size={14} color="#000" /> {option}
-              </Link>
+              />
             ) : (
-              <button
-                type="button"
+              <StudentOptionsButton
                 key={id}
-                className="bg-transparent text-[14px] flex gap-2 items-center text-[#1c1c1c]"
-                onClick={() => {
-                  option === 'Bloquear' && (
-                    handleBlockOptionClick(student.students.User.email, !student.students.User.isBlocked))
-                  option === 'Confirmar estudante' &&
-                    (dispatch({ type: actions.toggleEnrollmentNumber, payload: student?.id }),
-                      dispatch({ type: actions.changeModalStateToChangeLevel, payload: true }))
+                Icon={Icon}
+                isBlocked={student?.students?.User?.isBlocked}
+                option={option}
+                onClick={() =>
+                  openOptionsModal(
+                    option,
+                    student.students.User.email,
+                    !student.students.User.isBlocked,
+                    student?.id
+                  )
                 }
-                }
-              >
-                <Icon size={14} color="#000" />{' '}
-                {option === 'Bloquear' && student.students.User.isBlocked ? 'Desbloquear' : option}
-              </button>
+              />
             ),
           )}
         </StudentOptionsModal>
@@ -168,6 +215,7 @@ const Students = ({ students }: { students: any }) => {
   return (
     <div id="students" className="pt-12 w-full overflow-x-auto scroll-transparent pb-32">
       {blockingTheStudent && <ProgressBar />}
+
       <DefaultModal
         display={state?.modalStateToChangeLevel}
         closeModal={() => {
@@ -177,61 +225,64 @@ const Students = ({ students }: { students: any }) => {
           })
           resetStudentInformation()
           setShowData(false)
-        }
-        }
-      >{showData && data?.classes ?
-        <div className='flex gap-4 flex-col p-4'>
-          <p className='font-medium'>Estudante: {data?.students?.fullName}</p>
-          <div className='flex gap-4 flex-wrap'>
-            <span className='border-b'>Turma: {data?.classes?.name}</span>
-            <span className='border-b'>{data?.classes?.classrooms?.name}</span>
-            <span className='border-b'>Periodo: {data?.classes?.period === 'AFTERNOON' ? 'Tarde' : data?.classes?.period === 'MORNING' ? 'Manhã' : 'Noite'}</span>
-          </div>
-        </div> :
-        <div className='flex flex-col gap-4 p-4'>
-          <h2 className="text=[18px] md:text-[24px] font-medium">
-            Selecione a classe
-          </h2>
-          <div className="grid gap-4 grid-cols-2">
-            {LEVELS.map(({ id, level }) => (
-              <button
-                key={id}
-                type="button"
-                className={`text-[14px] uppercase border py-6 px-4 w-full rounded-md  border-[#dcdcdc] ${state?.currentLevelId === id ? 'bg-[#bee7d4] hover:bg-[#bee7d4]' : 'border-[#dcdcdc00] hover:bg-[#dcdcdc52]'}`}
-                onClick={() => dispatch({
-                  type: actions.changeLevelId, payload: id
-                })}
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-          <Button
-            type='button'
-            onClick={confirmStudent}
-            isLoading={isLoading}
-            content={isLoading ? '' : 'Confirmar estudante'}
-            Icon={isLoading && <CircleNotch size={18} className="animate-rotate" />}
-          />
-        </div>}
+        }}
+      >
+        {showData && data?.classes ?
+          <ConfirmationDetailsViewer
+            classRoom={data?.classes?.classrooms?.name}
+            fullName={data?.students?.fullName}
+            level={data?.classes?.name}
+            period={data?.classes?.period}
+          /> :
+          <div className='flex flex-col gap-4 p-4'>
+            <h2 className="text=[18px] md:text-[24px] font-medium">
+              Selecione a classe
+            </h2>
+            <div className="grid gap-4 grid-cols-2">
+              {LEVELS.map(({ id, level }) => (
+                <ButtonToChangeLevel
+                  key={id}
+                  id={id}
+                  currentLevelId={state?.currentLevelId}
+                  level={level}
+                  onClick={() => dispatch({ type: actions.changeLevelId, payload: id })}
+                />
+              ))}
+            </div>
+            <Button
+              type='button'
+              onClick={confirmStudent}
+              isLoading={isLoading}
+              content={isLoading ? '' : 'Confirmar estudante'}
+              Icon={isLoading && <CircleNotch size={18} className="animate-rotate" />}
+            />
+          </div>}
       </DefaultModal>
+
       <QuestionModal
-        title={state.studentStatus ? 'Deseja bloquear o estudante?' : 'Confirmar o desbloqueio do estudante'}
-        paragraph={state.studentStatus ? 'O estudante deixará de ter acesso ao sistema.' : ''}
+        title={state.studentStatus ?
+          'Deseja bloquear o estudante?' : 'Confirmar o desbloqueio do estudante'
+        }
+        paragraph={state.studentStatus ?
+          'O estudante deixará de ter acesso ao sistema.' : ''
+        }
         visible={state.modalStateForBlocking}
         iconReject={<X color="#fff" size={24} />}
         iconConfirm={<Check color="#fff" size={24} />}
         reject={closeLockModal}
-        confirm={() => useBlockStudent({ formData: { status: state.studentStatus, email: state.selectedStudent } })}
+        confirm={() =>
+          useBlockStudent({
+            formData: {
+              status: state.studentStatus, email: state.selectedStudent
+            }
+          })}
       />
 
       <table className="w-full">
         <thead>
           <tr className="border-b border-[#E8E8E8]">
             {tableHeader.map(({ id, content }) => (
-              <th className="w-auto p-3 text-left text-[14px] lg:text-[16px] font-normal text-[#363636]" key={id}>
-                {content}
-              </th>
+              <HeaderContent content={content} key={id} />
             ))}
           </tr>
         </thead>

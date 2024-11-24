@@ -1,4 +1,5 @@
 import { UseFetchEnrollmentsApproved } from '../../hooks/useFetchEnrollmentsApproved'
+import { ButtonForPagination } from '../button-for-pagination'
 import { DataTableHeader } from './header'
 import { Students } from './table'
 import { useEffect, useState } from 'react'
@@ -12,12 +13,7 @@ const StudentsTable = () => {
     refetch,
   }: any = UseFetchEnrollmentsApproved(currentPage)
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (currentPage) refetch()
-  }, [currentPage])
-
-
+  useEffect(() => { currentPage && refetch() }, [currentPage])
 
   const totalStudents: any[] = enrollmentsApproved?.items?.filter((student: any) => student.students?.User)
 
@@ -34,15 +30,12 @@ const StudentsTable = () => {
         )}
         <div className="flex gap-2 flex-wrap w-full">
           {Array.from({ length: enrollmentsApproved?.totalPages }, (_, index: number) => (
-            <button
-              type="button"
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            <ButtonForPagination
               key={index}
+              content={index + 1}
+              isActive={currentPage === index + 1}
               onClick={() => setCurrentPage(index + 1)}
-              className={`rounded-lg px-4 py-2 flex items-center justify-center ${currentPage === index + 1 ? 'bg-[#d8a429a9] font-semibold' : 'bg-[#b7b7b73b]'}`}
-            >
-              {index + 1}
-            </button>
+            />
           ))}
         </div>
       </div>

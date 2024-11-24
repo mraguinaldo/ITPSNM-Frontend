@@ -1,12 +1,9 @@
 const actions = {
-  changeStateOfChevron: 'changeStateOfChevron',
-  toggleModalState: 'toggleModalState',
-  toggleUserType: 'toggleUserType',
-  changeInputType: 'changeInputType',
-  displayPayments: 'displayPayments',
-  reset: 'reset',
-  togglePaymentId: 'togglePaymentId',
-  toggleEmployee: 'toggleEmployee',
+  chooseStudent: 'chooseStudent',
+  changePaymentType: 'changePaymentType',
+  showStudentOptionsModal: 'showStudentOptionsModal',
+  choosePayment: 'choosePayment',
+  toggleInvoice: 'toggleInvoice',
 }
 
 export { actions }

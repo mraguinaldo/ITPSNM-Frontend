@@ -15,6 +15,8 @@ import Cookies from 'js-cookie'
 import { DefaultModal } from '../modals/default'
 import { Button } from '../button'
 import { Toast } from '../toast'
+import { ButtonToChooseThePeriod } from './button-to-choose-the-period'
+import { HeaderContent } from './header-content'
 
 interface IStudents {
   students: any
@@ -33,13 +35,19 @@ const Students = ({ students }: IStudents) => {
   const employeeNumber: any = Cookies.get('employeeNumber')
 
   const closeLockModal = () => {
-    dispatch({ type: actions.changeModalStateToApproveEnrollment, payload: false })
+    dispatch({
+      type: actions.changeModalStateToApproveEnrollment,
+      payload: false
+    })
 
     dispatch({ type: actions.changeSelectedStudent, payload: '' })
   }
 
   const handleStudentClick = (studentId: string) => {
-    dispatch({ type: actions.changeSelectedStudent, payload: state.selectedStudent === studentId ? '' : studentId })
+    dispatch({
+      type: actions.changeSelectedStudent,
+      payload: state.selectedStudent === studentId ? '' : studentId
+    })
   }
 
   const approveEnrollment = () => {
@@ -150,7 +158,9 @@ const Students = ({ students }: IStudents) => {
           onClick={() => handleStudentClick(student?.identityCardNumber)}
         />
       </th>
-      <StudentOptionsModal isVisible={state.selectedStudent === student?.identityCardNumber}>
+      <StudentOptionsModal
+        isVisible={state.selectedStudent === student?.identityCardNumber}
+      >
         {STUDENT_OPTIONS.map(({ Icon, id, option, href }) =>
           href ? (
             <Link
@@ -198,15 +208,12 @@ const Students = ({ students }: IStudents) => {
           </h2>
           <div className="flex gap-4 flex-wrap sm:flex-nowrap">
             {PERIODS.map(({ id, content, period }) => (
-              <button
+              <ButtonToChooseThePeriod
                 key={id}
-                type="button"
-                className={`text-[14px] uppercase border py-2 px-4 w-full rounded-md  border-[#dcdcdc] ${currentPeriod === period ? 'bg-[#bee7d4] hover:bg-[#bee7d4]' : 'border-[#dcdcdc00] hover:bg-[#dcdcdc52]'}`}
+                content={content}
                 onClick={() => setCurrentPeriod(period)}
-              >
-                {content}
-              </button>
-            ))}
+                option={currentPeriod === period}
+              />))}
           </div>
           <Button
             type='button'
@@ -230,12 +237,10 @@ const Students = ({ students }: IStudents) => {
         <thead>
           <tr className="border-b border-[#E8E8E8]">
             {tableHeader.map(({ id, content }) => (
-              <th
-                className={`w-auto p-3 whitespace-nowrap text-[14px] lg:text-[16px] font-normal text-[#363636] ${content === 'Estado da matrícula' ? 'text-left' : 'text-left '}`}
+              <HeaderContent
                 key={id}
-              >
-                {content}
-              </th>
+                content={content}
+              />
             ))}
           </tr>
         </thead>

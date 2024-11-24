@@ -19,8 +19,6 @@ const InvoiceCardRenderer = ({ invoice, student }: { invoice: any, student: any 
   const receiptNumber: any = Cookies.get('receiptNumber')
   const redirectTo = useNavigate()
 
-  console.log(invoice)
-
   const [enrollmentId, setEnrollmentId] = useState<string>('')
   const [transactionNumber, setTransactionNumber] = useState<string>('')
 

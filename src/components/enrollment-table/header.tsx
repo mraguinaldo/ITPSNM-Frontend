@@ -6,6 +6,7 @@ import { ApplicationContexts } from '../contexts/applicationContexts'
 import { UseCheckEnrollment } from '../../hooks/useCheckEnrollment'
 import { Toast } from '../toast'
 import { ProgressBar } from '../progress-bar'
+import { ButtonForSearchOptions } from '../button-for-search-options'
 // import { ApplicationContexts } from '../contexts/applicationContexts'
 
 interface IDataTableHeader {
@@ -15,7 +16,13 @@ interface IDataTableHeader {
 
 const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
   const { setEnrollmentFound }: any = useContext(ApplicationContexts)
-  const { mutate: useCheckEnrollment, data: student, isLoading, reset: resetUserFound, error } = UseCheckEnrollment()
+  const {
+    error,
+    isLoading,
+    data: student,
+    reset: resetUserFound,
+    mutate: useCheckEnrollment
+  } = UseCheckEnrollment()
 
   const [enrollmentNumber, setEnrollmentNumber] = useState<any>()
   const [searchType, setSearchType] = useState<string>('enrollmentNumber')
@@ -27,9 +34,7 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
     useCheckEnrollment(params)
   }
 
-  const fetchUser = (e: any) => {
-    if (e.key === 'Enter') searchStudent()
-  }
+  const fetchUser = (e: any) => e.key === 'Enter' && searchStudent()
 
   useEffect(() => {
     if (student) {
@@ -41,7 +46,11 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
 
   useEffect(() => {
     if (error) {
-      Toast({ message: 'Estudante não encontrado', theme: 'colored', toastType: 'error' })
+      Toast({
+        message: 'Estudante não encontrado',
+        theme: 'colored',
+        toastType: 'error'
+      })
       setEnrollmentFound(null)
     }
   }, [error, setEnrollmentFound])
@@ -55,21 +64,16 @@ const DataTableHeader = ({ totalStudents }: IDataTableHeader) => {
 
       <div id="search__area" className="flex flex-col items-center relative gap-3 w-full lg:max-w-[316px] pb-8 md:p-0">
         <div className="flex gap-4 flex-wrap w-full justify-between">
-          <button
-            type="button"
-            className={`text-[12px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${searchType === 'enrollmentNumber' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+          <ButtonForSearchOptions
+            content='Nº de inscrição'
+            option={searchType === 'enrollmentNumber'}
             onClick={() => setSearchType('enrollmentNumber')}
-          >
-            Nº de inscrição
-          </button>
-          <button
-            type="button"
-            className={`text-[12px] uppercase border py-2 px-4 rounded-3xl  hover:bg-[#dcdcdc52] 
-              ${searchType !== 'enrollmentNumber' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+          />
+          <ButtonForSearchOptions
+            content='Nº do BI'
+            option={searchType !== 'enrollmentNumber'}
             onClick={() => setSearchType('identityCardNumber')}
-          >
-            Nº do BI
-          </button>
+          />
         </div>
         <InputSearch
           placeholder={'Pesquisar matrícula...'}

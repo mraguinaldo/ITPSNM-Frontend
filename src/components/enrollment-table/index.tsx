@@ -3,6 +3,9 @@ import { Students } from './table'
 import { useEffect, useState } from 'react'
 import { UseFetchEnrollments } from '../../hooks/useFetchEnrollments'
 import { UseFetchEnrollmentsApproved } from '../../hooks/useFetchEnrollmentsApproved'
+import { TitleForProcessing } from '../title-for-processing'
+import { ButtonForPagination } from '../button-for-pagination'
+import { ButtonForSearchOptions } from '../button-for-search-options'
 
 const EnrollmentsTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -32,7 +35,6 @@ const EnrollmentsTable = () => {
   }, [currentPage])
 
 
-
   useEffect(() => {
     if (enrollmentType === 'PENDING') {
       setStudents(enrollmentsPending)
@@ -46,25 +48,19 @@ const EnrollmentsTable = () => {
       <div className="flex flex-col gap-6 w-full px-8 py-16 lg:p-11 lg:rounded-[16px] bg-white">
         <DataTableHeader totalStudents={students?.totalItems} students={students} />
         <div className="flex gap-4 flex-wrap">
-          <button
-            type="button"
-            className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc]' : 'border-[#dcdcdc00]'}`}
+          <ButtonForSearchOptions
+            content={`PENDENTES ( ${enrollmentsPending?.items?.length} )`}
             onClick={() => setEnrollmenType('PENDING')}
-          >
-            PENDENTES ( {enrollmentsPending?.items?.length} )
-          </button>
-          <button
-            type="button"
-            className={`text-[14px] uppercase border py-2 px-4 rounded-3xl hover:bg-[#dcdcdc52] hover:border-[#dcdcdc] ${enrollmentType === 'PENDING' ? 'border-[#dcdcdc00]' : 'border-[#dcdcdc]'}`}
+            option={enrollmentType === 'PENDING'}
+          />
+          <ButtonForSearchOptions
+            content={`APROVADAS ( ${enrollmentsApproved?.items?.length} )`}
             onClick={() => setEnrollmenType('APPROVED')}
-          >
-            Aprovadas ( {enrollmentsApproved?.items?.length} )
-          </button>
+            option={enrollmentType === 'APPROVED'}
+          />
         </div>
         {!enrollmentsPending || !enrollmentsApproved ? (
-          <h1 className="text=[24px] md:text-[32px] font-semibold justify-center flex items-center h-20">
-            Buscando matrículas...
-          </h1>
+          <TitleForProcessing title='Buscando matrículas...' />
         ) : (
           <Students students={students} />
         )}
@@ -72,10 +68,10 @@ const EnrollmentsTable = () => {
           {Array.from(
             { length: enrollmentType === 'PENDING' ? enrollmentsPending?.totalPages : enrollmentsApproved?.totalPages },
             (_, index: number) => (
-              <button
-                type="button"
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              <ButtonForPagination
                 key={index}
+                content={index + 1}
+                isActive={currentPage === index + 1}
                 onClick={() => {
                   if (enrollmentType === 'PENDING') {
                     setCurrentPage(index + 1)
@@ -83,15 +79,12 @@ const EnrollmentsTable = () => {
                     setCurrentPage(index + 1)
                   }
                 }}
-                className={`rounded-lg px-4 py-2 flex items-center justify-center ${currentPage === index + 1 ? 'bg-[#d8a429a9] font-semibold' : 'bg-[#b7b7b73b]'}`}
-              >
-                {index + 1}
-              </button>
+              />
             ),
           )}
         </div>
       </div>
-    </section>
+    </section >
   )
 }
 
