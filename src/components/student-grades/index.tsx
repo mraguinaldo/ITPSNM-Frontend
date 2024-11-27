@@ -46,7 +46,6 @@ const StudentGrades = () => {
 
   const searchStudent = (e: any) => e.key === 'Enter' && fetchStudent()
 
-
   return (
     <div className={`w-full pl-6 py-16 lg:pt-11 lg:pb-32 lg:rounded-[16px] bg-white flex gap-6 flex-col ${student ? 'h-fit' : 'h-dvh'}`}>
       <h1 className="text-[24px] lg:text-[32px] font-semibold leading-9">

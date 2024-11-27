@@ -7,6 +7,8 @@ const actions = {
   changeCourse: 'changeCourse',
   changeEnrollmentId: 'changeEnrollmentId',
   changeIdentityCardNumber: 'changeIdentityCardNumber',
+  toggleCurrentPeriod: 'toggleCurrentPeriod',
+  addPaymentId: 'addPaymentId'
 }
 
 export { actions }

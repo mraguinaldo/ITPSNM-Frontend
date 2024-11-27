@@ -50,6 +50,18 @@ const reducer = (state: any, action: any) => {
         identityCardNumber: action.payload,
       }
     }
+    case actions.toggleCurrentPeriod: {
+      return {
+        ...state,
+        currentPeriod: action.payload,
+      }
+    }
+    case actions.addPaymentId: {
+      return {
+        ...state,
+        currentPaymentId: action.payload,
+      }
+    }
     default: {
       return state
     }

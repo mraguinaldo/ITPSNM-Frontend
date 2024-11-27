@@ -40,8 +40,6 @@ const Form = () => {
   const [, setSearchParams] = useSearchParams()
   const employeeNumber: any = Cookies.get('employeeNumber')
 
-  const [currentPeriod, setCurrentPeriod] = useState<string>('')
-
   const { data: courses } = UseFetchCourses()
   const {
     data: enrollmentFound,
@@ -53,6 +51,13 @@ const Form = () => {
     isLoading: approvingTheEnrollment,
     isSuccess: approvedEnrollment,
   } = UseApproveEnrollment()
+
+  const togglePeriod = (period: string) => {
+    dispatch({
+      type: actions.toggleCurrentPeriod,
+      payload: period,
+    })
+  }
 
   const {
     register,
@@ -138,20 +143,20 @@ const Form = () => {
   useEffect(() => {
     if (enrollmentFound) {
       const studentFields: any = [
-        { name: 'fullName', value: enrollmentFound.enrollment.students.fullName },
-        { name: 'father', value: enrollmentFound.enrollment.students.father },
-        { name: 'mother', value: enrollmentFound.enrollment.students.mother },
-        { name: 'phone', value: enrollmentFound.enrollment.students.phone },
-        { name: 'alternativePhone', value: enrollmentFound.enrollment.students.alternativePhone },
-        { name: 'gender', value: enrollmentFound.enrollment.students.gender },
+        { name: 'fullName', value: enrollmentFound?.enrollment?.students?.fullName },
+        { name: 'father', value: enrollmentFound?.enrollment?.students?.father },
+        { name: 'mother', value: enrollmentFound?.enrollment?.students?.mother },
+        { name: 'phone', value: enrollmentFound?.enrollment?.students?.phone },
+        { name: 'alternativePhone', value: enrollmentFound?.enrollment?.students?.alternativePhone },
+        { name: 'gender', value: enrollmentFound?.enrollment?.students?.gender },
         {
           name: 'maritalStatus',
-          value: enrollmentFound.enrollment.students.maritalStatus,
+          value: enrollmentFound?.enrollment?.students?.maritalStatus,
         },
-        { name: 'residence', value: enrollmentFound.enrollment.students.residence },
-        { name: 'height', value: enrollmentFound.enrollment.students.height },
-        { name: 'dateOfBirth', value: enrollmentFound.enrollment.students.dateOfBirth.split('T')[0] },
-        { name: 'emissionDate', value: enrollmentFound.enrollment.students.emissionDate.split('T')[0] },
+        { name: 'residence', value: enrollmentFound?.enrollment?.students?.residence },
+        { name: 'height', value: enrollmentFound?.enrollment?.students?.height },
+        { name: 'dateOfBirth', value: enrollmentFound?.enrollment?.students?.dateOfBirth.split('T')[0] },
+        { name: 'emissionDate', value: enrollmentFound?.enrollment?.students?.emissionDate.split('T')[0] },
       ]
 
       for (const field of studentFields) {
@@ -159,26 +164,26 @@ const Form = () => {
       }
 
       const enrollmentFields: any = [
-        { name: 'identityCardNumber', value: enrollmentFound.enrollment.identityCardNumber },
-        { name: 'levelId', value: enrollmentFound.enrollment.levelId },
-        { name: 'courseId', value: enrollmentFound.enrollment.courseId },
+        { name: 'identityCardNumber', value: enrollmentFound?.enrollment?.identityCardNumber },
+        { name: 'levelId', value: enrollmentFound?.enrollment?.levelId },
+        { name: 'courseId', value: enrollmentFound?.enrollment?.courseId },
       ]
 
       for (const field of enrollmentFields) {
         setValue(field.name, field.value, { shouldValidate: true })
       }
 
-      dispatch({ type: actions.toggleLevel, payload: enrollmentFound.enrollment.levelId })
-      dispatch({ type: actions.addCourse, payload: enrollmentFound.enrollment.courses.name })
+      dispatch({ type: actions.toggleLevel, payload: enrollmentFound?.enrollment?.levelId })
+      dispatch({ type: actions.addCourse, payload: enrollmentFound?.enrollment?.courses?.name })
       dispatch({
         type: actions.changeGender,
-        payload: enrollmentFound.enrollment.students.gender === 'MALE' ? 0 : 1,
+        payload: enrollmentFound?.enrollment?.students?.gender === 'MALE' ? 0 : 1,
       })
       dispatch({
         type: actions.toggleMaritalStatus,
         payload: UseGettMaritalStatus(
-          enrollmentFound.enrollment.students.maritalStatus,
-          enrollmentFound.enrollment.students.gender,
+          enrollmentFound?.enrollment?.students?.maritalStatus,
+          enrollmentFound?.enrollment?.students?.gender,
         ),
       })
     }
@@ -194,7 +199,8 @@ const Form = () => {
       paymentState: 'APPROVED',
       employeeId: Number(employeeNumber),
       identityCardNumber: enrollmentFound?.enrollment?.identityCardNumber,
-      period: currentPeriod
+      period: state?.currentPeriod,
+      paymentId: state?.currentPaymentId
     }
 
     if (formData) {
@@ -203,9 +209,14 @@ const Form = () => {
   }
 
   const openModalToConfirmEnrollment = () => {
-    if (currentPeriod === '') {
+    if (state?.currentPeriod === '' || !state?.currentPaymentId) {
       Toast({
-        message: 'Selecione o período',
+        message: `
+          ${state?.currentPeriod === '' ?
+            `Selecione o período ${!state?.currentPaymentId ? 'e' : ''}` : ''
+          }
+          ${!state?.currentPaymentId ? 'Insira o id do pagamento' : ''}
+        `,
         theme: 'colored',
         toastType: 'error'
       })
@@ -257,19 +268,30 @@ const Form = () => {
             payload: false,
           })}
       >
-        <div className='flex flex-col gap-4 p-4'>
-          <h2 className="text=[18px] md:text-[24px] font-medium">
+        <div className={`flex flex-col gap-4 p-4 ${state?.modalStatusToConfirmPeriod ? 'flex' : 'hidden'}`}>
+          <div className="flex gap-2 flex-col w-full">
+            <Input
+              inputType='number'
+              label='Id do pagamento'
+              placeholder="Insira o id do pagamento"
+              onChange={(e) =>
+                dispatch({
+                  type: actions.addPaymentId,
+                  payload: Number(e.currentTarget.value),
+                })
+              }
+            />
+          </div>
+          <h2 className="text-[16px] font-medium">
             Selecione o período
           </h2>
-          <div className="flex gap-4 flex-wrap sm:flex-nowrap">
+          <div className="flex gap-4 sm:flex-nowrap">
             {PERIODS.map(({ id, content, period }) => (
               <ButtonToChooseThePeriod
                 key={id}
                 content={content}
-                onClick={() => {
-                  setCurrentPeriod(period)
-                }}
-                option={currentPeriod === period}
+                onClick={() => togglePeriod(period)}
+                option={state?.currentPeriod === period}
               />))}
           </div>
           <Button

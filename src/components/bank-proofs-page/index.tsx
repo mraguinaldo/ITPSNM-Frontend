@@ -136,6 +136,7 @@ const BankProofsPage = () => {
             dispatch({ type: actions.toggleEnrollmentId, payload: e.target.value })}
         />
       </div>
+
       {transactions && <div className="flex gap-4 flex-wrap">
         {TRANSACTION_VIEW_OPTIONS.map(({ id, content, transactionType }) => (
           <ButtonForSearchOptions

@@ -14,7 +14,9 @@ const actions = {
   handleChangeVaccineCard: 'handleChangeVaccineCard',
   handleChangeMedicalCertificate: 'handleChangeMedicalCertificate',
   handleStudentEditing: 'handleStudentEditing',
-  changeModalStatePeriod: 'changeModalStatePeriod'
+  changeModalStatePeriod: 'changeModalStatePeriod',
+  toggleCurrentPeriod: 'toggleCurrentPeriod',
+  addPaymentId: 'addPaymentId'
 }
 
 export { actions }

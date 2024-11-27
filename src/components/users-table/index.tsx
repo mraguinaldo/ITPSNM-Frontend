@@ -81,7 +81,10 @@ const UsersTable = () => {
   const fetchUser = (e: any) => e.key === 'Enter' && catchUser({ email: state.userEmail })
 
   const handleStudentClick = (user: string) => {
-    dispatch({ type: actions.changeSelectedUser, payload: state.selectedUser === user ? '' : user })
+    dispatch({
+      type: actions.changeSelectedUser,
+      payload: state.selectedUser === user ? '' : user
+    })
   }
 
   const changePassword = (email: string) => {
@@ -301,7 +304,7 @@ const UsersTable = () => {
         </table>
         {!userFound && users?.users?.items?.length <= 0 && (
           <h1 className="w-full h-64 flex items-center justify-center text-[24px] sm:text-[32px] font-semibold">
-            Sem {state.currentRole.content}
+            Sem Usuários {state.currentRole.content}
           </h1>
         )}
       </div>

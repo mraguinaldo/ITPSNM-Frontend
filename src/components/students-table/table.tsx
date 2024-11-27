@@ -213,7 +213,7 @@ const Students = ({ students }: { students: any }) => {
     )
 
   return (
-    <div id="students" className="pt-12 w-full overflow-x-auto scroll-transparent pb-32">
+    <div id="students" className="pt-12 w-full overflow-x-auto scroll-transparent pb-16">
       {blockingTheStudent && <ProgressBar />}
 
       <DefaultModal
@@ -234,7 +234,7 @@ const Students = ({ students }: { students: any }) => {
             level={data?.classes?.name}
             period={data?.classes?.period}
           /> :
-          <div className='flex flex-col gap-4 p-4'>
+          <div className={`flex-col gap-4 p-4  ${state?.modalStateToChangeLevel ? 'flex' : 'hidden'}`}>
             <h2 className="text=[18px] md:text-[24px] font-medium">
               Selecione a classe
             </h2>
