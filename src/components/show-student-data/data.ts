@@ -9,7 +9,9 @@ const initialValues = {
   IDENTITY_CARD: 'Carregue o seu bilhete de identidade',
   PHOTO: 'Carregue a sua foto',
   editStudent: false,
-  modalStatusToConfirmPeriod: false
+  modalStatusToConfirmPeriod: false,
+  currentPeriod: '',
+  currentPaymentId: null
 }
 
 const fields = [

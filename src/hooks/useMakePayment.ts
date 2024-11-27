@@ -55,6 +55,12 @@ const UseMakePayment = () => {
           theme: 'light', 
           toastType: 'warning' 
         })
+      }else if(error.response.data.message === 'This transaction is already assigned to another student.'){
+        Toast({ 
+          message: 'O comprovativo não pertence a este aluno!', 
+          theme: 'colored', 
+          toastType: 'error' 
+        })
       }else{
         Toast({ 
           message: 'Erro ao efectuar o pagamento...', 

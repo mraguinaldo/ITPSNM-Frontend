@@ -5,6 +5,20 @@ interface PropsTypeTableHeader {
   content: string
 }
 
+export type IInitialValues = {
+  selectedStudent: string;
+  studentStatus: string;
+  modalStatusToConfirmEnrollment: boolean;
+  modalStatusToConfirmPeriod: boolean;
+  courseId: string | undefined;
+  levelId: string | undefined;
+  enrollmentId: string | undefined;
+  identityCardNumber: string | undefined;
+  currentPeriod: string;
+  currentPaymentId: string | null;
+};
+
+
 const tableHeader: PropsTypeTableHeader[] = [
   {
     id: 0,
@@ -46,7 +60,7 @@ const STUDENT_OPTIONS = [
   },
 ]
 
-const initialValues = {
+const initialValues: IInitialValues = {
   selectedStudent: '',
   studentStatus: '',
   modalStatusToConfirmEnrollment: false,
@@ -54,7 +68,9 @@ const initialValues = {
   courseId: undefined,
   levelId: undefined,
   enrollmentId: undefined,
-  identityCardNumber: undefined
+  identityCardNumber: undefined,
+  currentPeriod: '',
+  currentPaymentId: null
 }
 
 const PERIODS = [

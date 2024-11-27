@@ -23,6 +23,14 @@ const EnrollmentsTable = () => {
     refetch: useFetchEnrollmentsApproved,
   }: any = UseFetchEnrollmentsApproved(currentPage)
 
+
+  const calculateTotalEnrollments = (enrollments: any) => {
+    return enrollments?.items.filter((enroll: any) => enroll?.students).length
+  }
+
+  const totalEnrollmentsApproved = calculateTotalEnrollments(enrollmentsApproved)
+  const totalEnrollmentsPending = calculateTotalEnrollments(enrollmentsPending)
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (currentPage && currentPage) {
@@ -49,12 +57,12 @@ const EnrollmentsTable = () => {
         <DataTableHeader totalStudents={students?.totalItems} students={students} />
         <div className="flex gap-4 flex-wrap">
           <ButtonForSearchOptions
-            content={`PENDENTES ( ${enrollmentsPending?.items?.length} )`}
+            content={`PENDENTES ( ${totalEnrollmentsPending} )`}
             onClick={() => setEnrollmenType('PENDING')}
             option={enrollmentType === 'PENDING'}
           />
           <ButtonForSearchOptions
-            content={`APROVADAS ( ${enrollmentsApproved?.items?.length} )`}
+            content={`APROVADAS ( ${totalEnrollmentsApproved} )`}
             onClick={() => setEnrollmenType('APPROVED')}
             option={enrollmentType === 'APPROVED'}
           />

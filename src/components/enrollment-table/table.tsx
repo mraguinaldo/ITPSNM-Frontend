@@ -2,7 +2,7 @@ import { Check, CircleNotch, DotsThree, X } from 'phosphor-react'
 import { Student } from '../student'
 import { initialValues, PERIODS, STUDENT_OPTIONS, tableHeader } from './data'
 import { ApplicationContexts } from '../contexts/applicationContexts'
-import { useContext, useEffect, useReducer, useState } from 'react'
+import { useContext, useEffect, useReducer } from 'react'
 import { StudentOptionsModal } from './modals/student-options'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UseRenameClass } from '../../hooks/useRenameClass'
@@ -18,6 +18,7 @@ import { Toast } from '../toast'
 import { ButtonToChooseThePeriod } from './button-to-choose-the-period'
 import { HeaderContent } from './header-content'
 import { StudentOptionsButton } from './student-options-button'
+import { Input } from '../inputs/normal'
 
 interface IStudents {
   students: any
@@ -26,7 +27,6 @@ interface IStudents {
 const Students = ({ students }: IStudents) => {
   const { enrollmentFound }: any = useContext(ApplicationContexts)
   const [state, dispatch] = useReducer(reducer, initialValues)
-  const [currentPeriod, setCurrentPeriod] = useState<string>('')
   const {
     mutate: useApproveEnrollment,
     isLoading: approvingTheEnrollment,
@@ -37,6 +37,8 @@ const Students = ({ students }: IStudents) => {
   const navigate = useNavigate()
 
   const employeeNumber: any = Cookies.get('employeeNumber')
+
+  console.log(students)
 
   const closeLockModal = () => {
     dispatch({
@@ -66,19 +68,28 @@ const Students = ({ students }: IStudents) => {
       paymentState: 'APPROVED',
       employeeId: Number(employeeNumber),
       identityCardNumber: state?.identityCardNumber,
-      period: currentPeriod
+      period: state?.currentPeriod,
+      paymentId: state?.currentPaymentId
     }
 
     if (formData) {
       useApproveEnrollment({ formData, enrollmentId: state?.enrollmentId })
+      dispatch({
+        type: actions.toggleCurrentPeriod,
+        payload: '',
+      })
     }
   }
 
-  const openModalToApproveEnrollment = (student: any) => {
+  const updatePeriodModalStatus = (status: boolean) => {
     dispatch({
       type: actions.changeModalStatePeriod,
-      payload: true,
+      payload: status,
     })
+  }
+
+  const openModalToApproveEnrollment = (student: any) => {
+    updatePeriodModalStatus(true)
     dispatch({
       type: actions.changeLevel,
       payload: student?.levelId,
@@ -98,9 +109,14 @@ const Students = ({ students }: IStudents) => {
   }
 
   const openModalToConfirmRegistration = () => {
-    if (currentPeriod === '') {
+    if (state?.currentPeriod === '' || !state?.currentPaymentId) {
       Toast({
-        message: 'Selecione o período',
+        message: `
+          ${state?.currentPeriod === '' ?
+            `Selecione o período ${!state?.currentPaymentId ? 'e' : ''}` : ''
+          }
+          ${!state?.currentPaymentId ? 'Insira o id do pagamento' : ''}
+        `,
         theme: 'colored',
         toastType: 'error'
       })
@@ -109,11 +125,15 @@ const Students = ({ students }: IStudents) => {
         type: actions.changeModalStateToApproveEnrollment,
         payload: true,
       })
-      dispatch({
-        type: actions.changeModalStatePeriod,
-        payload: false,
-      })
+      updatePeriodModalStatus(false)
     }
+  }
+
+  const togglePeriod = (period: string) => {
+    dispatch({
+      type: actions.toggleCurrentPeriod,
+      payload: period,
+    })
   }
 
 
@@ -136,12 +156,12 @@ const Students = ({ students }: IStudents) => {
   useEffect(() => {
     if (approvedEnrollment) {
       handleStudentClick(state.selectedStudent),
-        setCurrentPeriod('')
+        togglePeriod('')
     }
   }, [approvedEnrollment])
 
   const renderStudentRow = (student: any) => (
-    <Student.Root className="mb-3" key={student.identityCardNumber}>
+    student?.students && <Student.Root className="mb-3" key={student.identityCardNumber}>
       <th className="text-left p-3 w-[172px]">
         <Student.Level level={student?.id} />
       </th>
@@ -206,23 +226,35 @@ const Students = ({ students }: IStudents) => {
     <div id="students" className="pt-12 w-full overflow-x-auto overflow-y-auto scroll-transparent pb-20">
       <DefaultModal
         display={state?.modalStatusToConfirmPeriod}
-        closeModal={() =>
-          dispatch({
-            type: actions.changeModalStatePeriod,
-            payload: false,
-          })}
+        closeModal={() => {
+          updatePeriodModalStatus(false)
+          togglePeriod('')
+        }}
       >
-        <div className='flex flex-col gap-4 p-4'>
-          <h2 className="text=[18px] md:text-[24px] font-medium">
+        <div className={`flex flex-col gap-4 p-4 ${state?.modalStatusToConfirmPeriod ? 'flex' : 'hidden'}`}>
+          <div className="flex gap-2 flex-col w-full">
+            <Input
+              inputType='number'
+              label='Id do pagamento'
+              placeholder="Insira o id do pagamento"
+              onChange={(e) =>
+                dispatch({
+                  type: actions.addPaymentId,
+                  payload: Number(e.currentTarget.value),
+                })
+              }
+            />
+          </div>
+          <h2 className="text-[16px] font-medium">
             Selecione o período
           </h2>
-          <div className="flex gap-4 flex-wrap sm:flex-nowrap">
+          <div className="flex gap-4 sm:flex-nowrap">
             {PERIODS.map(({ id, content, period }) => (
               <ButtonToChooseThePeriod
                 key={id}
                 content={content}
-                onClick={() => setCurrentPeriod(period)}
-                option={currentPeriod === period}
+                onClick={() => togglePeriod(period)}
+                option={state?.currentPeriod === period}
               />))}
           </div>
           <Button
