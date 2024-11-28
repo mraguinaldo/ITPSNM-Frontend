@@ -19,7 +19,12 @@ const UseAddvaluesToTheTransaction = () => {
         Toast({ message: 'Funcionário não encontrado...', theme: 'colored', toastType: 'error' })
       }else if(error.response.data.message === 'Enrollment not found.'){
         Toast({ message: 'Estudante não encontrado...', theme: 'colored', toastType: 'error' })
-      }else{
+      }else if(error.response.data.message === 'This transaction belongs to another student.'){
+        Toast({ 
+          message: 'Este comprovativo já foi usado...', 
+          theme: 'colored', 
+          toastType: 'error' 
+        })}else{
         Toast({ message: 'Erro ao concluir a transação...', theme: 'colored', toastType: 'error' })
       }
     }

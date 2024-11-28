@@ -4,7 +4,8 @@ const actions = {
   toggleLockModalState: 'toggleLockModalState',
   changeModalStateToChangeLevel: 'changeModalStateToChangeLevel',
   changeLevelId: 'changeLevelId',
-  toggleEnrollmentNumber: 'toggleEnrollmentNumber'
+  toggleEnrollmentNumber: 'toggleEnrollmentNumber',
+  toggleCurrentPeriod: 'toggleCurrentPeriod'
 }
 
 export { actions }

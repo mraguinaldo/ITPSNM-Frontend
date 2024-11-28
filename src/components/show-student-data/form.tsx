@@ -31,6 +31,7 @@ import { PERIODS } from '../enrollment-table/data'
 import { ButtonToChooseThePeriod } from '../enrollment-table/button-to-choose-the-period'
 import { DefaultModal } from '../modals/default'
 import { Toast } from '../toast'
+import { UseTranslatePeriods } from '../../hooks/use-translate-periods'
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialValues)
@@ -58,6 +59,8 @@ const Form = () => {
       payload: period,
     })
   }
+
+  console.log(enrollmentFound?.enrollment.classes)
 
   const {
     register,
@@ -304,17 +307,30 @@ const Form = () => {
 
       </DefaultModal>
 
-      <div className="flex flex-wrap gap-4 justify-between w-full">
-        <h1 className="text-[20px] sm:text-[24px] font-semibold">
-          Nome do aluno: <span className="font-normal">{enrollmentFound?.enrollment.students.fullName}</span>
-        </h1>
-        <button
-          type="button"
-          onClick={() => dispatch({ type: actions.handleStudentEditing, payload: !state.editStudent })}
-          className={`py-3 px-5 rounded-3xl cursor-pointer ${state.editStudent ? 'bg-slate-400 text-white' : 'bg-green-300'}`}
-        >
-          {state.editStudent ? 'Desabilitar edição de aluno' : 'Editar aluno'}
-        </button>
+      <div className='w-full flex flex-col gap-2'>
+        <div className="flex flex-wrap gap-4 justify-between w-full">
+          <h2 className="text-[20px] sm:text-[24px] font-semibold">
+            Nome do aluno: <span className="font-normal">{enrollmentFound?.enrollment.students.fullName}</span>
+          </h2>
+          <button
+            type="button"
+            onClick={() => dispatch({ type: actions.handleStudentEditing, payload: !state.editStudent })}
+            className={`py-3 px-5 rounded-3xl cursor-pointer ${state.editStudent ? 'bg-slate-400 text-white' : 'bg-green-300'}`}
+          >
+            {state.editStudent ? 'Desabilitar edição de aluno' : 'Editar aluno'}
+          </button>
+        </div>
+        <div className='flex flex-wrap gap-2'>
+          <span className="text-[18px] font-normal border-b">
+            {enrollmentFound?.enrollment?.classes?.classrooms?.name}
+          </span>
+          <span className="text-[18px] font-normal border-b">
+            Turma: {enrollmentFound?.enrollment?.classes?.name}
+          </span>
+          <span className="text-[18px] font-normal border-b">
+            Periodo: {UseTranslatePeriods(enrollmentFound?.enrollment?.classes?.period)}
+          </span>
+        </div>
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}

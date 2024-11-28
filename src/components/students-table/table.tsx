@@ -21,6 +21,8 @@ import { ConfirmationDetailsViewer } from './confirmation-details-viewer'
 import { StudentOptionsButton } from './buttons/student-options-button'
 import { StudentOptionsLink } from './buttons/student-options-link'
 import { HeaderContent } from './header-content'
+import { PERIODS } from '../enrollment-table/data'
+import { ButtonToChooseThePeriod } from '../enrollment-table/button-to-choose-the-period'
 
 const Students = ({ students }: { students: any }) => {
   const { studentFound, setStudentFound }: any = useContext(ApplicationContexts)
@@ -71,7 +73,8 @@ const Students = ({ students }: { students: any }) => {
     } else {
       const formData = {
         enrollmentNumber: state?.enrollmentNumber,
-        levelId: state?.currentLevelId
+        levelId: state?.currentLevelId,
+        period: state?.currentPeriod,
       }
 
       useConfirmeStudent({ formData })
@@ -105,6 +108,13 @@ const Students = ({ students }: { students: any }) => {
           })
         break
     }
+  }
+
+  const togglePeriod = (period: string) => {
+    dispatch({
+      type: actions.toggleCurrentPeriod,
+      payload: period,
+    })
   }
 
   useEffect(() => {
@@ -248,6 +258,18 @@ const Students = ({ students }: { students: any }) => {
                   onClick={() => dispatch({ type: actions.changeLevelId, payload: id })}
                 />
               ))}
+            </div>
+            <h2 className="text-[16px] font-medium">
+              Selecione o período
+            </h2>
+            <div className="flex gap-4 sm:flex-nowrap">
+              {PERIODS.map(({ id, content, period }) => (
+                <ButtonToChooseThePeriod
+                  key={id}
+                  content={content}
+                  onClick={() => togglePeriod(period)}
+                  option={state?.currentPeriod === period}
+                />))}
             </div>
             <Button
               type='button'

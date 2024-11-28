@@ -77,7 +77,8 @@ const initialValues = {
   modalStateForBlocking: false,
   modalStateToChangeLevel: false,
   currentLevelId: 0,
-  enrollmentNumber: undefined
+  enrollmentNumber: undefined,
+  currentPeriod: '',
 }
 
 export { tableHeader, STUDENT_OPTIONS, initialValues, LEVELS }
