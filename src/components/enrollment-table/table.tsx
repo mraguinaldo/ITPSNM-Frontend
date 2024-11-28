@@ -38,8 +38,6 @@ const Students = ({ students }: IStudents) => {
 
   const employeeNumber: any = Cookies.get('employeeNumber')
 
-  console.log(students)
-
   const closeLockModal = () => {
     dispatch({
       type: actions.changeModalStateToApproveEnrollment,

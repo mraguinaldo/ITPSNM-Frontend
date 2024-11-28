@@ -37,6 +37,12 @@ const reducer = (state: any, action: any) => {
         currentLevelId: action.payload,
       }
     }
+    case actions.toggleCurrentPeriod: {
+      return {
+        ...state,
+        currentPeriod: action.payload,
+      }
+    }
     default: {
       return state
     }
