@@ -34,6 +34,21 @@ export const schemaForm = yup.object().shape({
       return originalValue === '' ? undefined : value
     })
     .required('A classe é obrigatória'),
+  academicYear: yup
+    .string()
+    .transform((value, originalValue) => {
+      if (originalValue.match(/^(\d{4})-(\d{4})$/)) {
+        const anoAtual = Number(originalValue.slice(0, 4));
+        const anoSeguinte = Number(originalValue.slice(-4));
+
+        if (anoSeguinte - anoAtual === 1) {
+          return value; 
+        }
+      }
+
+      return undefined;
+    })
+    .required('Ex: 2024-2025'),
   items: yup.array().of(
       yup.object().shape({
         description: yup.string().required('A descrição é obrigatória'),

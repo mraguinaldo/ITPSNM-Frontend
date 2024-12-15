@@ -5,7 +5,9 @@ const actions = {
   changeModalStateToChangeLevel: 'changeModalStateToChangeLevel',
   changeLevelId: 'changeLevelId',
   toggleEnrollmentNumber: 'toggleEnrollmentNumber',
-  toggleCurrentPeriod: 'toggleCurrentPeriod'
+  toggleCurrentPeriod: 'toggleCurrentPeriod',
+  addAcademicYear: 'addAcademicYear'
+
 }
 
 export { actions }

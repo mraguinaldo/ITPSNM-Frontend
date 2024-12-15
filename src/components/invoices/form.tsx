@@ -62,6 +62,7 @@ const Form = () => {
       levelId: undefined,
       dueDate: undefined,
       issueDate: undefined,
+      academicYear: undefined,
       items: [
         {
           description: undefined,
@@ -232,6 +233,14 @@ const Form = () => {
         </div>
         <span className='text-[12px] sm:text-[14px] text-[#FB7373] absolute bottom-[-28px] font-medium'>{errors.levelId?.message}</span>
       </div>
+
+      <Input
+        label="Ano acadêmico"
+        errorMessage={errors.academicYear?.message}
+        inputType="text"
+        placeholder="Insira o ano acadêmico"
+        {...register('academicYear')}
+      />
 
       <div className="flex flex-col gap-3">
         <p className="text-[16px] text-[#2F2F2F] uppercase font-semibold">Itens a serem pagos</p>

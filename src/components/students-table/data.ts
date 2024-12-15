@@ -79,6 +79,7 @@ const initialValues = {
   currentLevelId: 0,
   enrollmentNumber: undefined,
   currentPeriod: '',
+  academicYear: ''
 }
 
 export { tableHeader, STUDENT_OPTIONS, initialValues, LEVELS }
