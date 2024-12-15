@@ -23,6 +23,7 @@ import { StudentOptionsLink } from './buttons/student-options-link'
 import { HeaderContent } from './header-content'
 import { PERIODS } from '../enrollment-table/data'
 import { ButtonToChooseThePeriod } from '../enrollment-table/button-to-choose-the-period'
+import { Input } from '../inputs/normal'
 
 const Students = ({ students }: { students: any }) => {
   const { studentFound, setStudentFound }: any = useContext(ApplicationContexts)
@@ -64,20 +65,30 @@ const Students = ({ students }: { students: any }) => {
   }
 
   const confirmStudent = () => {
+    const currentYear = Number(state.academicYear.slice(0, 4))
+    const nextYear = Number(state.academicYear.slice(-4))
+
     if (state?.currentLevelId === 0) {
       Toast({
         message: 'Selecione a classe',
         theme: 'colored',
         toastType: 'error'
       })
-    } else {
+    } else if (nextYear - currentYear === 1 && state.academicYear.slice(4, -4) === '-') {
       const formData = {
         enrollmentNumber: state?.enrollmentNumber,
         levelId: state?.currentLevelId,
         period: state?.currentPeriod,
+        academicYear: state?.academicYear
       }
 
       useConfirmeStudent({ formData })
+    } else {
+      Toast({
+        message: 'Formato do ano acadêmico incorrecto. EX: 2024-2025',
+        theme: 'colored',
+        toastType: 'error'
+      })
     }
   }
 
@@ -271,6 +282,16 @@ const Students = ({ students }: { students: any }) => {
                   option={state?.currentPeriod === period}
                 />))}
             </div>
+            <Input
+              inputType='text'
+              label='Ano Acadêmico'
+              onChange={(e) =>
+                dispatch({
+                  type: actions.addAcademicYear,
+                  payload: e.currentTarget.value
+                })
+              }
+            />
             <Button
               type='button'
               onClick={confirmStudent}

@@ -60,8 +60,6 @@ const Form = () => {
     })
   }
 
-  console.log(enrollmentFound?.enrollment.classes)
-
   const {
     register,
     handleSubmit,

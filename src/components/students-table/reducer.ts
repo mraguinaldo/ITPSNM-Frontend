@@ -43,6 +43,12 @@ const reducer = (state: any, action: any) => {
         currentPeriod: action.payload,
       }
     }
+    case actions.addAcademicYear: {
+      return {
+        ...state,
+        academicYear: action.payload,
+      }
+    }
     default: {
       return state
     }
